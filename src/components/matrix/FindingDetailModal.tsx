@@ -32,6 +32,7 @@ export const FindingDetailModal: React.FC = () => {
   const [newQuote, setNewQuote] = useState('');
   const [newSourceType, setNewSourceType] = useState<'publik' | 'wawancara'>('publik');
   const [newInterviewId, setNewInterviewId] = useState('');
+  const [newPencatat, setNewPencatat] = useState(currentUser.nama || 'Rinaldi Firmansyah (Lead Admin)');
 
   // Finding Inline Edit State
   const [isEditingFinding, setIsEditingFinding] = useState(false);
@@ -47,6 +48,7 @@ export const FindingDetailModal: React.FC = () => {
   const [editEvQuote, setEditEvQuote] = useState('');
   const [editEvSourceType, setEditEvSourceType] = useState<'publik' | 'wawancara'>('publik');
   const [editEvInterviewId, setEditEvInterviewId] = useState('');
+  const [editEvPencatat, setEditEvPencatat] = useState('');
 
   if (!selectedFindingModalId) return null;
 
@@ -97,12 +99,13 @@ export const FindingDetailModal: React.FC = () => {
       interviewId: newSourceType === 'wawancara' ? newInterviewId : undefined,
       tanggalAkses: new Date().toISOString().slice(0, 10),
       kutipanRingkas: newQuote,
-      pencatat: currentUser.nama
+      pencatat: newPencatat.trim() || currentUser.nama
     });
 
     setNewTitle('');
     setNewUrl('');
     setNewQuote('');
+    setNewPencatat(currentUser.nama || 'Rinaldi Firmansyah (Lead Admin)');
     setShowAddEvidence(false);
   };
 
@@ -113,6 +116,7 @@ export const FindingDetailModal: React.FC = () => {
     setEditEvQuote(ev.kutipanRingkas || '');
     setEditEvSourceType(ev.tipeSumber);
     setEditEvInterviewId(ev.interviewId || '');
+    setEditEvPencatat(ev.pencatat || currentUser.nama);
   };
 
   const handleSaveEvidenceEdit = (e: React.FormEvent) => {
@@ -124,7 +128,8 @@ export const FindingDetailModal: React.FC = () => {
       tipeSumber: editEvSourceType,
       url: editEvSourceType === 'publik' ? editEvUrl : undefined,
       interviewId: editEvSourceType === 'wawancara' ? editEvInterviewId : undefined,
-      kutipanRingkas: editEvQuote
+      kutipanRingkas: editEvQuote,
+      pencatat: editEvPencatat.trim() || currentUser.nama
     });
 
     setEditingEvidenceId(null);
@@ -379,32 +384,46 @@ export const FindingDetailModal: React.FC = () => {
                   </div>
                 </div>
 
-                {newSourceType === 'publik' ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {newSourceType === 'publik' ? (
+                    <div>
+                      <label className="block text-slate-600 font-medium mb-1">URL Publik</label>
+                      <input
+                        type="url"
+                        placeholder="https://..."
+                        value={newUrl}
+                        onChange={e => setNewUrl(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-slate-600 font-medium mb-1">Pilih Catatan Wawancara</label>
+                      <select
+                        value={newInterviewId}
+                        onChange={e => setNewInterviewId(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
+                      >
+                        <option value="">-- Pilih Narasumber Anonim --</option>
+                        {bankInterviews.map(i => (
+                          <option key={i.id} value={i.id}>{i.kodeNarasumber} ({i.divisi})</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
                   <div>
-                    <label className="block text-slate-600 font-medium mb-1">URL Publik</label>
+                    <label className="block text-slate-600 font-medium mb-1">Dicatat oleh (Nama Pencatat / Analyst)</label>
                     <input
-                      type="url"
-                      placeholder="https://..."
-                      value={newUrl}
-                      onChange={e => setNewUrl(e.target.value)}
+                      type="text"
+                      placeholder="Contoh: Rinaldi Firmansyah (Lead Admin)"
+                      value={newPencatat}
+                      onChange={e => setNewPencatat(e.target.value)}
                       className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
+                      required
                     />
                   </div>
-                ) : (
-                  <div>
-                    <label className="block text-slate-600 font-medium mb-1">Pilih Catatan Wawancara</label>
-                    <select
-                      value={newInterviewId}
-                      onChange={e => setNewInterviewId(e.target.value)}
-                      className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
-                    >
-                      <option value="">-- Pilih Narasumber Anonim --</option>
-                      {bankInterviews.map(i => (
-                        <option key={i.id} value={i.id}>{i.kodeNarasumber} ({i.divisi})</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
+                </div>
 
                 <div>
                   <label className="block text-slate-600 font-medium mb-1">Kutipan / Pernyataan Ringkas</label>
@@ -490,31 +509,45 @@ export const FindingDetailModal: React.FC = () => {
                           </div>
                         </div>
 
-                        {editEvSourceType === 'publik' ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {editEvSourceType === 'publik' ? (
+                            <div>
+                              <label className="block text-slate-700 font-semibold mb-1">URL Publik</label>
+                              <input
+                                type="url"
+                                value={editEvUrl}
+                                onChange={e => setEditEvUrl(e.target.value)}
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
+                              />
+                            </div>
+                          ) : (
+                            <div>
+                              <label className="block text-slate-700 font-semibold mb-1">Pilih Catatan Wawancara</label>
+                              <select
+                                value={editEvInterviewId}
+                                onChange={e => setEditEvInterviewId(e.target.value)}
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
+                              >
+                                <option value="">-- Pilih Narasumber Anonim --</option>
+                                {bankInterviews.map(i => (
+                                  <option key={i.id} value={i.id}>{i.kodeNarasumber} ({i.divisi})</option>
+                                ))}
+                              </select>
+                            </div>
+                          )}
+
                           <div>
-                            <label className="block text-slate-700 font-semibold mb-1">URL Publik</label>
+                            <label className="block text-slate-700 font-semibold mb-1">Dicatat oleh (Nama Pencatat / Analyst)</label>
                             <input
-                              type="url"
-                              value={editEvUrl}
-                              onChange={e => setEditEvUrl(e.target.value)}
+                              type="text"
+                              value={editEvPencatat}
+                              onChange={e => setEditEvPencatat(e.target.value)}
+                              placeholder="Contoh: Rinaldi Firmansyah (Lead Admin)"
                               className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
+                              required
                             />
                           </div>
-                        ) : (
-                          <div>
-                            <label className="block text-slate-700 font-semibold mb-1">Pilih Catatan Wawancara</label>
-                            <select
-                              value={editEvInterviewId}
-                              onChange={e => setEditEvInterviewId(e.target.value)}
-                              className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
-                            >
-                              <option value="">-- Pilih Narasumber Anonim --</option>
-                              {bankInterviews.map(i => (
-                                <option key={i.id} value={i.id}>{i.kodeNarasumber} ({i.divisi})</option>
-                              ))}
-                            </select>
-                          </div>
-                        )}
+                        </div>
 
                         <div>
                           <label className="block text-slate-700 font-semibold mb-1">Kutipan / Pernyataan Ringkas</label>
