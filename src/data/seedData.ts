@@ -662,7 +662,7 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     url: 'https://www.confluent.io/customers/bank-bri/',
     tanggalAkses: '2026-09-10',
     kutipanRingkas: '"Bank BRI utilizes Confluent Platform to process over 25,000 TPS across AgenBRILink and mobile banking with 99.99% availability."',
-    pencatat: 'Rinaldi (Lead Tech Analyst)'
+    pencatat: 'Admin'
   },
   {
     id: 'ev-bri-kafka-2',
@@ -672,7 +672,7 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     interviewId: 'int-bri-01',
     tanggalAkses: '2026-09-12',
     kutipanRingkas: 'Narasumber EA-01 mengonfirmasi bahwa Confluent Kafka menjadi tulang punggung streaming transaksi dan deteksi fraud.',
-    pencatat: 'Rinaldi (Lead Tech Analyst)'
+    pencatat: 'Admin'
   },
   {
     id: 'ev-bri-openshift-1',
@@ -702,7 +702,7 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     interviewId: 'int-bri-02',
     tanggalAkses: '2026-09-18',
     kutipanRingkas: 'Narasumber MB-02 menegaskan tidak ada adopsi framework hybrid pada super-app BRImo demi performa dan enkripsi hardware.',
-    pencatat: 'Rinaldi (Lead Tech Analyst)'
+    pencatat: 'Admin'
   },
   {
     id: 'ev-bri-cassandra-1',
@@ -724,7 +724,7 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     url: 'https://aws.amazon.com/solutions/case-studies/bank-mandiri/',
     tanggalAkses: '2026-08-14',
     kutipanRingkas: '"Bank Mandiri leverages AWS Cloud services in Jakarta Region to power its digital lifestyle platform Livin\' Sukha."',
-    pencatat: 'Rinaldi (Lead Tech Analyst)'
+    pencatat: 'Admin'
   },
   {
     id: 'ev-mdr-aws-2',
@@ -734,7 +734,7 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     interviewId: 'int-mandiri-01',
     tanggalAkses: '2026-09-15',
     kutipanRingkas: 'Narasumber MDR-01 memverifikasi hybrid setup antara AWS Jakarta untuk lifestyle dan on-premise Exadata untuk core banking.',
-    pencatat: 'Rinaldi (Lead Tech Analyst)'
+    pencatat: 'Admin'
   },
   {
     id: 'ev-mdr-redis-1',
@@ -764,7 +764,7 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     url: 'https://www.ibm.com/case-studies/',
     tanggalAkses: '2026-10-13',
     kutipanRingkas: 'Bank Mandiri mengandalkan IBM InfoSphere DataStage sebagai engine ETL utama dalam orkestrasi pemrosesan batch data transaksi harian, mengintegrasikan data dari core database ke data mart Business Intelligence dan pelaporan kepatuhan risiko Basel.',
-    pencatat: 'Rinaldi (Lead Admin)'
+    pencatat: 'Admin'
   },
   {
     id: 'ev-mdr-datastage-2',
@@ -796,7 +796,7 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     interviewId: 'int-bni-01',
     tanggalAkses: '2026-09-25',
     kutipanRingkas: 'Narasumber BNI-01 membenarkan bahwa APM Dynatrace dipasang di setiap container microservices untuk zero-blindspot monitoring.',
-    pencatat: 'Rinaldi (Lead Tech Analyst)'
+    pencatat: 'Admin'
   },
 
   // BTN Evidences
@@ -830,7 +830,7 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     interviewId: 'int-bsi-01',
     tanggalAkses: '2026-10-02',
     kutipanRingkas: 'Narasumber BSI-01 mengonfirmasi penggelaran HashiCorp Vault untuk enkripsi zero-trust dan manajemen kunci terpusat.',
-    pencatat: 'Rinaldi (Lead Tech Analyst)'
+    pencatat: 'Admin'
   },
   {
     id: 'ev-bsi-postgresql-1',

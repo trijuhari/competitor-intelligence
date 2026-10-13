@@ -199,14 +199,15 @@ app.get('/api/evidences', async (req, res) => {
 
 app.post('/api/evidences', async (req, res) => {
   try {
-    const { findingId, tipeSumber, judul, url, interviewId, tanggalAkses, kutipanRingkas, pencatat } = req.body;
+    const { findingId, tipeSumber, judul, url, interviewId, tanggalAkses, kutipanRingkas } = req.body;
+    const pencatat = req.body.pencatat?.trim() || 'Admin';
     const id = req.body.id || `ev-${Date.now()}`;
     await run(
       `INSERT INTO evidences (id, findingId, tipeSumber, judul, url, interviewId, tanggalAkses, kutipanRingkas, pencatat)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [id, findingId, tipeSumber, judul, url || null, interviewId || null, tanggalAkses, kutipanRingkas, pencatat]
     );
-    await recordAudit('usr-1', pencatat || 'Analyst', 'CREATE', 'Evidence', `Menambahkan bukti: ${judul}`);
+    await recordAudit('usr-1', pencatat, 'CREATE', 'Evidence', `Menambahkan bukti: ${judul}`);
     res.status(201).json({ id, findingId, tipeSumber, judul, url, interviewId, tanggalAkses, kutipanRingkas, pencatat });
   } catch (err) {
     res.status(500).json({ error: err.message });

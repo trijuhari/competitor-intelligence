@@ -32,7 +32,7 @@ export const FindingDetailModal: React.FC = () => {
   const [newQuote, setNewQuote] = useState('');
   const [newSourceType, setNewSourceType] = useState<'publik' | 'wawancara'>('publik');
   const [newInterviewId, setNewInterviewId] = useState('');
-  const [newPencatat, setNewPencatat] = useState(currentUser.nama || 'Rinaldi Firmansyah (Lead Admin)');
+  const [newPencatat, setNewPencatat] = useState('Admin');
 
   // Finding Inline Edit State
   const [isEditingFinding, setIsEditingFinding] = useState(false);
@@ -99,13 +99,13 @@ export const FindingDetailModal: React.FC = () => {
       interviewId: newSourceType === 'wawancara' ? newInterviewId : undefined,
       tanggalAkses: new Date().toISOString().slice(0, 10),
       kutipanRingkas: newQuote,
-      pencatat: newPencatat.trim() || currentUser.nama
+      pencatat: newPencatat.trim() || 'Admin'
     });
 
     setNewTitle('');
     setNewUrl('');
     setNewQuote('');
-    setNewPencatat(currentUser.nama || 'Rinaldi Firmansyah (Lead Admin)');
+    setNewPencatat('Admin');
     setShowAddEvidence(false);
   };
 
@@ -116,7 +116,7 @@ export const FindingDetailModal: React.FC = () => {
     setEditEvQuote(ev.kutipanRingkas || '');
     setEditEvSourceType(ev.tipeSumber);
     setEditEvInterviewId(ev.interviewId || '');
-    setEditEvPencatat(ev.pencatat || currentUser.nama);
+    setEditEvPencatat(ev.pencatat || 'Admin');
   };
 
   const handleSaveEvidenceEdit = (e: React.FormEvent) => {
@@ -129,7 +129,7 @@ export const FindingDetailModal: React.FC = () => {
       url: editEvSourceType === 'publik' ? editEvUrl : undefined,
       interviewId: editEvSourceType === 'wawancara' ? editEvInterviewId : undefined,
       kutipanRingkas: editEvQuote,
-      pencatat: editEvPencatat.trim() || currentUser.nama
+      pencatat: editEvPencatat.trim() || 'Admin'
     });
 
     setEditingEvidenceId(null);
@@ -413,10 +413,10 @@ export const FindingDetailModal: React.FC = () => {
                   )}
 
                   <div>
-                    <label className="block text-slate-600 font-medium mb-1">Dicatat oleh (Nama Pencatat / Analyst)</label>
+                    <label className="block text-slate-600 font-medium mb-1">Dicatat oleh</label>
                     <input
                       type="text"
-                      placeholder="Contoh: Rinaldi Firmansyah (Lead Admin)"
+                      placeholder="Contoh: Admin"
                       value={newPencatat}
                       onChange={e => setNewPencatat(e.target.value)}
                       className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
@@ -537,12 +537,12 @@ export const FindingDetailModal: React.FC = () => {
                           )}
 
                           <div>
-                            <label className="block text-slate-700 font-semibold mb-1">Dicatat oleh (Nama Pencatat / Analyst)</label>
+                            <label className="block text-slate-700 font-semibold mb-1">Dicatat oleh</label>
                             <input
                               type="text"
                               value={editEvPencatat}
                               onChange={e => setEditEvPencatat(e.target.value)}
-                              placeholder="Contoh: Rinaldi Firmansyah (Lead Admin)"
+                              placeholder="Contoh: Admin"
                               className="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white"
                               required
                             />
