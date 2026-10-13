@@ -11,6 +11,9 @@ import { TechCatalogView } from './components/tech/TechCatalogView';
 import { GapAnalysisView } from './components/gapanalysis/GapAnalysisView';
 import { AdminCMSView } from './components/admin/AdminCMSView';
 import { PresentationView } from './components/presentation/PresentationView';
+import { StrategicDecisionMatrixView } from './components/strategy/StrategicDecisionMatrixView';
+import { TcoCostSimulatorView } from './components/strategy/TcoCostSimulatorView';
+import { GenAiReadinessView } from './components/strategy/GenAiReadinessView';
 import { FindingDetailModal } from './components/matrix/FindingDetailModal';
 import { ShieldCheck, Lock, ExternalLink } from 'lucide-react';
 
@@ -64,6 +67,18 @@ export const AppContent: React.FC = () => {
 
     if (currentPath.includes('gap-analysis') || activeTab === 'gap-analysis') {
       return <GapAnalysisView />;
+    }
+
+    if (currentPath.includes('decision-matrix') || activeTab === 'decision-matrix') {
+      return <StrategicDecisionMatrixView />;
+    }
+
+    if (currentPath.includes('tco-simulator') || activeTab === 'tco-simulator') {
+      return <TcoCostSimulatorView />;
+    }
+
+    if (currentPath.includes('genai-readiness') || activeTab === 'genai-readiness') {
+      return <GenAiReadinessView />;
     }
 
     if (currentPath.includes('tech-catalog') || activeTab === 'tech-catalog') {

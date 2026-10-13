@@ -99,6 +99,9 @@ const pathToTab = (path: string): string => {
   if (path.includes('matrix')) return 'matrix';
   if (path.includes('head-to-head')) return 'head-to-head';
   if (path.includes('gap-analysis')) return 'gap-analysis';
+  if (path.includes('decision-matrix')) return 'decision-matrix';
+  if (path.includes('tco-simulator')) return 'tco-simulator';
+  if (path.includes('genai-readiness')) return 'genai-readiness';
   if (path.includes('tech-catalog')) return 'tech-catalog';
   if (path.includes('banks')) return 'banks';
   if (path.includes('dashboard') || path === '/executive' || path === '/analyst') return 'dashboard';

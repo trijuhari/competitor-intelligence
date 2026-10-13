@@ -162,6 +162,121 @@ export const HeadToHeadView: React.FC = () => {
         </div>
       </div>
 
+      {/* MBB Strategic Battlecard: Moat vs Vulnerability vs Counter-Tactics */}
+      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+        <div className="flex items-center justify-between flex-wrap gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <div className="flex items-center space-x-2 text-orange-400 font-extrabold text-xs uppercase tracking-wider">
+              <Sparkles className="w-4 h-4" />
+              <span>MBB Strategic Battlecard: BRI vs {competitor.singkatan}</span>
+            </div>
+            <h3 className="text-xl font-extrabold text-white mt-1">
+              Architectural Moat & Titik Kritis Perbandingan Head-to-Head
+            </h3>
+          </div>
+          <span className="px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">
+            Deep-Dive Profiling
+          </span>
+        </div>
+
+        {/* 3 Pillars Grid: Moat, Vulnerability, Counter-Tactics */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+          {/* Pillar 1: Architectural Moat */}
+          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3">
+            <div className="flex items-center space-x-2 text-emerald-400 font-extrabold text-xs uppercase">
+              <Shield className="w-4 h-4" />
+              <span>1. Architectural Moat</span>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <span className="font-bold text-blue-300 block text-[11px] uppercase">🟦 Keunggulan Mutlak BRI:</span>
+                <p className="text-slate-300 mt-1 leading-relaxed">
+                  {selectedCompetitorId === 'bank-mandiri'
+                    ? 'Event streaming sejati (Confluent Kafka + Cassandra) berkecepatan 25.000 TPS real-time. 0% ketergantungan lisensi legacy batch ETL.'
+                    : selectedCompetitorId === 'bank-bni'
+                    ? 'Throughput transaksi volume raksasa, jaringan 1.000.000+ AgenBRILink, dan kestabilan hybrid cluster OpenShift on-premise.'
+                    : selectedCompetitorId === 'bank-bsi'
+                    ? 'Skalabilitas ekosistem perbankan mikro tanpa hambatan fragmentasi data merger; kecepatan release cycle harian.'
+                    : 'Diversifikasi ekosistem super-app BRImo yang matang dan kapasitas data lakehouse mutasi historis rekening.'}
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-700/60">
+                <span className="font-bold text-orange-300 block text-[11px] uppercase">
+                  {competitor.logo} Keunggulan {competitor.singkatan}:
+                </span>
+                <p className="text-slate-300 mt-1 leading-relaxed">
+                  {selectedCompetitorId === 'bank-mandiri'
+                    ? 'Ekosistem lifestyle di AWS Jakarta (Livin\' Sukha) dengan rilis mingguan + data science MLOps terpusat di Dataiku.'
+                    : selectedCompetitorId === 'bank-bni'
+                    ? 'APM Dynatrace Perform dengan Davis AI memberikan zero-blindspot monitoring di seluruh microservices wondr.'
+                    : selectedCompetitorId === 'bank-bsi'
+                    ? 'Standarisasi enkripsi HashiCorp Vault dan PostgreSQL EDB pasca-merger memenuhi zero-trust UU PDP.'
+                    : 'Monopoli digitalisasi data perumahan & KPR nasional yang terintegrasi di bale by BTN.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pillar 2: Critical Vulnerability / SPOF */}
+          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3">
+            <div className="flex items-center space-x-2 text-rose-400 font-extrabold text-xs uppercase">
+              <AlertTriangle className="w-4 h-4" />
+              <span>2. Titik Lemah / SPOF</span>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <span className="font-bold text-rose-300 block text-[11px] uppercase">
+                  ⚠️ Celah Arsitektur {competitor.singkatan}:
+                </span>
+                <p className="text-slate-300 mt-1 leading-relaxed">
+                  {selectedCompetitorId === 'bank-mandiri'
+                    ? 'Terkunci lisensi mahal IBM DataStage (batch harian T+1) & Oracle Exadata, membatasi fleksibilitas real-time fraud inference.'
+                    : selectedCompetitorId === 'bank-bni'
+                    ? 'Beban operasional transisi migrasi nasabah dari BNI Mobile Banking lama ke aplikasi wondr.'
+                    : selectedCompetitorId === 'bank-bsi'
+                    ? 'Kompleksitas rekonsiliasi database historis eks-3 bank syariah yang masih rentan bottleneck sinkronisasi.'
+                    : 'Footprint legacy backoffice berbasis AngularJS v1 rentan celah keamanan unpatched.'}
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-700/60">
+                <span className="font-bold text-amber-300 block text-[11px] uppercase">
+                  🔍 Area Waspada bagi BRI:
+                </span>
+                <p className="text-slate-300 mt-1 leading-relaxed">
+                  {selectedCompetitorId === 'bank-mandiri'
+                    ? 'Perlu mengantisipasi time-to-market fitur lifestyle non-core perbankan agar nasabah muda tidak beralih ke Livin\'.'
+                    : 'Kebutuhan adopsi full-stack tracing end-to-end agar resolusi insiden transaksi setara standar Dynatrace.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pillar 3: Counter-Tactics Playbook */}
+          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3">
+            <div className="flex items-center space-x-2 text-blue-400 font-extrabold text-xs uppercase">
+              <Sparkles className="w-4 h-4" />
+              <span>3. Rekomendasi MBB Counter-Tactics</span>
+            </div>
+            <div className="space-y-2 text-slate-300 leading-relaxed">
+              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-700/60">
+                <strong className="text-white block text-[11px]">1. Kunci Keunggulan Real-Time</strong>
+                Maksimalkan Kafka streaming untuk keputusan kredit mikro instan dalam hitungan detik yang tidak mampu ditandingi kompetitor batch.
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-700/60">
+                <strong className="text-white block text-[11px]">2. Pilot Hybrid Hyperscaler</strong>
+                Eksplorasi deployment terisolasi di AWS/GCP Jakarta Region khusus fitur lifestyle non-core BRImo tanpa memindahkan data nasabah inti.
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-700/60">
+                <strong className="text-white block text-[11px]">3. Pertahankan Kedaulatan TCO</strong>
+                Hindari vendor lock-in software proprietary monolithic demi menjaga rasio belanja inovasi (*Change-the-Bank*) di atas 38%.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Category by Category Breakdown */}
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-slate-900 flex items-center space-x-2">

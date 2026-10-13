@@ -3,8 +3,9 @@ import { useApp } from '../../context/AppContext';
 import { 
   BarChart3, Grid3X3, ArrowLeftRight, Building2, Cpu, 
   TrendingUp, Shield, Presentation, Download, CheckCircle2, ChevronDown, 
-  LogOut, Lock, User as UserIcon
+  LogOut, Lock, User as UserIcon, FileText, Compass, DollarSign, Bot 
 } from 'lucide-react';
+import { ExecutiveBoardMemoModal } from '../strategy/ExecutiveBoardMemoModal';
 
 export const Navbar: React.FC = () => {
   const { 
@@ -20,6 +21,7 @@ export const Navbar: React.FC = () => {
   } = useApp();
 
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
+  const [isBoardMemoOpen, setIsBoardMemoOpen] = useState(false);
 
   // Stats for badge
   const verifiedCount = findings.filter(f => f.confidence === 'Confirmed' || f.confidence === 'Likely').length;
@@ -42,6 +44,9 @@ export const Navbar: React.FC = () => {
     : isRoleAnalyst
     ? [
         { path: '/analyst/matrix', label: 'Matriks Tech Stack', icon: Grid3X3 },
+        { path: '/analyst/decision-matrix', label: 'Decision Matrix 2x2', icon: Compass },
+        { path: '/analyst/tco-simulator', label: 'TCO Simulator', icon: DollarSign },
+        { path: '/analyst/genai-readiness', label: 'GenAI Readiness', icon: Bot },
         { path: '/analyst/head-to-head', label: 'Head-to-Head (BRI vs X)', icon: ArrowLeftRight },
         { path: '/analyst/gap-analysis', label: 'Gap Analysis', icon: TrendingUp },
         { path: '/analyst/tech-catalog', label: 'Katalog Teknologi', icon: Cpu },
@@ -50,8 +55,12 @@ export const Navbar: React.FC = () => {
       ]
     : [
         { path: '/executive/dashboard', label: 'Executive Overview', icon: BarChart3 },
+        { path: '/executive/decision-matrix', label: 'Decision Matrix 2x2', icon: Compass },
+        { path: '/executive/tco-simulator', label: 'TCO Simulator', icon: DollarSign },
+        { path: '/executive/genai-readiness', label: 'GenAI Readiness', icon: Bot },
+        { path: '/executive/head-to-head', label: 'Head-to-Head Battlecard', icon: ArrowLeftRight },
         { path: '/executive/banks', label: 'Profil 5 Bank Himbara', icon: Building2 },
-        { path: '/executive/presentation', label: 'Mode Presentasi (17 Slide)', icon: Presentation },
+        { path: '/executive/presentation', label: 'Mode Presentasi (20 Slide)', icon: Presentation },
       ];
 
   const roleBadgeInfo = isRoleAdmin
@@ -132,6 +141,16 @@ export const Navbar: React.FC = () => {
               </div>
             )}
 
+            {/* Board Memo Button (1-Click Executive PDF) */}
+            <button
+              onClick={() => setIsBoardMemoOpen(true)}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold shadow-xs transition active:scale-95"
+              title="Cetak Executive Board Memorandum (PDF/A4)"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Board Memo</span>
+            </button>
+
             {/* Mode Presentasi Button */}
             <button
               onClick={() => {
@@ -193,6 +212,12 @@ export const Navbar: React.FC = () => {
           })}
         </nav>
       </div>
+
+      {/* Global Board Memorandum Modal */}
+      <ExecutiveBoardMemoModal 
+        isOpen={isBoardMemoOpen} 
+        onClose={() => setIsBoardMemoOpen(false)} 
+      />
     </header>
   );
 };

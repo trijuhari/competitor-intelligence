@@ -188,6 +188,67 @@ export const DashboardOverview: React.FC = () => {
         </div>
       </div>
 
+      {/* MBB Strategic Cockpit Quick Launch */}
+      <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center space-x-2">
+            <span className="p-1.5 rounded-lg bg-orange-500 text-white font-bold">
+              <Sparkles className="w-4 h-4" />
+            </span>
+            <h3 className="font-extrabold text-base text-white">
+              MBB Strategic Advisory Cockpits (Board-Level Decision Tools)
+            </h3>
+          </div>
+          <span className="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-200 border border-blue-400/30 text-xs font-bold">
+            Executive Toolkits
+          </span>
+        </div>
+        <p className="text-xs text-slate-300 max-w-3xl">
+          Alat bantu analisis strategis untuk Rapat Direksi: Evaluasi dampak vs kompleksitas inisiatif, kuantifikasi penghematan lisensi (TCO), dan kesiapan infrastruktur cerdas GenAI.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          <div 
+            onClick={() => setActiveTab('decision-matrix')}
+            className="p-4 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-400 cursor-pointer transition space-y-2 group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-extrabold text-blue-300 text-sm">Strategic Decision Matrix</span>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-300 transition" />
+            </div>
+            <p className="text-[11px] text-slate-300 leading-relaxed">
+              Matriks 2x2 Effort vs Impact & 4R Roadmap (Quick Wins, Strategic Bets, Tech Debt).
+            </p>
+          </div>
+
+          <div 
+            onClick={() => setActiveTab('tco-simulator')}
+            className="p-4 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-400 cursor-pointer transition space-y-2 group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-extrabold text-emerald-300 text-sm">TCO & Cost Simulator</span>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-300 transition" />
+            </div>
+            <p className="text-[11px] text-slate-300 leading-relaxed">
+              Simulasi rasio Run vs Change dan potensi penghematan lisensi proprietary per-core.
+            </p>
+          </div>
+
+          <div 
+            onClick={() => setActiveTab('genai-readiness')}
+            className="p-4 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-purple-400 cursor-pointer transition space-y-2 group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-extrabold text-purple-300 text-sm">GenAI & Data Readiness</span>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-purple-300 transition" />
+            </div>
+            <p className="text-[11px] text-slate-300 leading-relaxed">
+              Benchmark 4 pilar arsitektur cerdas: Streaming mesh, feature store, & kedaulatan UU PDP.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Strategic Callouts (Hanya BRI, Hanya Kompetitor, Standar Himbara) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Box 1: Keunggulan Eksklusif BRI */}

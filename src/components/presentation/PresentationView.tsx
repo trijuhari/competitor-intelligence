@@ -22,6 +22,7 @@ export const PresentationView: React.FC = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [showSpeakerNotes, setShowSpeakerNotes] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [slide17PeerFilter, setSlide17PeerFilter] = useState<string>('all');
 
   // Filter only Published findings for workshop presentation
   const publishedFindings = findings.filter(f => f.statusReview === 'Published');
@@ -640,9 +641,33 @@ export const PresentationView: React.FC = () => {
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
               Radar Kesenjangan Kapabilitas & Titik Ancaman Kompetitor Terhadap BRI
             </h2>
-            <p className="text-xs text-slate-400 mt-1">
-              Pemetaan kuadran strategis: Di mana BRI memimpin, dan di mana kompetitor sedang mempersempit jarak.
-            </p>
+            <div className="flex items-center justify-between flex-wrap gap-2 mt-2">
+              <p className="text-xs text-slate-400">
+                Pemetaan kuadran strategis: Di mana BRI memimpin, dan di mana kompetitor sedang mempersempit jarak.
+              </p>
+              <div className="flex items-center space-x-1.5 text-xs">
+                <span className="text-slate-400 font-semibold text-[11px]">Sorot Peer:</span>
+                {[
+                  { id: 'all', label: 'Semua' },
+                  { id: 'bank-mandiri', label: 'Mandiri' },
+                  { id: 'bank-bni', label: 'BNI' },
+                  { id: 'bank-btn', label: 'BTN' },
+                  { id: 'bank-bsi', label: 'BSI' }
+                ].map(peer => (
+                  <button
+                    key={peer.id}
+                    onClick={() => setSlide17PeerFilter(peer.id)}
+                    className={`px-2 py-0.5 rounded text-[11px] font-bold transition ${
+                      slide17PeerFilter === peer.id 
+                        ? 'bg-orange-500 text-white shadow-xs' 
+                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    {peer.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">

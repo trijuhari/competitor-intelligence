@@ -248,13 +248,27 @@ export const MatrixView: React.FC = () => {
 
                     {/* Tech Rows in this Category */}
                     {techsInCat.map(tech => {
+                      const adoptionCount = findings.filter(f => f.technologyId === tech.id).length;
+                      const isDifferentiator = adoptionCount <= 2;
+
                       return (
                         <tr key={tech.id} className="hover:bg-slate-50/80 transition group">
                           {/* Tech Name Column (Sticky) */}
                           <td className="py-3 px-4 font-medium text-slate-900 sticky left-0 bg-white group-hover:bg-slate-50/90 z-10 border-r border-slate-200 shadow-xs">
                             <div className="flex items-start justify-between">
                               <div>
-                                <div className="font-bold text-slate-900 text-xs">{tech.nama}</div>
+                                <div className="flex items-center space-x-1.5">
+                                  <span className="font-bold text-slate-900 text-xs">{tech.nama}</span>
+                                  {isDifferentiator ? (
+                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-purple-100 text-purple-800 border border-purple-200" title="Komponen pembeda arsitektur spesifik (diadopsi ≤ 2 bank)">
+                                      Differentiator
+                                    </span>
+                                  ) : (
+                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-semibold bg-slate-100 text-slate-600" title="Standar konsensus industri (diadopsi ≥ 3 bank)">
+                                      Commodity
+                                    </span>
+                                  )}
+                                </div>
                                 <div className="text-[11px] text-slate-500 flex items-center space-x-1.5 mt-0.5">
                                   <span>{tech.vendor}</span>
                                   <span>•</span>
