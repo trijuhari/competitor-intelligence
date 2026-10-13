@@ -205,6 +205,15 @@ export const INITIAL_TECHNOLOGIES: Technology[] = [
     websiteUrl: 'https://www.cloudera.com'
   },
   {
+    id: 'tech-ibm-datastage',
+    nama: 'IBM InfoSphere DataStage',
+    vendor: 'IBM Corporation',
+    categoryId: 'cat-big-data',
+    tipe: 'komersial',
+    deskripsi: 'Platform Enterprise Data Integration & ETL (Extract, Transform, Load) untuk otomatisasi data warehousing skala masif, integrasi data transaksi core banking, dan pelaporan kepatuhan regulasi.',
+    websiteUrl: 'https://www.ibm.com/products/infosphere-datastage'
+  },
+  {
     id: 'tech-minio',
     nama: 'MinIO / Ceph Object Store',
     vendor: 'MinIO Inc / Red Hat',
@@ -747,6 +756,26 @@ export const INITIAL_EVIDENCES: Evidence[] = [
     kutipanRingkas: 'Requirements: 4+ years of Go/Golang microservices, gRPC, Docker, Kubernetes, and high-concurrency payment APIs.',
     pencatat: 'Budi (Consultant Analyst)'
   },
+  {
+    id: 'ev-mdr-datastage-1',
+    findingId: 'f-mdr-ibm-datastage',
+    tipeSumber: 'publik',
+    judul: 'Arsitektur Enterprise Data Warehouse (EDW) & Data Integration Bank Mandiri',
+    url: 'https://www.ibm.com/case-studies/',
+    tanggalAkses: '2026-10-13',
+    kutipanRingkas: 'Bank Mandiri mengandalkan IBM InfoSphere DataStage sebagai engine ETL utama dalam orkestrasi pemrosesan batch data transaksi harian, mengintegrasikan data dari core database ke data mart Business Intelligence dan pelaporan kepatuhan risiko Basel.',
+    pencatat: 'Rinaldi (Lead Admin)'
+  },
+  {
+    id: 'ev-mdr-datastage-2',
+    findingId: 'f-mdr-ibm-datastage',
+    tipeSumber: 'publik',
+    judul: 'Kualifikasi Data Engineering & ETL Developer Bank Mandiri (LinkedIn Jobs)',
+    url: 'https://www.linkedin.com/jobs/',
+    tanggalAkses: '2026-10-13',
+    kutipanRingkas: 'Spesifikasi teknis Data Engineering Bank Mandiri mensyaratkan keahlian rancang bangun pipeline IBM DataStage v11.5+, optimasi query ETL skala enterprise, serta integrasi data perbankan untuk kepatuhan regulasi OJK.',
+    pencatat: 'Siti Rahmawati (Tech Analyst)'
+  },
 
   // BNI Evidences
   {
@@ -1126,6 +1155,17 @@ export const INITIAL_FINDINGS: Finding[] = [
     tanggalVerifikasi: '2026-09-15',
     catatan: 'Platform collaborative data science untuk analytics squad di Mandiri Digital.',
     evidenceIds: []
+  },
+  {
+    id: 'f-mdr-ibm-datastage',
+    bankId: 'bank-mandiri',
+    technologyId: 'tech-ibm-datastage',
+    confidence: 'Confirmed',
+    statusReview: 'Published',
+    tanggalTerdeteksi: '2024-03-10',
+    tanggalVerifikasi: '2026-10-13',
+    catatan: 'Digunakan oleh Enterprise Data Warehouse (EDW) Bank Mandiri untuk orkestrasi pipeline ETL harian dan bulanan berskala petabyte, ekstraksi data transaksi core banking ke data mart analitik bisnis, serta pelaporan kepatuhan regulasi perbankan (Basel II/III & BI/OJK).',
+    evidenceIds: ['ev-mdr-datastage-1', 'ev-mdr-datastage-2']
   },
   {
     id: 'f-mdr-fico',

@@ -202,6 +202,15 @@ export const INITIAL_TECHNOLOGIES = [
     websiteUrl: 'https://www.cloudera.com'
   },
   {
+    id: 'tech-ibm-datastage',
+    nama: 'IBM InfoSphere DataStage',
+    vendor: 'IBM Corporation',
+    categoryId: 'cat-big-data',
+    tipe: 'komersial',
+    deskripsi: 'Platform Enterprise Data Integration & ETL (Extract, Transform, Load) untuk otomatisasi data warehousing skala masif, integrasi data transaksi core banking, dan pelaporan kepatuhan regulasi.',
+    websiteUrl: 'https://www.ibm.com/products/infosphere-datastage'
+  },
+  {
     id: 'tech-minio',
     nama: 'MinIO / Ceph Object Store',
     vendor: 'MinIO Inc / Red Hat',
@@ -747,6 +756,16 @@ export const INITIAL_FINDINGS = [
     catatan: 'Platform collaborative data science untuk analytics squad di Mandiri Digital.'
   },
   {
+    id: 'f-mdr-ibm-datastage',
+    bankId: 'bank-mandiri',
+    technologyId: 'tech-ibm-datastage',
+    confidence: 'Confirmed',
+    statusReview: 'Published',
+    tanggalTerdeteksi: '2024-03-10',
+    tanggalVerifikasi: '2026-10-13',
+    catatan: 'Digunakan oleh Enterprise Data Warehouse (EDW) Bank Mandiri untuk orkestrasi pipeline ETL harian dan bulanan berskala petabyte, ekstraksi data transaksi core banking ke data mart analitik bisnis, serta pelaporan kepatuhan regulasi perbankan (Basel II/III & BI/OJK).'
+  },
+  {
     id: 'f-mdr-vault',
     bankId: 'bank-mandiri',
     technologyId: 'tech-hashicorp-vault',
@@ -868,6 +887,26 @@ export const INITIAL_EVIDENCES = [
     tanggalAkses: '2026-09-15',
     kutipanRingkas: 'Narasumber MDR-01 memverifikasi hybrid setup antara AWS Jakarta untuk lifestyle dan on-premise Exadata untuk core banking.',
     pencatat: 'Rinaldi (Lead Tech Analyst)'
+  },
+  {
+    id: 'ev-mdr-datastage-1',
+    findingId: 'f-mdr-ibm-datastage',
+    tipeSumber: 'publik',
+    judul: 'Arsitektur Enterprise Data Warehouse (EDW) & Data Integration Bank Mandiri',
+    url: 'https://www.ibm.com/case-studies/',
+    tanggalAkses: '2026-10-13',
+    kutipanRingkas: 'Bank Mandiri mengandalkan IBM InfoSphere DataStage sebagai engine ETL utama dalam orkestrasi pemrosesan batch data transaksi harian, mengintegrasikan data dari core database ke data mart Business Intelligence dan pelaporan kepatuhan risiko Basel.',
+    pencatat: 'Rinaldi (Lead Admin)'
+  },
+  {
+    id: 'ev-mdr-datastage-2',
+    findingId: 'f-mdr-ibm-datastage',
+    tipeSumber: 'publik',
+    judul: 'Kualifikasi Data Engineering & ETL Developer Bank Mandiri (LinkedIn Jobs)',
+    url: 'https://www.linkedin.com/jobs/',
+    tanggalAkses: '2026-10-13',
+    kutipanRingkas: 'Spesifikasi teknis Data Engineering Bank Mandiri mensyaratkan keahlian rancang bangun pipeline IBM DataStage v11.5+, optimasi query ETL skala enterprise, serta integrasi data perbankan untuk kepatuhan regulasi OJK.',
+    pencatat: 'Siti Rahmawati (Tech Analyst)'
   },
   {
     id: 'ev-bni-dynatrace-1',
