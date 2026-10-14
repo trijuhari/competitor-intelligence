@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   ShieldCheck, CheckCircle2, AlertTriangle, Plus, Trash2, Edit3, 
-  Upload, Download, RefreshCw, FileText, Lock, Users, History, Check, X, Save, Cpu, Search
+  Upload, Download, RefreshCw, FileText, Lock, Users, History, Check, X, Save, Cpu, Search, Database
 } from 'lucide-react';
 import { ConfidenceLevel, ReviewStatus, TechType, Technology, Interview, Finding } from '../../types';
 import { getConfidenceBadge, getReviewStatusBadge } from '../../utils/helpers';
+import { AdminResearchMatrixTab } from './AdminResearchMatrixTab';
 
 export const AdminCMSView: React.FC = () => {
   const { 
@@ -19,6 +20,7 @@ export const AdminCMSView: React.FC = () => {
     currentUser,
     currentPath,
     navigate,
+    researchItems,
     addFinding,
     updateFinding,
     deleteFinding,
@@ -37,20 +39,23 @@ export const AdminCMSView: React.FC = () => {
   } = useApp();
 
   const [activeAdminSubtab, setActiveAdminSubtab] = useState<
-    'checklist' | 'findings' | 'technologies' | 'add-finding' | 'add-tech' | 'interviews' | 'audit'
-  >('checklist');
+    'checklist' | 'research-matrix' | 'findings' | 'technologies' | 'add-finding' | 'add-tech' | 'interviews' | 'audit'
+  >('research-matrix');
 
   React.useEffect(() => {
-    if (currentPath.includes('findings')) setActiveAdminSubtab('findings');
+    if (currentPath.includes('research-matrix') || currentPath.includes('capabilities') || currentPath.includes('sheet')) setActiveAdminSubtab('research-matrix');
+    else if (currentPath.includes('findings')) setActiveAdminSubtab('findings');
     else if (currentPath.includes('technologies')) setActiveAdminSubtab('technologies');
     else if (currentPath.includes('interviews')) setActiveAdminSubtab('interviews');
     else if (currentPath.includes('audit-logs')) setActiveAdminSubtab('audit');
-    else if (currentPath === '/admin' || currentPath.includes('overview')) setActiveAdminSubtab('checklist');
+    else if (currentPath.includes('checklist')) setActiveAdminSubtab('checklist');
+    else if (currentPath === '/admin' || currentPath.includes('overview')) setActiveAdminSubtab('research-matrix');
   }, [currentPath]);
 
   const switchSubtab = (tabId: typeof activeAdminSubtab) => {
     setActiveAdminSubtab(tabId);
-    if (tabId === 'checklist') navigate('/admin');
+    if (tabId === 'checklist') navigate('/admin/checklist');
+    else if (tabId === 'research-matrix') navigate('/admin/research-matrix');
     else if (tabId === 'findings') navigate('/admin/findings');
     else if (tabId === 'technologies') navigate('/admin/technologies');
     else if (tabId === 'interviews') navigate('/admin/interviews');
@@ -320,6 +325,7 @@ export const AdminCMSView: React.FC = () => {
       {/* Admin Subtabs Navigation */}
       <div className="flex items-center space-x-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none text-xs">
         {[
+          { id: 'research-matrix', label: `Riset Sheet CSV (${researchItems.length})` },
           { id: 'checklist', label: 'Checklist Kesiapan Workshop' },
           { id: 'findings', label: `Kelola Temuan (${findings.length})` },
           { id: 'technologies', label: `Kelola Teknologi (${technologies.length})` },
@@ -341,6 +347,11 @@ export const AdminCMSView: React.FC = () => {
           </button>
         ))}
       </div>
+
+      {/* Subtab: Kelola Riset Sheet CSV (408 Baris) */}
+      {activeAdminSubtab === 'research-matrix' && (
+        <AdminResearchMatrixTab />
+      )}
 
       {/* Subtab 1: Checklist Kesiapan Workshop */}
       {activeAdminSubtab === 'checklist' && (

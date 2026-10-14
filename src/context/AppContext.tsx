@@ -28,6 +28,9 @@ interface AppContextType {
   selectedResearchCell: { capId: string; bankCode: string } | null;
   setSelectedResearchCell: (cell: { capId: string; bankCode: string } | null) => void;
   updateResearchCell: (capId: string, bankCode: string, updates: Partial<BankCapabilityDetail>) => Promise<void>;
+  updateResearchCapability: (capId: string, updates: Partial<ResearchItem>) => Promise<void>;
+  addResearchCapability: (data: Omit<ResearchItem, 'id' | 'no'>) => Promise<void>;
+  deleteResearchCapability: (capId: string) => Promise<void>;
   exportResearchMatrixCSV: () => void;
 
   // Auth & Roles
@@ -649,6 +652,83 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addAuditLog('UPDATE', 'Finding', `Pembaruan riset kapabilitas #${capId} bank ${bankCode.toUpperCase()} (${updates.status || 'Updated'})`);
   };
 
+  const updateResearchCapability = async (capId: string, updates: Partial<ResearchItem>) => {
+    setResearchItems(prev => {
+      const next = prev.map(item => {
+        if (item.id !== capId) return item;
+        return {
+          ...item,
+          ...updates,
+          banks: updates.banks ? { ...item.banks, ...updates.banks } : item.banks
+        };
+      });
+      localStorage.setItem(RESEARCH_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+
+    try {
+      await api.updateResearchCapability(capId, updates, currentUser.nama);
+    } catch (err) {
+      console.warn('Backend update failed, kept in local state:', err);
+    }
+
+    addAuditLog('UPDATE', 'Finding', `Pembaruan data kapabilitas riset #${capId} (${updates.kapabilitas || 'Meta'})`);
+  };
+
+  const addResearchCapability = async (data: Omit<ResearchItem, 'id' | 'no'>) => {
+    const nextNo = researchItems.length > 0 ? Math.max(...researchItems.map(r => r.no)) + 1 : 1;
+    const newId = `cap-${nextNo}`;
+    
+    const defaultBanks: Record<string, BankCapabilityDetail> = {
+      bri: { bankCode: 'BRI', merk: '-', link: '', url: '', pic: 'Admin', status: 'Belum' },
+      mandiri: { bankCode: 'Mandiri', merk: '-', link: '', url: '', pic: 'Admin', status: 'Belum' },
+      bca: { bankCode: 'BCA', merk: '-', link: '', url: '', pic: 'Admin', status: 'Belum' },
+      bni: { bankCode: 'BNI', merk: '-', link: '', url: '', pic: 'Admin', status: 'Belum' },
+      btn: { bankCode: 'BTN', merk: '-', link: '', url: '', pic: 'Admin', status: 'Belum' },
+      bsi: { bankCode: 'BSI', merk: '-', link: '', url: '', pic: 'Admin', status: 'Belum' }
+    };
+
+    const newItem: ResearchItem = {
+      id: newId,
+      no: nextNo,
+      workshop: data.workshop,
+      domain: data.domain,
+      kategori: data.kategori,
+      kapabilitas: data.kapabilitas,
+      banks: data.banks ? { ...defaultBanks, ...data.banks } : defaultBanks
+    };
+
+    setResearchItems(prev => {
+      const next = [...prev, newItem];
+      localStorage.setItem(RESEARCH_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+
+    try {
+      await api.createResearchCapability({ ...data, banks: newItem.banks }, currentUser.nama);
+    } catch (err) {
+      console.warn('Backend creation failed, kept in local state:', err);
+    }
+
+    addAuditLog('CREATE', 'Finding', `Menambahkan kapabilitas riset baru #${nextNo}: ${data.kapabilitas} (${data.workshop})`);
+  };
+
+  const deleteResearchCapability = async (capId: string) => {
+    setResearchItems(prev => {
+      const next = prev.filter(r => r.id !== capId);
+      localStorage.setItem(RESEARCH_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+
+    try {
+      await api.deleteResearchCapability(capId, currentUser.nama);
+    } catch (err) {
+      console.warn('Backend delete failed, kept in local state:', err);
+    }
+
+    addAuditLog('DELETE', 'Finding', `Menghapus kapabilitas riset ID ${capId}`);
+  };
+
   const exportResearchMatrixCSV = () => {
     const headers = [
       'No', 'Workshop', 'Domain', 'Kategori', 'Kapabilitas/Sistem yang Dicari',
@@ -739,6 +819,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         selectedResearchCell,
         setSelectedResearchCell,
         updateResearchCell,
+        updateResearchCapability,
+        addResearchCapability,
+        deleteResearchCapability,
         exportResearchMatrixCSV,
 
         // Auth & Routing

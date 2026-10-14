@@ -188,6 +188,33 @@ export const api = {
     return res.json();
   },
 
+  async updateResearchCapability(capId: string, updates: any, userName?: string): Promise<any> {
+    const res = await fetch(`${API_BASE}/research-matrix/${capId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...updates, userName })
+    });
+    if (!res.ok) throw new Error('Failed to update capability');
+    return res.json();
+  },
+
+  async createResearchCapability(data: any, userName?: string): Promise<any> {
+    const res = await fetch(`${API_BASE}/research-matrix`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...data, userName })
+    });
+    if (!res.ok) throw new Error('Failed to create capability');
+    return res.json();
+  },
+
+  async deleteResearchCapability(capId: string, userName?: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/research-matrix/${capId}?userName=${encodeURIComponent(userName || 'Admin')}`, {
+      method: 'DELETE'
+    });
+    if (!res.ok) throw new Error('Failed to delete capability');
+  },
+
   async resetData(): Promise<void> {
     const res = await fetch(`${API_BASE}/reset-data`, {
       method: 'POST'

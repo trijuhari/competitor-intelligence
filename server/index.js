@@ -372,6 +372,115 @@ app.put('/api/research-matrix/:capId/:bankCode', async (req, res) => {
   }
 });
 
+// Update capability metadata and/or all its bank evaluations
+app.put('/api/research-matrix/:capId', async (req, res) => {
+  try {
+    const { capId } = req.params;
+    const { workshop, domain, kategori, kapabilitas, banks, userName } = req.body;
+    const no = parseInt(capId.replace('cap-', '')) || 1;
+
+    // Update capability meta for all 6 bank records with this 'no'
+    await run(
+      `UPDATE research_records SET
+        workshop = COALESCE(?, workshop),
+        domain = COALESCE(?, domain),
+        kategori = COALESCE(?, kategori),
+        kapabilitas = COALESCE(?, kapabilitas)
+       WHERE no = ?`,
+      [workshop, domain, kategori, kapabilitas, no]
+    );
+
+    // If banks object is provided, update each bank record
+    if (banks && typeof banks === 'object') {
+      for (const [bankSlug, bDetail] of Object.entries(banks)) {
+        if (!bDetail) continue;
+        await run(
+          `UPDATE research_records SET
+            merk = COALESCE(?, merk),
+            link = COALESCE(?, link),
+            url = COALESCE(?, url),
+            pic = COALESCE(?, pic),
+            status = COALESCE(?, status)
+           WHERE no = ? AND LOWER(bankCode) = LOWER(?)`,
+          [bDetail.merk, bDetail.link, bDetail.url, bDetail.pic, bDetail.status, no, bankSlug]
+        );
+      }
+    }
+
+    await recordAudit('usr-1', userName || 'Admin', 'UPDATE', 'Finding', `Memperbarui kapabilitas riset #${no} (${kapabilitas || 'Meta'})`);
+    res.json({ success: true, capId, no });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Add new capability to research matrix across all 6 banks
+app.post('/api/research-matrix', async (req, res) => {
+  try {
+    const { workshop, domain, kategori, kapabilitas, banks, userName } = req.body;
+    if (!kapabilitas || !workshop || !domain || !kategori) {
+      return res.status(400).json({ error: 'Kapabilitas, workshop, domain, dan kategori wajib diisi.' });
+    }
+
+    const maxNoRow = await getOne('SELECT MAX(no) as maxNo FROM research_records');
+    const newNo = (maxNoRow?.maxNo || 0) + 1;
+    const newCapId = `cap-${newNo}`;
+
+    const bankList = [
+      { code: 'BRI', id: 'bank-bri', key: 'bri' },
+      { code: 'Mandiri', id: 'bank-mandiri', key: 'mandiri' },
+      { code: 'BCA', id: 'bank-bca', key: 'bca' },
+      { code: 'BNI', id: 'bank-bni', key: 'bni' },
+      { code: 'BTN', id: 'bank-btn', key: 'btn' },
+      { code: 'BSI', id: 'bank-bsi', key: 'bsi' }
+    ];
+
+    for (const b of bankList) {
+      const bDetail = banks?.[b.key] || {};
+      const rowId = `rec-${newNo}-${b.code.toLowerCase()}`;
+      await run(
+        `INSERT INTO research_records (id, no, workshop, domain, kategori, kapabilitas, bankCode, bankId, merk, link, url, pic, status)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          rowId,
+          newNo,
+          workshop,
+          domain,
+          kategori,
+          kapabilitas,
+          b.code,
+          b.id,
+          bDetail.merk || '-',
+          bDetail.link || '',
+          bDetail.url || '',
+          bDetail.pic || 'Admin',
+          bDetail.status || 'Belum'
+        ]
+      );
+    }
+
+    await recordAudit('usr-1', userName || 'Admin', 'CREATE', 'Finding', `Menambahkan kapabilitas riset baru #${newNo}: ${kapabilitas}`);
+    res.status(201).json({ success: true, id: newCapId, no: newNo });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete a capability from research matrix
+app.delete('/api/research-matrix/:capId', async (req, res) => {
+  try {
+    const { capId } = req.params;
+    const no = parseInt(capId.replace('cap-', '')) || 0;
+    const { userName } = req.query;
+
+    await run('DELETE FROM research_records WHERE no = ?', [no]);
+    await recordAudit('usr-1', userName || 'Admin', 'DELETE', 'Finding', `Menghapus kapabilitas riset #${no}`);
+    res.json({ success: true, capId, no });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 8. Auth & Users
 app.post('/api/auth/login', async (req, res) => {
   try {

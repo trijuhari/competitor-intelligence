@@ -168,6 +168,24 @@ export const initDatabase = async () => {
     );
   `);
 
+  await run(`
+    CREATE TABLE IF NOT EXISTS research_records (
+      id TEXT PRIMARY KEY,
+      no INTEGER NOT NULL,
+      workshop TEXT NOT NULL,
+      domain TEXT NOT NULL,
+      kategori TEXT NOT NULL,
+      kapabilitas TEXT NOT NULL,
+      bankCode TEXT NOT NULL,
+      bankId TEXT NOT NULL,
+      merk TEXT,
+      link TEXT,
+      url TEXT,
+      pic TEXT,
+      status TEXT NOT NULL
+    );
+  `);
+
   console.log('✅ SQLite Schema initialized at:', dbPath);
 };
 
