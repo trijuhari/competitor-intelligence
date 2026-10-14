@@ -202,52 +202,52 @@ export const MatrixView: React.FC = () => {
 
       {/* Top KPI Statistics Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Kapabilitas</div>
-          <div className="text-xl font-extrabold text-slate-900 mt-0.5">{stats.total}</div>
-          <div className="text-[10px] text-slate-500">13 Domain Arsitektur</div>
+        <div className="bg-white/90 backdrop-blur-sm p-3.5 rounded-2xl border border-slate-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Total Kapabilitas</div>
+          <div className="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">{stats.total}</div>
+          <div className="text-[10px] text-slate-500 font-medium">13 Domain Arsitektur</div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 flex items-center space-x-1">
-            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+        <div className="bg-gradient-to-br from-emerald-50/80 to-teal-50/40 p-3.5 rounded-2xl border border-emerald-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 flex items-center space-x-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Terverifikasi</span>
           </div>
-          <div className="text-xl font-extrabold text-emerald-900 mt-0.5">{stats.verifiedCount}</div>
-          <div className="text-[10px] text-emerald-700 font-medium">{stats.verifiedPct}% dari 2.448 sel</div>
+          <div className="text-2xl font-black text-emerald-950 mt-0.5 tracking-tight">{stats.verifiedCount}</div>
+          <div className="text-[10px] text-emerald-700 font-semibold">{stats.verifiedPct}% dari 2.448 sel</div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-amber-200 bg-amber-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-amber-700 flex items-center space-x-1">
-            <AlertTriangle className="w-3 h-3 text-amber-600" />
+        <div className="bg-gradient-to-br from-amber-50/80 to-yellow-50/40 p-3.5 rounded-2xl border border-amber-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 flex items-center space-x-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
             <span>Inferensi</span>
           </div>
-          <div className="text-xl font-extrabold text-amber-900 mt-0.5">{stats.inferenceCount}</div>
-          <div className="text-[10px] text-amber-700 font-medium">{stats.inferencePct}% sinyal publik</div>
+          <div className="text-2xl font-black text-amber-950 mt-0.5 tracking-tight">{stats.inferenceCount}</div>
+          <div className="text-[10px] text-amber-700 font-semibold">{stats.inferencePct}% sinyal publik</div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-blue-200 bg-blue-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">WS1 Core & Digital</div>
-          <div className="text-xl font-extrabold text-blue-900 mt-0.5">{stats.wsCounts.WS1}</div>
-          <div className="text-[10px] text-blue-600">CBS, M-Banking, Internet</div>
+        <div className="bg-gradient-to-br from-blue-50/80 to-sky-50/40 p-3.5 rounded-2xl border border-blue-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-blue-800">WS1 Core & Digital</div>
+          <div className="text-2xl font-black text-blue-950 mt-0.5 tracking-tight">{stats.wsCounts.WS1}</div>
+          <div className="text-[10px] text-blue-700 font-medium">CBS, M-Banking, Web</div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-indigo-200 bg-indigo-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">WS2 EDW & BI</div>
-          <div className="text-xl font-extrabold text-indigo-900 mt-0.5">{stats.wsCounts.WS2}</div>
-          <div className="text-[10px] text-indigo-600">Data Warehouse & MDM</div>
+        <div className="bg-gradient-to-br from-indigo-50/80 to-violet-50/40 p-3.5 rounded-2xl border border-indigo-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-800">WS2 EDW & BI</div>
+          <div className="text-2xl font-black text-indigo-950 mt-0.5 tracking-tight">{stats.wsCounts.WS2}</div>
+          <div className="text-[10px] text-indigo-700 font-medium">Data Warehouse & MDM</div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-cyan-200 bg-cyan-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-cyan-700">WS3 Cloud & Infra</div>
-          <div className="text-xl font-extrabold text-cyan-900 mt-0.5">{stats.wsCounts.WS3}</div>
-          <div className="text-[10px] text-cyan-600">Cloud, Jaringan, ITSM</div>
+        <div className="bg-gradient-to-br from-cyan-50/80 to-teal-50/40 p-3.5 rounded-2xl border border-cyan-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-cyan-800">WS3 Cloud & Infra</div>
+          <div className="text-2xl font-black text-cyan-950 mt-0.5 tracking-tight">{stats.wsCounts.WS3}</div>
+          <div className="text-[10px] text-cyan-700 font-medium">Cloud, Jaringan, ITSM</div>
         </div>
 
-        <div className="bg-white p-3 rounded-xl border border-purple-200 bg-purple-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-purple-700">WS4 Big Data & AI</div>
-          <div className="text-xl font-extrabold text-purple-900 mt-0.5">{stats.wsCounts.WS4}</div>
-          <div className="text-[10px] text-purple-600">Hadoop, GenAI & ML</div>
+        <div className="bg-gradient-to-br from-purple-50/80 to-fuchsia-50/40 p-3.5 rounded-2xl border border-purple-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-purple-800">WS4 Big Data & AI</div>
+          <div className="text-2xl font-black text-purple-950 mt-0.5 tracking-tight">{stats.wsCounts.WS4}</div>
+          <div className="text-[10px] text-purple-700 font-medium">Hadoop, GenAI & ML</div>
         </div>
       </div>
 
@@ -541,30 +541,30 @@ export const MatrixView: React.FC = () => {
                         const hasLink = !!(detail.url || (detail.link && detail.link.startsWith('http')));
 
                         let cellBg = isBelum 
-                          ? 'bg-slate-50/60 hover:bg-slate-100/80 border-slate-200 text-slate-500'
+                          ? 'bg-slate-50/70 hover:bg-slate-100/90 border-slate-200/80 text-slate-500'
                           : isVerified
-                          ? 'bg-emerald-50/50 hover:bg-emerald-50 border-emerald-200 text-emerald-950'
-                          : 'bg-amber-50/40 hover:bg-amber-50 border-amber-200 text-amber-950';
+                          ? 'bg-gradient-to-b from-emerald-50/70 to-emerald-50/30 hover:bg-emerald-50 border-emerald-200/90 text-emerald-950 shadow-2xs'
+                          : 'bg-gradient-to-b from-amber-50/70 to-amber-50/30 hover:bg-amber-50 border-amber-200/90 text-amber-950 shadow-2xs';
 
                         return (
                           <td
                             key={b.key}
                             className={`py-2 px-2.5 align-top ${
                               b.isFocus 
-                                ? 'bg-blue-50/20 border-x-2 border-blue-400/70 group-hover:bg-blue-50/30' 
+                                ? 'bg-blue-50/20 border-x-2 border-blue-400/80 group-hover:bg-blue-50/30' 
                                 : 'border-r border-slate-100'
                             }`}
                           >
                             <button
                               type="button"
                               onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: b.key })}
-                              className={`w-full text-left p-2 rounded-xl border transition group/card relative flex flex-col justify-between min-h-[72px] shadow-2xs hover:shadow-xs hover:scale-[1.01] ${cellBg}`}
+                              className={`w-full text-left p-2.5 rounded-2xl border transition-all duration-150 group/card relative flex flex-col justify-between min-h-[76px] hover:shadow-card hover:-translate-y-0.5 active:scale-[0.99] ${cellBg}`}
                               title={`Klik untuk melihat detail & bukti sumber (${b.label} - ${detail.status})`}
                             >
                               <div className="space-y-1">
-                                <div className="flex items-start justify-between gap-1">
-                                  <div className={`font-bold text-[11px] leading-tight line-clamp-2 ${
-                                    isBelum ? 'text-slate-400 italic font-normal' : 'text-slate-900'
+                                <div className="flex items-start justify-between gap-1.5">
+                                  <div className={`font-bold text-[11px] leading-snug line-clamp-2 ${
+                                    isBelum ? 'text-slate-400 italic font-normal' : 'text-slate-900 tracking-tight'
                                   }`}>
                                     {detail.merk || '–'}
                                   </div>
@@ -574,22 +574,22 @@ export const MatrixView: React.FC = () => {
                                 </div>
                               </div>
 
-                              <div className="flex items-center justify-between mt-2 pt-1 border-t border-black/5 text-[9px]">
+                              <div className="flex items-center justify-between mt-2.5 pt-1.5 border-t border-black/5 text-[9px]">
                                 <div className="flex items-center space-x-1">
                                   {isVerified && (
-                                    <span className="flex items-center space-x-0.5 text-emerald-700 font-extrabold">
-                                      <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
+                                    <span className="flex items-center space-x-1 text-emerald-700 font-extrabold">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                       <span>Verified</span>
                                     </span>
                                   )}
                                   {isInference && (
-                                    <span className="flex items-center space-x-0.5 text-amber-800 font-bold">
-                                      <AlertTriangle className="w-2.5 h-2.5 text-amber-600" />
+                                    <span className="flex items-center space-x-1 text-amber-800 font-bold">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                       <span>Inferensi</span>
                                     </span>
                                   )}
                                   {isBelum && (
-                                    <span className="text-slate-400">
+                                    <span className="text-slate-400 font-medium">
                                       – Belum
                                     </span>
                                   )}

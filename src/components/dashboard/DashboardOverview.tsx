@@ -176,28 +176,51 @@ export const DashboardOverview: React.FC = () => {
   return (
     <div className="space-y-8 pb-16">
       {/* Hero Executive Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950 text-white p-8 sm:p-10 shadow-xl shadow-blue-900/15">
-        <div className="absolute right-0 top-0 -mt-12 -mr-12 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute left-1/3 bottom-0 -mb-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#002B49] via-[#00417A] to-[#0A2540] text-white p-8 sm:p-10 shadow-xl shadow-blue-950/20 border border-blue-800/40">
+        <div className="absolute right-0 top-0 -mt-16 -mr-16 w-[450px] h-[450px] bg-gradient-to-br from-blue-500/20 via-indigo-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute left-1/4 bottom-0 -mb-16 w-80 h-80 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-blue-200">
-            <Sparkles className="w-3.5 h-3.5 text-orange-400" />
-            <span>Materi Konsultasi & Workshop Arsitektur Teknologi Perbankan (MBB Style)</span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-blue-100 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>Executive Board & Architecture Consulting Platform · MBB Standard</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-            Competitor Intelligence: Riset Arsitektur 408 Kapabilitas Bank BRI vs Himbara & BCA
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            Competitor Intelligence: <br />
+            <span className="bg-gradient-to-r from-blue-200 via-sky-100 to-white bg-clip-text text-transparent">
+              Arsitektur 408 Kapabilitas Bank BRI vs Himbara & BCA
+            </span>
           </h1>
 
           <p className="text-sm sm:text-base text-blue-100/90 max-w-3xl leading-relaxed">
             Platform komparasi teknologi perbankan berbasis bukti (*evidence-based*). Mengumpulkan dan meneliti <strong>408 kapabilitas arsitektur</strong> di seluruh bank BUMN (BRI, Mandiri, BNI, BTN, BSI) dan BCA yang terstruktur ke dalam <strong>4 Workshop</strong> dan <strong>13 Domain Teknologi</strong>.
           </p>
 
+          {/* Quick Metrics Bar in Hero */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3">
+              <div className="text-2xl font-black text-white">{totalCapabilities}</div>
+              <div className="text-[11px] text-blue-200 font-medium">Kapabilitas Arsitektur</div>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3">
+              <div className="text-2xl font-black text-white">4</div>
+              <div className="text-[11px] text-blue-200 font-medium">Pilar Workshop</div>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3">
+              <div className="text-2xl font-black text-white">13</div>
+              <div className="text-[11px] text-blue-200 font-medium">Domain Teknologi</div>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3">
+              <div className="text-2xl font-black text-white">6 Bank</div>
+              <div className="text-[11px] text-blue-200 font-medium">2,448 Evaluasi Status</div>
+            </div>
+          </div>
+
           <div className="flex items-center flex-wrap gap-3 pt-3">
             <button
               onClick={() => setPresentationMode(true)}
-              className="px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs shadow-lg shadow-orange-500/25 flex items-center space-x-2 transition active:scale-95"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs shadow-lg shadow-orange-500/25 flex items-center space-x-2 transition-all active:scale-95 duration-150"
             >
               <Presentation className="w-4 h-4" />
               <span>Mulai Workshop / Mode Presentasi</span>
@@ -205,10 +228,18 @@ export const DashboardOverview: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('matrix')}
-              className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 backdrop-blur flex items-center space-x-2 transition"
+              className="px-5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs border border-white/25 backdrop-blur-md flex items-center space-x-2 transition-all active:scale-95 duration-150"
             >
               <Database className="w-4 h-4" />
               <span>Buka Matriks Riset Sheet (408 Baris)</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('head-to-head')}
+              className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 backdrop-blur-md flex items-center space-x-2 transition-all active:scale-95 duration-150"
+            >
+              <Zap className="w-4 h-4 text-yellow-300" />
+              <span>Head-to-Head Battlecard</span>
             </button>
           </div>
         </div>
@@ -218,7 +249,7 @@ export const DashboardOverview: React.FC = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-black text-slate-900 tracking-tight">
+            <h3 className="text-xl font-black text-slate-900 tracking-tight">
               4 Workshop Arsitektur Teknologi Perbankan
             </h3>
             <p className="text-xs text-slate-500">
@@ -227,10 +258,10 @@ export const DashboardOverview: React.FC = () => {
           </div>
           <button 
             onClick={() => setActiveTab('matrix')}
-            className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+            className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center space-x-1 group"
           >
             <span>Lihat Seluruh Matriks</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
 
@@ -239,15 +270,29 @@ export const DashboardOverview: React.FC = () => {
             const count = workshopCounts[key] || 0;
             const pct = Math.round((count / (totalCapabilities || 1)) * 100);
 
+            const borderGlowMap: Record<string, string> = {
+              WS1: 'hover:border-blue-300 group-hover:shadow-blue-500/10',
+              WS2: 'hover:border-indigo-300 group-hover:shadow-indigo-500/10',
+              WS3: 'hover:border-cyan-300 group-hover:shadow-cyan-500/10',
+              WS4: 'hover:border-purple-300 group-hover:shadow-purple-500/10'
+            };
+
+            const barColorMap: Record<string, string> = {
+              WS1: 'bg-blue-600',
+              WS2: 'bg-indigo-600',
+              WS3: 'bg-cyan-600',
+              WS4: 'bg-purple-600'
+            };
+
             return (
               <div 
                 key={key} 
                 onClick={() => setActiveTab('matrix')}
-                className={`p-5 rounded-2xl border bg-white shadow-xs hover:shadow-md transition cursor-pointer group flex flex-col justify-between ${info.border}`}
+                className={`p-5 rounded-2xl border bg-white/90 backdrop-blur-sm shadow-card hover:shadow-card-hover transition-all duration-200 cursor-pointer group flex flex-col justify-between border-slate-200/80 hover:-translate-y-0.5 ${borderGlowMap[key] || ''}`}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-extrabold ${info.bg} ${info.color}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold ${info.bg} ${info.color} border ${info.border}`}>
                       {key}
                     </span>
                     <span className="text-xs font-extrabold text-slate-400 group-hover:text-blue-600 transition flex items-center">
@@ -255,17 +300,25 @@ export const DashboardOverview: React.FC = () => {
                       <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
                     </span>
                   </div>
-                  <h4 className="font-extrabold text-slate-900 text-sm group-hover:text-blue-600 transition">
+                  <h4 className="font-extrabold text-slate-900 text-sm group-hover:text-blue-600 transition tracking-tight">
                     {info.label.split(': ')[1]}
                   </h4>
-                  <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                  <p className="text-[11px] text-slate-500 mt-1.5 line-clamp-2 leading-relaxed font-normal">
                     {info.desc}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-2xl font-black text-slate-900">{count}</span>
-                  <span className="text-[11px] text-slate-400 font-medium">Kapabilitas Riset</span>
+                <div className="mt-5 pt-3 border-t border-slate-100">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-2xl font-black text-slate-900 tracking-tight">{count}</span>
+                    <span className="text-[11px] text-slate-400 font-medium">Kapabilitas</span>
+                  </div>
+                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-500 ${barColorMap[key] || 'bg-blue-600'}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
                 </div>
               </div>
             );
@@ -277,7 +330,7 @@ export const DashboardOverview: React.FC = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-black text-slate-900 tracking-tight">
+            <h3 className="text-xl font-black text-slate-900 tracking-tight">
               Tingkat Bukti & Cakupan Kapabilitas 6 Bank
             </h3>
             <p className="text-xs text-slate-500">
@@ -290,38 +343,40 @@ export const DashboardOverview: React.FC = () => {
           {bankStats.map(b => (
             <div 
               key={b.slug}
-              className={`p-5 rounded-2xl border transition bg-white shadow-xs hover:border-slate-300 relative ${
-                b.isFocus ? 'border-2 border-blue-500 shadow-sm ring-2 ring-blue-500/10' : 'border-slate-200'
+              className={`p-5 rounded-2xl border transition-all duration-200 bg-white/90 backdrop-blur-sm shadow-card hover:shadow-card-hover relative hover:-translate-y-0.5 ${
+                b.isFocus 
+                  ? 'border-blue-500/80 ring-2 ring-blue-500/20 bg-gradient-to-b from-blue-50/30 to-white' 
+                  : 'border-slate-200/80 hover:border-slate-300'
               }`}
             >
               {b.isFocus && (
-                <div className="absolute top-3 right-3 px-2 py-0.5 bg-blue-600 text-white rounded text-[10px] font-bold">
-                  FOKUS UTAMA
+                <div className="absolute top-3.5 right-3.5 px-2.5 py-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-[10px] font-extrabold uppercase tracking-wide shadow-xs">
+                  FOCUS UTAMA
                 </div>
               )}
 
               <div className="flex items-center space-x-3 mb-3">
                 <span className="text-2xl">{b.logo}</span>
                 <div>
-                  <h4 className="font-extrabold text-slate-900 text-sm">{b.name}</h4>
-                  <span className="text-[11px] text-slate-400">Kode: {b.label}</span>
+                  <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">{b.name}</h4>
+                  <span className="text-[11px] text-slate-400 font-mono font-medium">ID: {b.label}</span>
                 </div>
               </div>
 
               {/* Progress bar */}
-              <div className="space-y-1.5 my-3">
+              <div className="space-y-1.5 my-3.5">
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-500">Tingkat Terverifikasi:</span>
-                  <span className="font-bold text-slate-800">{b.verifiedCount} / {totalCapabilities} ({b.verifiedPct}%)</span>
+                  <span className="text-slate-500 font-medium">Tingkat Terverifikasi:</span>
+                  <span className="font-extrabold text-slate-800">{b.verifiedCount} / {totalCapabilities} ({b.verifiedPct}%)</span>
                 </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden flex">
+                <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden flex p-0.5 shadow-inner">
                   <div 
-                    className="bg-emerald-500 h-full" 
+                    className="bg-emerald-500 h-full rounded-full transition-all duration-500" 
                     style={{ width: `${(b.verifiedCount / totalCapabilities) * 100}%` }}
                     title={`Terverifikasi: ${b.verifiedCount}`}
                   />
                   <div 
-                    className="bg-amber-400 h-full" 
+                    className="bg-amber-400 h-full rounded-full transition-all duration-500 ml-0.5" 
                     style={{ width: `${(b.inferenceCount / totalCapabilities) * 100}%` }}
                     title={`Inferensi: ${b.inferenceCount}`}
                   />
@@ -330,17 +385,26 @@ export const DashboardOverview: React.FC = () => {
 
               {/* Mini Stats Breakdown */}
               <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 text-center">
-                <div className="bg-emerald-50/60 p-1.5 rounded-lg border border-emerald-100">
-                  <div className="text-emerald-700 font-extrabold text-xs">{b.verifiedCount}</div>
-                  <div className="text-[9px] text-emerald-600 font-medium">Verified</div>
+                <div className="bg-emerald-50/70 p-2 rounded-xl border border-emerald-100">
+                  <div className="text-emerald-700 font-black text-sm">{b.verifiedCount}</div>
+                  <div className="text-[10px] text-emerald-600 font-medium flex items-center justify-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                    Verified
+                  </div>
                 </div>
-                <div className="bg-amber-50/60 p-1.5 rounded-lg border border-amber-100">
-                  <div className="text-amber-700 font-extrabold text-xs">{b.inferenceCount}</div>
-                  <div className="text-[9px] text-amber-600 font-medium">Inferensi</div>
+                <div className="bg-amber-50/70 p-2 rounded-xl border border-amber-100">
+                  <div className="text-amber-700 font-black text-sm">{b.inferenceCount}</div>
+                  <div className="text-[10px] text-amber-600 font-medium flex items-center justify-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+                    Inferensi
+                  </div>
                 </div>
-                <div className="bg-slate-50 p-1.5 rounded-lg border border-slate-200">
-                  <div className="text-slate-600 font-extrabold text-xs">{b.belumCount}</div>
-                  <div className="text-[9px] text-slate-400 font-medium">Belum</div>
+                <div className="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                  <div className="text-slate-700 font-black text-sm">{b.belumCount}</div>
+                  <div className="text-[10px] text-slate-400 font-medium flex items-center justify-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300 inline-block"></span>
+                    Belum
+                  </div>
                 </div>
               </div>
 
@@ -349,10 +413,10 @@ export const DashboardOverview: React.FC = () => {
                   setSelectedBankId(`bank-${b.slug}`);
                   setActiveTab('banks');
                 }}
-                className="w-full mt-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center justify-center space-x-1 transition"
+                className="w-full mt-3.5 py-2 rounded-xl border border-slate-200/80 bg-slate-50/80 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-center space-x-1.5 transition-all active:scale-95 duration-150"
               >
                 <span>Lihat Profil Arsitektur {b.label}</span>
-                <ArrowRight className="w-3 h-3" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
           ))}
@@ -362,14 +426,15 @@ export const DashboardOverview: React.FC = () => {
       {/* Strategic Triage: Gaps vs Advantages */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Card 1: Celah Arsitektur Kompetitor */}
-        <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-2xl border border-orange-200 flex flex-col justify-between">
+        <div className="bg-gradient-to-br from-amber-50/90 via-orange-50/70 to-rose-50/50 p-6 rounded-3xl border border-orange-200/80 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between">
           <div>
             <div className="flex items-center space-x-2 text-orange-800 font-extrabold text-xs uppercase tracking-wider mb-2">
+              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
               <AlertTriangle className="w-4 h-4 text-orange-600" />
               <span>Prioritas Celah Arsitektur (Gap)</span>
             </div>
-            <div className="text-3xl font-black text-orange-950">
-              {competitorGaps.length} Kapabilitas
+            <div className="text-3xl sm:text-4xl font-black text-orange-950 tracking-tight">
+              {competitorGaps.length} <span className="text-lg font-bold text-orange-700 font-sans">Kapabilitas</span>
             </div>
             <p className="text-xs text-orange-900/80 mt-2 leading-relaxed">
               Teknologi di mana kompetitor (Mandiri, BCA, atau BNI) telah terverifikasi mengadopsi solusi modern, namun status BRI masih dalam inferensi atau belum terkonfirmasi.
@@ -377,9 +442,13 @@ export const DashboardOverview: React.FC = () => {
 
             <div className="mt-4 space-y-2">
               {competitorGaps.slice(0, 3).map((item, idx) => (
-                <div key={idx} className="bg-white/90 p-2.5 rounded-xl border border-orange-200/60 text-xs">
+                <div key={idx} className="bg-white/95 backdrop-blur-sm p-3 rounded-2xl border border-orange-200/70 text-xs shadow-2xs hover:border-orange-300 transition">
                   <div className="font-bold text-slate-900 leading-tight">{item.kapabilitas}</div>
-                  <div className="text-[10px] text-orange-700 mt-0.5">{item.workshop} • {item.domain}</div>
+                  <div className="text-[10px] text-orange-700 mt-1 font-medium flex items-center gap-1.5">
+                    <span className="px-1.5 py-0.5 rounded-md bg-orange-100 text-orange-800 font-bold">{item.workshop}</span>
+                    <span>•</span>
+                    <span>{item.domain}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -387,7 +456,7 @@ export const DashboardOverview: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('gap-analysis')}
-            className="mt-5 w-full py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition flex items-center justify-center space-x-1.5 shadow-xs"
+            className="mt-5 w-full py-2.5 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-sm shadow-orange-500/20 active:scale-95 duration-150"
           >
             <span>Analisis Detail Celah (Gap View)</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -395,14 +464,15 @@ export const DashboardOverview: React.FC = () => {
         </div>
 
         {/* Card 2: Keunggulan Eksklusif BRI */}
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200 flex flex-col justify-between">
+        <div className="bg-gradient-to-br from-blue-50/90 via-indigo-50/70 to-sky-50/50 p-6 rounded-3xl border border-blue-200/80 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between">
           <div>
             <div className="flex items-center space-x-2 text-blue-800 font-extrabold text-xs uppercase tracking-wider mb-2">
+              <span className="w-2 h-2 rounded-full bg-blue-500"></span>
               <ShieldCheck className="w-4 h-4 text-blue-600" />
               <span>Keunggulan Terverifikasi BRI</span>
             </div>
-            <div className="text-3xl font-black text-blue-950">
-              {briLeadingCaps.length} Kapabilitas
+            <div className="text-3xl sm:text-4xl font-black text-blue-950 tracking-tight">
+              {briLeadingCaps.length} <span className="text-lg font-bold text-blue-700 font-sans">Kapabilitas</span>
             </div>
             <p className="text-xs text-blue-900/80 mt-2 leading-relaxed">
               Teknologi di mana implementasi BRI telah terkonfirmasi resmi (misal: satelit BRIsat, ekosistem super-app BRImo, Google Apigee open finance, micro-banking agent).
@@ -410,9 +480,12 @@ export const DashboardOverview: React.FC = () => {
 
             <div className="mt-4 space-y-2">
               {briLeadingCaps.slice(0, 3).map((item, idx) => (
-                <div key={idx} className="bg-white/90 p-2.5 rounded-xl border border-blue-200/60 text-xs">
+                <div key={idx} className="bg-white/95 backdrop-blur-sm p-3 rounded-2xl border border-blue-200/70 text-xs shadow-2xs hover:border-blue-300 transition">
                   <div className="font-bold text-slate-900 leading-tight">{item.kapabilitas}</div>
-                  <div className="text-[10px] text-blue-700 mt-0.5">{item.banks?.bri?.merk || 'Solusi Terverifikasi'}</div>
+                  <div className="text-[10px] text-blue-700 mt-1 font-semibold flex items-center gap-1.5">
+                    <span className="px-1.5 py-0.5 rounded-md bg-blue-100 text-blue-800 font-bold">Terverifikasi</span>
+                    <span>{item.banks?.bri?.merk || 'Solusi Resmi BRI'}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -420,7 +493,7 @@ export const DashboardOverview: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('matrix')}
-            className="mt-5 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition flex items-center justify-center space-x-1.5 shadow-xs"
+            className="mt-5 w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-sm shadow-blue-600/20 active:scale-95 duration-150"
           >
             <span>Eksplorasi Matriks Riset</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -428,14 +501,15 @@ export const DashboardOverview: React.FC = () => {
         </div>
 
         {/* Card 3: Standar Konsensus Industri */}
-        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-2xl border border-emerald-200 flex flex-col justify-between">
+        <div className="bg-gradient-to-br from-emerald-50/90 via-teal-50/70 to-cyan-50/50 p-6 rounded-3xl border border-emerald-200/80 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between">
           <div>
             <div className="flex items-center space-x-2 text-emerald-800 font-extrabold text-xs uppercase tracking-wider mb-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               <span>Standar Konsensus Perbankan</span>
             </div>
-            <div className="text-3xl font-black text-emerald-950">
-              {consensusCaps.length} Kapabilitas
+            <div className="text-3xl sm:text-4xl font-black text-emerald-950 tracking-tight">
+              {consensusCaps.length} <span className="text-lg font-bold text-emerald-700 font-sans">Kapabilitas</span>
             </div>
             <p className="text-xs text-emerald-900/80 mt-2 leading-relaxed">
               Arsitektur standar yang telah diadopsi bersama oleh BRI dan ≥ 2 bank lain (misal: Silverlake SIBS, BI-FAST, Kubernetes Openshift, Kafka event streaming).
@@ -443,9 +517,13 @@ export const DashboardOverview: React.FC = () => {
 
             <div className="mt-4 space-y-2">
               {consensusCaps.slice(0, 3).map((item, idx) => (
-                <div key={idx} className="bg-white/90 p-2.5 rounded-xl border border-emerald-200/60 text-xs">
+                <div key={idx} className="bg-white/95 backdrop-blur-sm p-3 rounded-2xl border border-emerald-200/70 text-xs shadow-2xs hover:border-emerald-300 transition">
                   <div className="font-bold text-slate-900 leading-tight">{item.kapabilitas}</div>
-                  <div className="text-[10px] text-emerald-700 mt-0.5">{item.workshop} • {item.domain}</div>
+                  <div className="text-[10px] text-emerald-700 mt-1 font-medium flex items-center gap-1.5">
+                    <span className="px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold">{item.workshop}</span>
+                    <span>•</span>
+                    <span>{item.domain}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -453,7 +531,7 @@ export const DashboardOverview: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('head-to-head')}
-            className="mt-5 w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition flex items-center justify-center space-x-1.5 shadow-xs"
+            className="mt-5 w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-sm shadow-emerald-600/20 active:scale-95 duration-150"
           >
             <span>Komparasi Head-to-Head</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -462,29 +540,34 @@ export const DashboardOverview: React.FC = () => {
       </div>
 
       {/* 13 Domains Heatmap Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-5 border-b border-slate-200 flex items-center justify-between">
+      <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 shadow-card overflow-hidden">
+        <div className="p-6 border-b border-slate-200/80 flex items-center justify-between">
           <div>
-            <h3 className="font-extrabold text-sm text-slate-900">
+            <h3 className="font-black text-base text-slate-900 tracking-tight">
               Matriks Kematangan 13 Domain Arsitektur
             </h3>
-            <p className="text-xs text-slate-500">
-              Distribusi 408 kapabilitas per domain dan jumlah teknologi terverifikasi di masing-masing bank.
+            <p className="text-xs text-slate-500 mt-0.5">
+              Distribusi 408 kapabilitas per domain dan rasio adopsi teknologi terverifikasi di masing-masing bank.
             </p>
           </div>
-          <span className="text-xs text-slate-400 font-mono">13 Domain</span>
+          <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-extrabold font-mono border border-slate-200">
+            13 Domain Arsitektur
+          </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold">
-                <th className="py-3 px-4 border-r border-slate-200">Domain Arsitektur</th>
-                <th className="py-3 px-3 w-20 text-center border-r border-slate-200">Workshop</th>
-                <th className="py-3 px-3 w-20 text-center border-r border-slate-200">Total Kapabilitas</th>
+              <tr className="bg-slate-50/90 border-b border-slate-200/80 text-slate-700 font-bold uppercase tracking-wider text-[11px]">
+                <th className="py-3.5 px-5 border-r border-slate-200/60">Domain Arsitektur</th>
+                <th className="py-3.5 px-3 w-24 text-center border-r border-slate-200/60">Workshop</th>
+                <th className="py-3.5 px-3 w-28 text-center border-r border-slate-200/60">Total Kapabilitas</th>
                 {BANK_CONFIG.map(b => (
-                  <th key={b.slug} className={`py-3 px-3 text-center min-w-[90px] border-r border-slate-200 ${b.isFocus ? 'bg-blue-50/70 text-blue-900 font-black' : ''}`}>
-                    {b.label}
+                  <th key={b.slug} className={`py-3.5 px-3 text-center min-w-[100px] border-r border-slate-200/60 ${b.isFocus ? 'bg-blue-50/80 text-blue-900 font-black' : ''}`}>
+                    <div className="flex items-center justify-center gap-1.5">
+                      <span>{b.logo}</span>
+                      <span>{b.label}</span>
+                    </div>
                   </th>
                 ))}
               </tr>
@@ -498,16 +581,16 @@ export const DashboardOverview: React.FC = () => {
                 };
 
                 return (
-                  <tr key={i} className="hover:bg-slate-50 transition">
-                    <td className="py-2.5 px-4 font-bold text-slate-900 border-r border-slate-100">
+                  <tr key={i} className="hover:bg-blue-50/30 transition-colors">
+                    <td className="py-3 px-5 font-bold text-slate-900 border-r border-slate-100">
                       {dom.domain}
                     </td>
-                    <td className="py-2.5 px-3 text-center border-r border-slate-100">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold border ${ws.bg} ${ws.color} ${ws.border}`}>
+                    <td className="py-3 px-3 text-center border-r border-slate-100">
+                      <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold border ${ws.bg} ${ws.color} ${ws.border}`}>
                         {dom.workshop}
                       </span>
                     </td>
-                    <td className="py-2.5 px-3 text-center font-bold text-slate-700 border-r border-slate-100">
+                    <td className="py-3 px-3 text-center font-extrabold text-slate-800 border-r border-slate-100">
                       {dom.total}
                     </td>
                     {BANK_CONFIG.map(b => {
@@ -515,10 +598,13 @@ export const DashboardOverview: React.FC = () => {
                       const pct = Math.round((vCount / dom.total) * 100);
 
                       return (
-                        <td key={b.slug} className={`py-2 px-3 text-center border-r border-slate-100 ${b.isFocus ? 'bg-blue-50/20' : ''}`}>
-                          <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                            vCount > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-400'
+                        <td key={b.slug} className={`py-2.5 px-3 text-center border-r border-slate-100 ${b.isFocus ? 'bg-blue-50/30 font-bold' : ''}`}>
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-bold text-[10px] ${
+                            vCount > 0 
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200/80' 
+                              : 'bg-slate-100 text-slate-400'
                           }`}>
+                            {vCount > 0 && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>}
                             {vCount} ({pct}%)
                           </span>
                         </td>

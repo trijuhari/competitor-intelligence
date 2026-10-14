@@ -145,13 +145,13 @@ export const HeadToHeadView: React.FC = () => {
         </div>
 
         {/* Bank Selection Switchers */}
-        <div className="flex items-center space-x-3 bg-white p-2 rounded-2xl border border-slate-200 shadow-xs flex-wrap">
-          <div className="flex items-center space-x-1.5 text-xs">
-            <span className="text-slate-400 font-bold text-[10px] uppercase">Bank 1:</span>
+        <div className="flex items-center space-x-3 bg-white/90 backdrop-blur-md p-2 rounded-2xl border border-slate-200/80 shadow-card flex-wrap">
+          <div className="flex items-center space-x-2 text-xs px-2">
+            <span className="text-slate-400 font-extrabold text-[10px] uppercase tracking-wider">Bank 1:</span>
             <select
               value={bankASlug}
               onChange={e => setBankASlug(e.target.value)}
-              className="px-2.5 py-1.5 rounded-xl border border-slate-300 font-extrabold text-slate-800 bg-slate-50 text-xs"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 font-black text-slate-800 bg-slate-50 text-xs focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-2xs"
             >
               {BANK_OPTIONS.map(b => (
                 <option key={b.slug} value={b.slug} disabled={b.slug === bankBSlug}>
@@ -161,14 +161,16 @@ export const HeadToHeadView: React.FC = () => {
             </select>
           </div>
 
-          <ArrowLeftRight className="w-4 h-4 text-slate-400" />
+          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+            <ArrowLeftRight className="w-4 h-4" />
+          </div>
 
-          <div className="flex items-center space-x-1.5 text-xs">
-            <span className="text-slate-400 font-bold text-[10px] uppercase">Bank 2:</span>
+          <div className="flex items-center space-x-2 text-xs px-2">
+            <span className="text-slate-400 font-extrabold text-[10px] uppercase tracking-wider">Bank 2:</span>
             <select
               value={bankBSlug}
               onChange={e => setBankBSlug(e.target.value)}
-              className="px-2.5 py-1.5 rounded-xl border border-slate-300 font-extrabold text-slate-800 bg-slate-50 text-xs"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 font-black text-slate-800 bg-slate-50 text-xs focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-2xs"
             >
               {BANK_OPTIONS.map(b => (
                 <option key={b.slug} value={b.slug} disabled={b.slug === bankASlug}>
@@ -182,37 +184,37 @@ export const HeadToHeadView: React.FC = () => {
 
       {/* Versus Comparison Summary Ribbon */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Kapabilitas</div>
-          <div className="text-2xl font-black text-slate-900 mt-1">{researchItems.length}</div>
-          <div className="text-[10px] text-slate-500">13 Domain Arsitektur</div>
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl border border-slate-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Total Kapabilitas</div>
+          <div className="text-3xl font-black text-slate-900 mt-1 tracking-tight">{researchItems.length}</div>
+          <div className="text-[10px] text-slate-500 font-medium">13 Domain Arsitektur</div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-blue-200 bg-blue-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700 flex items-center space-x-1">
+        <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/40 p-4 rounded-2xl border border-blue-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-blue-800 flex items-center space-x-1.5">
             <Shield className="w-3.5 h-3.5 text-blue-600" />
             <span>Keunggulan {bankA.label}</span>
           </div>
-          <div className="text-2xl font-black text-blue-900 mt-1">{onlyAVerifiedCount}</div>
-          <div className="text-[10px] text-blue-600">Terverifikasi di {bankA.label} saja</div>
+          <div className="text-3xl font-black text-blue-950 mt-1 tracking-tight">{onlyAVerifiedCount}</div>
+          <div className="text-[10px] text-blue-700 font-medium">Terverifikasi di {bankA.label} saja</div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-orange-200 bg-orange-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-orange-700 flex items-center space-x-1">
+        <div className="bg-gradient-to-br from-orange-50/80 to-amber-50/40 p-4 rounded-2xl border border-orange-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-orange-800 flex items-center space-x-1.5">
             <AlertTriangle className="w-3.5 h-3.5 text-orange-600" />
             <span>Keunggulan {bankB.label}</span>
           </div>
-          <div className="text-2xl font-black text-orange-900 mt-1">{onlyBVerifiedCount}</div>
-          <div className="text-[10px] text-orange-600">Celah untuk {bankA.label}</div>
+          <div className="text-3xl font-black text-orange-950 mt-1 tracking-tight">{onlyBVerifiedCount}</div>
+          <div className="text-[10px] text-orange-700 font-medium">Celah arsitektur bagi {bankA.label}</div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 flex items-center space-x-1">
+        <div className="bg-gradient-to-br from-emerald-50/80 to-teal-50/40 p-4 rounded-2xl border border-emerald-200/80 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 flex items-center space-x-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
             <span>Keduanya Terverifikasi</span>
           </div>
-          <div className="text-2xl font-black text-emerald-900 mt-1">{bothVerifiedCount}</div>
-          <div className="text-[10px] text-emerald-600">Standar Paritas Bersama</div>
+          <div className="text-3xl font-black text-emerald-950 mt-1 tracking-tight">{bothVerifiedCount}</div>
+          <div className="text-[10px] text-emerald-700 font-medium">Standar Paritas Bersama</div>
         </div>
       </div>
 

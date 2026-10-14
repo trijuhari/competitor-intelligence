@@ -132,16 +132,16 @@ export const BankProfilesView: React.FC = () => {
             <button
               key={bank.id}
               onClick={() => setSelectedBankId(bank.id)}
-              className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-xs transition border ${
+              className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl font-black text-xs transition-all duration-200 border hover:-translate-y-0.5 active:scale-95 ${
                 isSelected
-                  ? 'bg-white text-slate-900 border-slate-300 shadow-sm ring-2 ring-blue-500/20'
-                  : 'bg-slate-100/70 text-slate-600 border-transparent hover:bg-slate-200/70'
+                  ? 'bg-white text-slate-900 border-slate-300 shadow-card ring-2 ring-blue-500/25'
+                  : 'bg-white/60 backdrop-blur-sm text-slate-600 border-slate-200/80 hover:bg-white hover:text-slate-900 shadow-2xs'
               }`}
             >
-              <span className="text-lg">{bank.logo}</span>
-              <span>{bank.singkatan}</span>
+              <span className="text-xl">{bank.logo}</span>
+              <span className="tracking-tight">{bank.singkatan}</span>
               {bank.isFokusUtama && (
-                <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.2 rounded font-extrabold">
+                <span className="text-[9px] bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wider shadow-2xs">
                   FOKUS
                 </span>
               )}
@@ -152,28 +152,31 @@ export const BankProfilesView: React.FC = () => {
 
       {/* Selected Bank Hero Banner */}
       <div 
-        className="rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden"
+        className="rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-white/10"
         style={{ 
           background: currentBank.isFokusUtama 
-            ? 'linear-gradient(135deg, #00529C 0%, #002B49 100%)' 
+            ? 'linear-gradient(135deg, #002B49 0%, #00529C 60%, #0077C8 100%)' 
             : currentBank.brandColor 
         }}
       >
+        <div className="absolute right-0 top-0 -mt-12 -mr-12 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute left-1/3 bottom-0 -mb-12 w-64 h-64 bg-black/10 rounded-full blur-2xl pointer-events-none" />
+
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-start space-x-4">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0 shadow-md">
+            <div className="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0 shadow-lg">
               {currentBank.logo}
             </div>
             <div>
               <div className="flex items-center space-x-2 flex-wrap">
-                <h3 className="text-2xl font-extrabold text-white">{currentBank.nama}</h3>
+                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">{currentBank.nama}</h3>
                 {currentBank.isFokusUtama && (
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/20 text-white border border-white/30">
-                    Fokus Penelitian
+                  <span className="px-3 py-0.5 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md shadow-2xs">
+                    Target Fokus Utama
                   </span>
                 )}
               </div>
-              <p className="text-sm text-white/80 mt-1 max-w-xl">
+              <p className="text-sm text-white/90 mt-1.5 max-w-xl leading-relaxed">
                 {currentBank.deskripsi}
               </p>
             </div>
@@ -181,17 +184,17 @@ export const BankProfilesView: React.FC = () => {
 
           {/* Quick Metrics in Banner */}
           <div className="flex items-center space-x-3 shrink-0">
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl text-center min-w-[90px]">
-              <div className="text-2xl font-black text-white">{verifiedCount}</div>
-              <div className="text-[10px] text-white/70 uppercase tracking-wider font-bold">Terverifikasi</div>
+            <div className="bg-white/15 backdrop-blur-md border border-white/20 p-3.5 rounded-2xl text-center min-w-[95px] shadow-sm">
+              <div className="text-2xl sm:text-3xl font-black text-white tracking-tight">{verifiedCount}</div>
+              <div className="text-[10px] text-white/80 uppercase tracking-wider font-extrabold mt-0.5">Verified</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl text-center min-w-[90px]">
-              <div className="text-2xl font-black text-white">{inferenceCount}</div>
-              <div className="text-[10px] text-white/70 uppercase tracking-wider font-bold">Inferensi</div>
+            <div className="bg-white/15 backdrop-blur-md border border-white/20 p-3.5 rounded-2xl text-center min-w-[95px] shadow-sm">
+              <div className="text-2xl sm:text-3xl font-black text-white tracking-tight">{inferenceCount}</div>
+              <div className="text-[10px] text-white/80 uppercase tracking-wider font-extrabold mt-0.5">Inferensi</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl text-center min-w-[90px]">
-              <div className="text-2xl font-black text-white">{belumCount}</div>
-              <div className="text-[10px] text-white/70 uppercase tracking-wider font-bold">Belum</div>
+            <div className="bg-white/15 backdrop-blur-md border border-white/20 p-3.5 rounded-2xl text-center min-w-[95px] shadow-sm">
+              <div className="text-2xl sm:text-3xl font-black text-white tracking-tight">{belumCount}</div>
+              <div className="text-[10px] text-white/80 uppercase tracking-wider font-extrabold mt-0.5">Belum</div>
             </div>
           </div>
         </div>
@@ -204,18 +207,18 @@ export const BankProfilesView: React.FC = () => {
           const pct = Math.round((stats.verified / (stats.total || 1)) * 100);
 
           return (
-            <div key={key} className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
+            <div key={key} className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl border border-slate-200/80 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold border ${meta.bg} ${meta.color} ${meta.border}`}>
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${meta.bg} ${meta.color} ${meta.border}`}>
                   {key}
                 </span>
-                <span className="text-xs font-bold text-slate-700">{pct}% Verified</span>
+                <span className="text-xs font-black text-slate-800">{pct}% Verified</span>
               </div>
-              <div className="text-xs font-extrabold text-slate-900">{meta.label.split(': ')[1]}</div>
-              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-blue-600 h-full rounded-full" style={{ width: `${pct}%` }} />
+              <div className="text-xs font-extrabold text-slate-900 tracking-tight">{meta.label.split(': ')[1]}</div>
+              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden p-0.5 shadow-inner">
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 h-full rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
               </div>
-              <div className="text-[10px] text-slate-400">
+              <div className="text-[10px] text-slate-400 font-medium">
                 {stats.verified} dari {stats.total} kapabilitas terverifikasi
               </div>
             </div>

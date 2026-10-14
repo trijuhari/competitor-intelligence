@@ -148,25 +148,26 @@ export const GapAnalysisView: React.FC = () => {
         {/* Tab 1: Celah Arsitektur */}
         <button
           onClick={() => setActiveTabState('gaps')}
-          className={`p-5 rounded-2xl border text-left transition flex flex-col justify-between ${
+          className={`p-6 rounded-3xl border text-left transition-all duration-200 flex flex-col justify-between hover:-translate-y-0.5 active:scale-[0.99] ${
             activeTab === 'gaps'
-              ? 'bg-gradient-to-br from-orange-50 to-amber-50 border-orange-300 ring-2 ring-orange-500/20 shadow-xs'
-              : 'bg-white border-slate-200 hover:border-slate-300'
+              ? 'bg-gradient-to-br from-amber-50/90 via-orange-50/70 to-rose-50/50 border-orange-300 ring-2 ring-orange-500/25 shadow-card'
+              : 'bg-white/80 backdrop-blur-sm border-slate-200/80 hover:border-slate-300 shadow-card'
           }`}
         >
           <div className="flex items-center justify-between">
             <span className="font-extrabold text-xs text-orange-800 uppercase tracking-wider flex items-center space-x-1.5">
+              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
               <AlertTriangle className="w-4 h-4 text-orange-600" />
               <span>Celah untuk BRI (Gaps)</span>
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-200/80 text-orange-900">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-orange-200/80 text-orange-950 border border-orange-300/80 shadow-2xs">
               Prioritas Tindakan
             </span>
           </div>
-          <div className="text-3xl font-black text-orange-950 mt-3">
-            {gapsList.length}
+          <div className="text-4xl font-black text-orange-950 mt-4 tracking-tight">
+            {gapsList.length} <span className="text-base font-bold text-orange-700 font-sans">Kapabilitas</span>
           </div>
-          <p className="text-[11px] text-orange-800/80 mt-1">
+          <p className="text-[11px] text-orange-900/80 mt-2 leading-relaxed">
             Kompetitor telah terverifikasi resmi, BRI masih inferensi/belum terdata
           </p>
         </button>
@@ -174,51 +175,53 @@ export const GapAnalysisView: React.FC = () => {
         {/* Tab 2: Keunggulan Eksklusif BRI */}
         <button
           onClick={() => setActiveTabState('advantages')}
-          className={`p-5 rounded-2xl border text-left transition flex flex-col justify-between ${
+          className={`p-6 rounded-3xl border text-left transition-all duration-200 flex flex-col justify-between hover:-translate-y-0.5 active:scale-[0.99] ${
             activeTab === 'advantages'
-              ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-300 ring-2 ring-blue-500/20 shadow-xs'
-              : 'bg-white border-slate-200 hover:border-slate-300'
+              ? 'bg-gradient-to-br from-blue-50/90 via-indigo-50/70 to-sky-50/50 border-blue-300 ring-2 ring-blue-500/25 shadow-card'
+              : 'bg-white/80 backdrop-blur-sm border-slate-200/80 hover:border-slate-300 shadow-card'
           }`}
         >
           <div className="flex items-center justify-between">
             <span className="font-extrabold text-xs text-blue-800 uppercase tracking-wider flex items-center space-x-1.5">
+              <span className="w-2 h-2 rounded-full bg-blue-500"></span>
               <ShieldCheck className="w-4 h-4 text-blue-600" />
               <span>Keunggulan Terbukti BRI</span>
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-200/80 text-blue-900">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-200/80 text-blue-950 border border-blue-300/80 shadow-2xs">
               Differentiator
             </span>
           </div>
-          <div className="text-3xl font-black text-blue-950 mt-3">
-            {advantagesList.length}
+          <div className="text-4xl font-black text-blue-950 mt-4 tracking-tight">
+            {advantagesList.length} <span className="text-base font-bold text-blue-700 font-sans">Kapabilitas</span>
           </div>
-          <p className="text-[11px] text-blue-800/80 mt-1">
-            Implementasi BRI terverifikasi resmi, belum ditemukan di bank lain
+          <p className="text-[11px] text-blue-900/80 mt-2 leading-relaxed">
+            Implementasi BRI terverifikasi resmi, belum ditemukan jejak publik di bank lain
           </p>
         </button>
 
         {/* Tab 3: Standar Konsensus Industri */}
         <button
           onClick={() => setActiveTabState('consensus')}
-          className={`p-5 rounded-2xl border text-left transition flex flex-col justify-between ${
+          className={`p-6 rounded-3xl border text-left transition-all duration-200 flex flex-col justify-between hover:-translate-y-0.5 active:scale-[0.99] ${
             activeTab === 'consensus'
-              ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-300 ring-2 ring-emerald-500/20 shadow-xs'
-              : 'bg-white border-slate-200 hover:border-slate-300'
+              ? 'bg-gradient-to-br from-emerald-50/90 via-teal-50/70 to-cyan-50/50 border-emerald-300 ring-2 ring-emerald-500/25 shadow-card'
+              : 'bg-white/80 backdrop-blur-sm border-slate-200/80 hover:border-slate-300 shadow-card'
           }`}
         >
           <div className="flex items-center justify-between">
             <span className="font-extrabold text-xs text-emerald-800 uppercase tracking-wider flex items-center space-x-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               <span>Standar Paritas Industri</span>
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-200/80 text-emerald-900">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-200/80 text-emerald-950 border border-emerald-300/80 shadow-2xs">
               Konsensus
             </span>
           </div>
-          <div className="text-3xl font-black text-emerald-950 mt-3">
-            {consensusList.length}
+          <div className="text-4xl font-black text-emerald-950 mt-4 tracking-tight">
+            {consensusList.length} <span className="text-base font-bold text-emerald-700 font-sans">Kapabilitas</span>
           </div>
-          <p className="text-[11px] text-emerald-800/80 mt-1">
+          <p className="text-[11px] text-emerald-900/80 mt-2 leading-relaxed">
             Diadopsi dan terverifikasi di BRI dan ≥ 2 bank kompetitor
           </p>
         </button>

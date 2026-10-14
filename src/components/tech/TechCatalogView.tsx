@@ -218,32 +218,32 @@ export const TechCatalogView: React.FC = () => {
           return (
             <div
               key={item.id}
-              className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition flex flex-col justify-between space-y-4"
+              className="bg-white/90 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/80 shadow-card hover:shadow-card-hover hover:border-blue-200 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between space-y-4 group"
             >
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold border ${ws.bg} ${ws.color} ${ws.border}`}>
+                <div className="flex items-center justify-between mb-3">
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${ws.bg} ${ws.color} ${ws.border}`}>
                     {item.workshop}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400">
+                  <span className="text-[10px] font-mono text-slate-400 font-medium">
                     ID: {item.id}
                   </span>
                 </div>
 
-                <h3 className="font-extrabold text-slate-900 text-sm leading-snug line-clamp-2">
+                <h3 className="font-extrabold text-slate-900 text-sm leading-snug line-clamp-2 tracking-tight group-hover:text-blue-600 transition-colors">
                   {item.kapabilitas}
                 </h3>
 
                 <div className="flex items-center space-x-2 mt-2 text-[11px] text-slate-500">
                   <span className="font-semibold text-slate-700">{item.domain}</span>
                   <span>•</span>
-                  <span>{item.kategori}</span>
+                  <span className="text-slate-400 font-medium">{item.kategori}</span>
                 </div>
               </div>
 
               {/* 6 Banks implementation grid */}
-              <div className="pt-3 border-t border-slate-100 space-y-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="pt-3 border-t border-slate-100 space-y-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
                   Implementasi di 6 Bank:
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
@@ -257,21 +257,21 @@ export const TechCatalogView: React.FC = () => {
                         key={b.slug}
                         type="button"
                         onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: b.slug })}
-                        className={`p-1.5 rounded-lg border text-left text-[10px] transition hover:scale-102 ${
+                        className={`p-2 rounded-xl border text-left text-[10px] transition-all hover:scale-[1.02] ${
                           isVerified 
-                            ? 'bg-emerald-50 border-emerald-200 text-emerald-950 font-bold'
+                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950 font-bold shadow-2xs'
                             : isInference
-                            ? 'bg-amber-50 border-amber-200 text-amber-950 font-medium'
-                            : 'bg-slate-50 border-slate-200 text-slate-400'
+                            ? 'bg-amber-50/70 border-amber-200 text-amber-950 font-medium shadow-2xs'
+                            : 'bg-slate-50/80 border-slate-200 text-slate-400'
                         }`}
                         title={`${b.label}: ${detail.merk || 'Belum'} (${detail.status})`}
                       >
                         <div className="flex items-center justify-between text-[9px] text-slate-500 font-bold">
                           <span>{b.label}</span>
-                          {isVerified && <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />}
-                          {isInference && <AlertTriangle className="w-2.5 h-2.5 text-amber-600" />}
+                          {isVerified && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>}
+                          {isInference && <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>}
                         </div>
-                        <div className="truncate mt-0.5 leading-tight">
+                        <div className="truncate mt-1 leading-tight font-medium">
                           {detail.merk || '–'}
                         </div>
                       </button>
