@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { 
   BarChart3, Grid3X3, ArrowLeftRight, Building2, Cpu, 
   TrendingUp, Shield, Presentation, Download, CheckCircle2, ChevronDown, 
-  LogOut, Lock, User as UserIcon, FileText, Compass, DollarSign, Bot 
+  LogOut, Lock, User as UserIcon, FileText, Compass, DollarSign, Bot, Database 
 } from 'lucide-react';
 import { ExecutiveBoardMemoModal } from '../strategy/ExecutiveBoardMemoModal';
 
@@ -43,25 +43,21 @@ export const Navbar: React.FC = () => {
 
   const navItems = isRoleAdmin
     ? [
-        { path: '/admin', label: 'Riset Sheet (408)', icon: Grid3X3 },
+        { path: '/admin', label: 'Kelola Temuan (408)', icon: Database },
+        { path: '/analyst/matrix', label: 'Matriks Riset (408)', icon: Grid3X3 },
         { path: '/admin/checklist', label: 'Checklist Kesiapan', icon: Shield },
-        { path: '/admin/findings', label: 'Audit Temuan', icon: CheckCircle2 },
         { path: '/admin/interviews', label: 'Narasumber Anonim', icon: Building2 },
         { path: '/admin/audit-logs', label: 'Log Audit', icon: TrendingUp },
-        { path: '/analyst/matrix', label: 'Matriks Riset ↗', icon: Grid3X3, isSecondary: true },
         { path: '/executive/dashboard', label: 'Executive Portal ↗', icon: BarChart3, isSecondary: true },
       ]
     : isRoleAnalyst
     ? [
+        { path: '/executive/dashboard', label: 'Overview', icon: BarChart3 },
         { path: '/analyst/matrix', label: 'Matriks Riset (408)', icon: Grid3X3 },
-        { path: '/analyst/head-to-head', label: 'Head-to-Head (BRI vs X)', icon: ArrowLeftRight },
+        { path: '/analyst/head-to-head', label: 'Head-to-Head Battlecard', icon: ArrowLeftRight },
         { path: '/analyst/gap-analysis', label: 'Gap Analysis', icon: TrendingUp },
         { path: '/analyst/tech-catalog', label: 'Katalog Kapabilitas', icon: Cpu },
         { path: '/analyst/banks', label: 'Profil 6 Bank', icon: Building2 },
-        { path: '/analyst/decision-matrix', label: 'Decision Matrix', icon: Compass },
-        { path: '/analyst/tco-simulator', label: 'TCO Simulator', icon: DollarSign },
-        { path: '/analyst/genai-readiness', label: 'GenAI Readiness', icon: Bot },
-        { path: '/executive/dashboard', label: 'Executive Overview ↗', icon: BarChart3, isSecondary: true },
       ]
     : [
         { path: '/executive/dashboard', label: 'Executive Overview', icon: BarChart3 },
@@ -69,7 +65,6 @@ export const Navbar: React.FC = () => {
         { path: '/executive/head-to-head', label: 'Head-to-Head Battlecard', icon: ArrowLeftRight },
         { path: '/executive/gap-analysis', label: 'Gap Analysis', icon: TrendingUp },
         { path: '/executive/banks', label: 'Profil 6 Bank', icon: Building2 },
-        { path: '/executive/decision-matrix', label: 'Decision Matrix', icon: Compass },
         { path: '/executive/presentation', label: 'Mode Presentasi', icon: Presentation },
       ];
 
