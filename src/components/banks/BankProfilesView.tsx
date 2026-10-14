@@ -1,57 +1,126 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   Building2, ExternalLink, Calendar, ShieldCheck, 
-  MessageSquare, Layers, CheckCircle2, Lock 
+  MessageSquare, Layers, CheckCircle2, Lock, AlertTriangle, 
+  HelpCircle, Search, Filter, RotateCcw, Database, ArrowRight 
 } from 'lucide-react';
-import { getConfidenceBadge } from '../../utils/helpers';
+
+const WORKSHOP_META: Record<string, { label: string; color: string; bg: string; border: string }> = {
+  WS1: { label: 'WS1: Core & Digital', color: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-200' },
+  WS2: { label: 'WS2: EDW & BI', color: 'text-indigo-700', bg: 'bg-indigo-50', border: 'border-indigo-200' },
+  WS3: { label: 'WS3: Cloud & Infra', color: 'text-cyan-700', bg: 'bg-cyan-50', border: 'border-cyan-200' },
+  WS4: { label: 'WS4: Big Data & AI', color: 'text-purple-700', bg: 'bg-purple-50', border: 'border-purple-200' }
+};
 
 export const BankProfilesView: React.FC = () => {
   const { 
     banks, 
-    categories, 
-    technologies, 
-    findings, 
-    evidences, 
-    interviews,
+    researchItems,
     selectedBankId, 
     setSelectedBankId,
-    setSelectedFindingModalId 
+    setSelectedResearchCell 
   } = useApp();
 
   const currentBank = banks.find(b => b.id === selectedBankId) || banks[0];
-  const bankFindings = findings.filter(f => f.bankId === currentBank.id);
-  const bankFindingIds = new Set(bankFindings.map(f => f.id));
-  const bankEvidences = evidences.filter(e => bankFindingIds.has(e.findingId));
-  const bankInterviews = interviews.filter(i => i.bankId === currentBank.id);
+  const bankSlug = currentBank.singkatan.toLowerCase();
 
-  // Group bank technologies by category
-  const categorizedFindings = categories.map(cat => {
-    const findingsInCat = bankFindings.filter(f => {
-      const tech = technologies.find(t => t.id === f.technologyId);
-      return tech?.categoryId === cat.id;
+  const [workshopFilter, setWorkshopFilter] = useState('all');
+  const [domainFilter, setDomainFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Extract all domains
+  const allDomains = useMemo(() => {
+    return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
+  }, [researchItems]);
+
+  // Bank stats from 408 capabilities
+  const {
+    bankCapabilities,
+    verifiedCount,
+    inferenceCount,
+    belumCount,
+    wsCounts
+  } = useMemo(() => {
+    let verified = 0;
+    let inference = 0;
+    let belum = 0;
+    const wsMap: Record<string, { total: number; verified: number }> = {
+      WS1: { total: 0, verified: 0 },
+      WS2: { total: 0, verified: 0 },
+      WS3: { total: 0, verified: 0 },
+      WS4: { total: 0, verified: 0 }
+    };
+
+    const caps = researchItems.map(item => {
+      const detail = item.banks[bankSlug] || {
+        bankCode: currentBank.singkatan,
+        merk: '-',
+        link: '',
+        url: '',
+        pic: 'Admin',
+        status: 'Belum'
+      };
+
+      if (wsMap[item.workshop]) {
+        wsMap[item.workshop].total++;
+        if (detail.status === 'Terverifikasi') wsMap[item.workshop].verified++;
+      }
+
+      if (detail.status === 'Terverifikasi') verified++;
+      else if (detail.status === 'Inferensi') inference++;
+      else belum++;
+
+      return {
+        item,
+        detail
+      };
     });
 
     return {
-      category: cat,
-      findings: findingsInCat
+      bankCapabilities: caps,
+      verifiedCount: verified,
+      inferenceCount: inference,
+      belumCount: belum,
+      wsCounts: wsMap
     };
-  }).filter(group => group.findings.length > 0);
+  }, [researchItems, bankSlug, currentBank.singkatan]);
+
+  // Filtered capabilities
+  const filteredCaps = useMemo(() => {
+    return bankCapabilities.filter(({ item, detail }) => {
+      if (workshopFilter !== 'all' && item.workshop !== workshopFilter) return false;
+      if (domainFilter !== 'all' && item.domain !== domainFilter) return false;
+      if (statusFilter !== 'all' && detail.status !== statusFilter) return false;
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchCap = item.kapabilitas.toLowerCase().includes(q);
+        const matchDom = item.domain.toLowerCase().includes(q);
+        const matchMerk = detail.merk?.toLowerCase().includes(q);
+        const matchLink = detail.link?.toLowerCase().includes(q);
+        if (!matchCap && !matchDom && !matchMerk && !matchLink) return false;
+      }
+
+      return true;
+    });
+  }, [bankCapabilities, workshopFilter, domainFilter, statusFilter, searchQuery]);
 
   return (
     <div className="space-y-6 pb-16">
       {/* Page Header */}
       <div>
         <div className="flex items-center space-x-2">
-          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-            Profil Bank & Lanskap Teknologi
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+            Profil Bank & Lanskap Arsitektur Teknologi
           </h2>
           <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
-            F3 · Profil Detail
+            408 Kapabilitas Riset
           </span>
         </div>
         <p className="text-xs text-slate-500 mt-1">
-          Eksplorasi mendalam arsitektur per bank, produk digital unggulan, dan daftar jejak bukti yang terdokumentasi.
+          Eksplorasi mendalam profil implementasi teknologi di setiap bank BUMN (BRI, Mandiri, BNI, BTN, BSI) & BCA berdasarkan 4 Workshop dan 13 Domain Arsitektur.
         </p>
       </div>
 
@@ -73,7 +142,7 @@ export const BankProfilesView: React.FC = () => {
               <span>{bank.singkatan}</span>
               {bank.isFokusUtama && (
                 <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.2 rounded font-extrabold">
-                  BRI
+                  FOKUS
                 </span>
               )}
             </button>
@@ -81,7 +150,7 @@ export const BankProfilesView: React.FC = () => {
         })}
       </div>
 
-      {/* Selected Bank Banner */}
+      {/* Selected Bank Hero Banner */}
       <div 
         className="rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden"
         style={{ 
@@ -98,180 +167,216 @@ export const BankProfilesView: React.FC = () => {
             <div>
               <div className="flex items-center space-x-2 flex-wrap">
                 <h3 className="text-2xl font-extrabold text-white">{currentBank.nama}</h3>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur text-white font-bold">
-                  {currentBank.singkatan}
-                </span>
-              </div>
-              <p className="text-xs text-white/90 max-w-2xl mt-1.5 leading-relaxed">
-                {currentBank.deskripsi}
-              </p>
-
-              {/* Digital Products Badges */}
-              <div className="flex items-center space-x-2 flex-wrap gap-y-1.5 mt-3">
-                <span className="text-xs text-white/70 font-medium mr-1">Produk Digital:</span>
-                {currentBank.produkDigital.map(prod => (
-                  <span 
-                    key={prod}
-                    className="px-2.5 py-0.5 rounded-lg bg-white/15 border border-white/25 text-xs text-white font-semibold backdrop-blur"
-                  >
-                    {prod}
+                {currentBank.isFokusUtama && (
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/20 text-white border border-white/30">
+                    Fokus Penelitian
                   </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Stats on the right */}
-          <div className="flex items-center space-x-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/15 shrink-0 text-center">
-            <div>
-              <div className="text-2xl font-extrabold text-white">{bankFindings.length}</div>
-              <div className="text-[11px] text-white/80 font-medium">Teknologi Teridentifikasi</div>
-            </div>
-            <div className="w-px h-8 bg-white/20" />
-            <div>
-              <div className="text-2xl font-extrabold text-white">{bankEvidences.length}</div>
-              <div className="text-[11px] text-white/80 font-medium">Berkas Bukti Publik</div>
-            </div>
-            <div className="w-px h-8 bg-white/20" />
-            <div>
-              <div className="text-2xl font-extrabold text-white">{bankInterviews.length}</div>
-              <div className="text-[11px] text-white/80 font-medium">Wawancara Terverifikasi</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Tech Stack Grouped per Category */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-bold text-slate-900 flex items-center space-x-2">
-          <Layers className="w-5 h-5 text-blue-600" />
-          <span>Komponen Tech Stack ({currentBank.singkatan}) per Kategori</span>
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {categorizedFindings.map(group => {
-            return (
-              <div 
-                key={group.category.id}
-                className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs hover:border-slate-300 transition"
-              >
-                <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-2.5">
-                  <div className="flex items-center space-x-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                    <h4 className="font-extrabold text-slate-900 text-sm">{group.category.nama}</h4>
-                  </div>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">
-                    {group.findings.length} teknologi
-                  </span>
-                </div>
-
-                <div className="space-y-2.5">
-                  {group.findings.map(finding => {
-                    const tech = technologies.find(t => t.id === finding.technologyId);
-                    if (!tech) return null;
-                    const confidenceBadge = getConfidenceBadge(finding.confidence);
-
-                    return (
-                      <div
-                        key={finding.id}
-                        onClick={() => setSelectedFindingModalId(finding.id)}
-                        className="p-3 rounded-xl bg-slate-50/70 hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-200 cursor-pointer transition flex items-center justify-between text-xs"
-                      >
-                        <div>
-                          <div className="font-bold text-slate-900">{tech.nama}</div>
-                          <div className="text-[11px] text-slate-500 mt-0.5">
-                            {tech.vendor} • <span className="capitalize">{tech.tipe}</span>
-                          </div>
-                          {finding.catatan && (
-                            <p className="text-[11px] text-slate-600 italic mt-1 line-clamp-1">
-                              "{finding.catatan}"
-                            </p>
-                          )}
-                        </div>
-
-                        <span className={`px-2 py-1 rounded-lg border font-bold text-[11px] shrink-0 ml-3 ${confidenceBadge.bgColor}`}>
-                          {confidenceBadge.symbol} {confidenceBadge.label}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Bibliography & Evidence List for this Bank */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-          <div className="flex items-center space-x-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-600" />
-            <h3 className="text-base font-bold text-slate-900">
-              Daftar Bukti & Jejak Rekaman Wawancara ({currentBank.singkatan})
-            </h3>
-          </div>
-          <span className="text-xs text-slate-500 font-medium">
-            Sesuai Metodologi & Regulasi UU PDP
-          </span>
-        </div>
-
-        {/* Anonymized Interview Cards */}
-        {bankInterviews.length > 0 && (
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold text-purple-900 uppercase tracking-wider flex items-center space-x-1.5">
-              <Lock className="w-3.5 h-3.5 text-purple-600" />
-              <span>Catatan Wawancara Narasumber Internal (Anonim):</span>
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {bankInterviews.map(inv => (
-                <div key={inv.id} className="p-4 bg-purple-50/60 rounded-xl border border-purple-200 text-xs space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-purple-950">{inv.kodeNarasumber}</span>
-                    <span className="text-slate-500 text-[11px] flex items-center space-x-1">
-                      <Calendar className="w-3 h-3" />
-                      <span>{inv.tanggal}</span>
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-purple-800 font-medium">{inv.divisi}</div>
-                  <p className="text-slate-700 leading-relaxed italic bg-white/70 p-2 rounded-lg border border-purple-100">
-                    "{inv.ringkasan}"
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Public Evidences */}
-        <div className="space-y-3 pt-2">
-          <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-            Sumber Publik & Studi Kasus Resmi:
-          </h4>
-          <div className="space-y-2">
-            {bankEvidences.map(ev => (
-              <div key={ev.id} className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-start justify-between gap-3">
-                <div className="space-y-1">
-                  <div className="font-bold text-slate-800">{ev.judul}</div>
-                  <blockquote className="text-slate-600 italic">"{ev.kutipanRingkas}"</blockquote>
-                  <div className="text-[11px] text-slate-400">
-                    Diakses: {ev.tanggalAkses} · Pencatat: {ev.pencatat}
-                  </div>
-                </div>
-                {ev.url && (
-                  <a 
-                    href={ev.url} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="shrink-0 p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition"
-                    title="Buka Tautan"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
                 )}
               </div>
-            ))}
+              <p className="text-sm text-white/80 mt-1 max-w-xl">
+                {currentBank.deskripsi}
+              </p>
+            </div>
           </div>
+
+          {/* Quick Metrics in Banner */}
+          <div className="flex items-center space-x-3 shrink-0">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl text-center min-w-[90px]">
+              <div className="text-2xl font-black text-white">{verifiedCount}</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider font-bold">Terverifikasi</div>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl text-center min-w-[90px]">
+              <div className="text-2xl font-black text-white">{inferenceCount}</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider font-bold">Inferensi</div>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl text-center min-w-[90px]">
+              <div className="text-2xl font-black text-white">{belumCount}</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider font-bold">Belum</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 4 Workshops Progress for this Bank */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {Object.entries(WORKSHOP_META).map(([key, meta]) => {
+          const stats = wsCounts[key] || { total: 0, verified: 0 };
+          const pct = Math.round((stats.verified / (stats.total || 1)) * 100);
+
+          return (
+            <div key={key} className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold border ${meta.bg} ${meta.color} ${meta.border}`}>
+                  {key}
+                </span>
+                <span className="text-xs font-bold text-slate-700">{pct}% Verified</span>
+              </div>
+              <div className="text-xs font-extrabold text-slate-900">{meta.label.split(': ')[1]}</div>
+              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div className="bg-blue-600 h-full rounded-full" style={{ width: `${pct}%` }} />
+              </div>
+              <div className="text-[10px] text-slate-400">
+                {stats.verified} dari {stats.total} kapabilitas terverifikasi
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Filter and Control Bar */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+          <div className="md:col-span-5 relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder={`Cari kapabilitas ${currentBank.singkatan}, merk, atau sumber...`}
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 focus:bg-white"
+            />
+          </div>
+
+          <div className="md:col-span-3">
+            <select
+              value={workshopFilter}
+              onChange={e => setWorkshopFilter(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+            >
+              <option value="all">Semua Workshop</option>
+              <option value="WS1">WS1: Core & Digital</option>
+              <option value="WS2">WS2: EDW & BI</option>
+              <option value="WS3">WS3: Cloud & Infra</option>
+              <option value="WS4">WS4: Big Data & AI</option>
+            </select>
+          </div>
+
+          <div className="md:col-span-2">
+            <select
+              value={statusFilter}
+              onChange={e => setStatusFilter(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+            >
+              <option value="all">Semua Status</option>
+              <option value="Terverifikasi">Terverifikasi (✓)</option>
+              <option value="Inferensi">Inferensi (⚠)</option>
+              <option value="Belum">Belum (–)</option>
+            </select>
+          </div>
+
+          <div className="md:col-span-2 flex justify-end">
+            {(searchQuery || workshopFilter !== 'all' || domainFilter !== 'all' || statusFilter !== 'all') && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setWorkshopFilter('all');
+                  setDomainFilter('all');
+                  setStatusFilter('all');
+                }}
+                className="text-xs text-blue-600 hover:underline font-semibold flex items-center space-x-1"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset Filter</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="text-xs text-slate-500 pt-2 border-t border-slate-100">
+          Menampilkan <strong className="text-slate-800">{filteredCaps.length}</strong> dari <strong className="text-slate-800">{researchItems.length}</strong> kapabilitas riset di {currentBank.nama}
+        </div>
+      </div>
+
+      {/* Capabilities Table for Current Bank */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="bg-slate-100/90 border-b border-slate-200 text-slate-700 font-bold">
+                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200">No</th>
+                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200">WS</th>
+                <th className="py-3.5 px-3 w-48 border-r border-slate-200">Domain & Kategori</th>
+                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200">Kapabilitas / Sistem</th>
+                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200">Merk / Solusi di {currentBank.singkatan}</th>
+                <th className="py-3.5 px-3 w-32 text-center border-r border-slate-200">Status Bukti</th>
+                <th className="py-3.5 px-4 min-w-[220px]">Rujukan Sumber Bukti</th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-slate-100">
+              {filteredCaps.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-12 text-center text-slate-400">
+                    Tidak ada kapabilitas yang cocok dengan filter aktif.
+                  </td>
+                </tr>
+              ) : (
+                filteredCaps.map(({ item, detail }) => {
+                  const isVerified = detail.status === 'Terverifikasi';
+                  const isInference = detail.status === 'Inferensi';
+                  const isBelum = detail.status === 'Belum' || !detail.status;
+
+                  return (
+                    <tr 
+                      key={item.id} 
+                      onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankSlug })}
+                      className="hover:bg-slate-50 transition cursor-pointer group"
+                    >
+                      <td className="py-3 px-3 text-center font-mono text-slate-400 border-r border-slate-100 align-top">
+                        {item.no}
+                      </td>
+
+                      <td className="py-3 px-2 text-center border-r border-slate-100 align-top">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+                          {item.workshop}
+                        </span>
+                      </td>
+
+                      <td className="py-3 px-3 border-r border-slate-100 align-top">
+                        <div className="font-semibold text-slate-800 leading-tight">{item.domain}</div>
+                        <div className="text-[10px] text-slate-400 mt-1">{item.kategori}</div>
+                      </td>
+
+                      <td className="py-3 px-4 font-bold text-slate-900 border-r border-slate-100 align-top">
+                        <div className="leading-snug group-hover:text-blue-600 transition">{item.kapabilitas}</div>
+                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">ID: {item.id}</div>
+                      </td>
+
+                      <td className="py-3 px-4 border-r border-slate-100 align-top font-bold text-slate-900">
+                        <div className="line-clamp-2">{detail.merk || '– Belum terdata'}</div>
+                      </td>
+
+                      <td className="py-3 px-3 text-center border-r border-slate-100 align-top">
+                        {isVerified && (
+                          <span className="px-2 py-1 rounded-md text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            ✓ Verified
+                          </span>
+                        )}
+                        {isInference && (
+                          <span className="px-2 py-1 rounded-md text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
+                            ⚠ Inferensi
+                          </span>
+                        )}
+                        {isBelum && (
+                          <span className="text-slate-400 text-[10px]">– Belum</span>
+                        )}
+                      </td>
+
+                      <td className="py-3 px-4 align-top text-slate-600">
+                        {detail.link ? (
+                          <div className="line-clamp-2 text-[11px] leading-relaxed">
+                            {detail.link}
+                          </div>
+                        ) : (
+                          <span className="text-slate-300 italic text-[11px]">Belum ada rujukan bukti</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@ export const PresentationView: React.FC = () => {
     findings, 
     evidences, 
     interviews,
+    researchItems,
     setPresentationMode 
   } = useApp();
 
@@ -168,7 +169,7 @@ export const PresentationView: React.FC = () => {
               </span>
             </h1>
             <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Analisis komparatif empiris arsitektur teknologi, postur infrastruktur, dan diferensiasi kapabilitas digital Bank BRI terhadap Bank Mandiri, BCA, BNI, BTN, dan BSI di 11 domain strategis.
+              Analisis komparatif empiris arsitektur teknologi, postur infrastruktur, dan diferensiasi kapabilitas digital Bank BRI terhadap Bank Mandiri, BCA, BNI, BTN, dan BSI berdasarkan 408 kapabilitas riset di 13 domain dan 4 workshop.
             </p>
           </div>
 
@@ -184,7 +185,7 @@ export const PresentationView: React.FC = () => {
             </div>
             <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="text-slate-500 block text-[10px] uppercase font-bold">Scope Domains</span>
-              <strong className="text-orange-400">11 Technical Categories</strong>
+              <strong className="text-orange-400">4 Workshops · 13 Domains (408 Caps)</strong>
             </div>
             <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="text-slate-500 block text-[10px] uppercase font-bold">Engagement Status</span>
@@ -386,15 +387,26 @@ export const PresentationView: React.FC = () => {
               Matriks Kematangan Kapabilitas Teknologi 6 Bank (BRI · Mandiri · BCA · BNI · BTN · BSI)
             </h2>
             <p className="text-xs text-slate-400 mt-1">
-              Distribusi 170+ temuan teknologi terverifikasi di seluruh domain arsitektur.
+              Distribusi 408 kapabilitas riset terverifikasi di seluruh 13 domain arsitektur dan 4 workshop.
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {banks.map(bank => {
-              const bankFindings = publishedFindings.filter(f => f.bankId === bank.id);
-              const confirmedCount = bankFindings.filter(f => f.confidence === 'Confirmed').length;
+              const bSlug = bank.singkatan.toLowerCase();
+              let verified = 0;
+              let inference = 0;
+              let belum = 0;
+
+              researchItems.forEach(item => {
+                const s = item.banks[bSlug]?.status;
+                if (s === 'Terverifikasi') verified++;
+                else if (s === 'Inferensi') inference++;
+                else belum++;
+              });
+
               const isBRI = bank.id === 'bank-bri';
+              const pct = Math.round((verified / (researchItems.length || 1)) * 100);
 
               return (
                 <div 
@@ -420,15 +432,19 @@ export const PresentationView: React.FC = () => {
 
                   <div className="mt-4 pt-3 border-t border-slate-800 space-y-1.5 text-xs">
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Total Stack:</span>
-                      <strong className="text-white font-mono">{bankFindings.length}</strong>
+                      <span className="text-slate-400">Verified:</span>
+                      <strong className="text-emerald-400 font-mono">{verified} ({pct}%)</strong>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Confirmed:</span>
-                      <strong className="text-emerald-400 font-mono">{confirmedCount}</strong>
+                      <span className="text-slate-400">Inferensi:</span>
+                      <strong className="text-amber-400 font-mono">{inference}</strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Belum:</span>
+                      <strong className="text-slate-500 font-mono">{belum}</strong>
                     </div>
                     <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-400">
-                      Fokus Utama: <span className="text-slate-200 font-semibold">{isBRI ? 'Inklusi & Skala Mikro' : bank.id === 'bank-mandiri' ? 'Lifestyle & Korporasi' : bank.id === 'bank-bca' ? 'Transaksi Ritel & Digital Ecosystem' : bank.id === 'bank-bni' ? 'Global & wondr App' : bank.id === 'bank-btn' ? 'KPR & Mortgage' : 'Perbankan Syariah'}</span>
+                      Total: <span className="text-slate-200 font-semibold">{researchItems.length} Caps</span>
                     </div>
                   </div>
                 </div>
@@ -438,7 +454,7 @@ export const PresentationView: React.FC = () => {
 
           <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 leading-relaxed flex items-center justify-between">
             <div>
-              <span className="text-orange-400 font-bold">Konteks Eksekutif:</span> BRI memiliki portofolio komponen stack terverifikasi terbanyak (11 kategori penuh), BCA mendominasi efisiensi transaksi ritel proprietary & on-premise AI, sementara Mandiri dan BNI memimpin modernisasi open lakehouse & cloud.
+              <span className="text-orange-400 font-bold">Konteks Eksekutif:</span> Data empiris dari 408 kapabilitas menunjukkan BRI memimpin di volume pemrosesan mikro, BCA unggul dalam efisiensi transaksi ritel, sementara Mandiri dan BNI agresif dalam modernisasi arsitektur data & cloud hybrid.
             </div>
           </div>
         </div>

@@ -17,14 +17,24 @@ export const Navbar: React.FC = () => {
     findings,
     isDbConnected,
     exportDataJSON,
-    exportMatrixCSV
+    exportMatrixCSV,
+    exportResearchMatrixCSV,
+    researchItems
   } = useApp();
 
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const [isBoardMemoOpen, setIsBoardMemoOpen] = useState(false);
 
-  // Stats for badge
-  const verifiedCount = findings.filter(f => f.confidence === 'Confirmed' || f.confidence === 'Likely').length;
+  // Stats for badge from 408 capabilities
+  const verifiedCount = React.useMemo(() => {
+    let count = 0;
+    researchItems.forEach(item => {
+      Object.values(item.banks).forEach(b => {
+        if (b.status === 'Terverifikasi') count++;
+      });
+    });
+    return count;
+  }, [researchItems]);
 
   // Determine nav items based on user role
   const isRoleAdmin = currentUser.role === 'Admin';
@@ -33,34 +43,34 @@ export const Navbar: React.FC = () => {
 
   const navItems = isRoleAdmin
     ? [
-        { path: '/admin', label: 'Overview CMS & Checklist', icon: Shield },
-        { path: '/admin/findings', label: 'Audit & Kelola Temuan', icon: CheckCircle2 },
-        { path: '/admin/technologies', label: 'Direktori Teknologi', icon: Cpu },
+        { path: '/admin', label: 'Riset Sheet (408)', icon: Grid3X3 },
+        { path: '/admin/checklist', label: 'Checklist Kesiapan', icon: Shield },
+        { path: '/admin/findings', label: 'Audit Temuan', icon: CheckCircle2 },
         { path: '/admin/interviews', label: 'Narasumber Anonim', icon: Building2 },
         { path: '/admin/audit-logs', label: 'Log Audit', icon: TrendingUp },
-        { path: '/analyst/matrix', label: 'Matriks Stack ↗', icon: Grid3X3, isSecondary: true },
+        { path: '/analyst/matrix', label: 'Matriks Riset ↗', icon: Grid3X3, isSecondary: true },
         { path: '/executive/dashboard', label: 'Executive Portal ↗', icon: BarChart3, isSecondary: true },
       ]
     : isRoleAnalyst
     ? [
-        { path: '/analyst/matrix', label: 'Matriks Tech Stack', icon: Grid3X3 },
-        { path: '/analyst/decision-matrix', label: 'Decision Matrix 2x2', icon: Compass },
-        { path: '/analyst/tco-simulator', label: 'TCO Simulator', icon: DollarSign },
-        { path: '/analyst/genai-readiness', label: 'GenAI Readiness', icon: Bot },
+        { path: '/analyst/matrix', label: 'Matriks Riset (408)', icon: Grid3X3 },
         { path: '/analyst/head-to-head', label: 'Head-to-Head (BRI vs X)', icon: ArrowLeftRight },
         { path: '/analyst/gap-analysis', label: 'Gap Analysis', icon: TrendingUp },
-        { path: '/analyst/tech-catalog', label: 'Katalog Teknologi', icon: Cpu },
-        { path: '/analyst/banks', label: 'Profil Bank', icon: Building2 },
+        { path: '/analyst/tech-catalog', label: 'Katalog Kapabilitas', icon: Cpu },
+        { path: '/analyst/banks', label: 'Profil 6 Bank', icon: Building2 },
+        { path: '/analyst/decision-matrix', label: 'Decision Matrix', icon: Compass },
+        { path: '/analyst/tco-simulator', label: 'TCO Simulator', icon: DollarSign },
+        { path: '/analyst/genai-readiness', label: 'GenAI Readiness', icon: Bot },
         { path: '/executive/dashboard', label: 'Executive Overview ↗', icon: BarChart3, isSecondary: true },
       ]
     : [
         { path: '/executive/dashboard', label: 'Executive Overview', icon: BarChart3 },
-        { path: '/executive/decision-matrix', label: 'Decision Matrix 2x2', icon: Compass },
-        { path: '/executive/tco-simulator', label: 'TCO Simulator', icon: DollarSign },
-        { path: '/executive/genai-readiness', label: 'GenAI Readiness', icon: Bot },
+        { path: '/executive/matrix', label: 'Matriks Riset (408)', icon: Grid3X3 },
         { path: '/executive/head-to-head', label: 'Head-to-Head Battlecard', icon: ArrowLeftRight },
-        { path: '/executive/banks', label: 'Profil 5 Bank Himbara', icon: Building2 },
-        { path: '/executive/presentation', label: 'Mode Presentasi (20 Slide)', icon: Presentation },
+        { path: '/executive/gap-analysis', label: 'Gap Analysis', icon: TrendingUp },
+        { path: '/executive/banks', label: 'Profil 6 Bank', icon: Building2 },
+        { path: '/executive/decision-matrix', label: 'Decision Matrix', icon: Compass },
+        { path: '/executive/presentation', label: 'Mode Presentasi', icon: Presentation },
       ];
 
   const roleBadgeInfo = isRoleAdmin
@@ -125,10 +135,10 @@ export const Navbar: React.FC = () => {
                     onMouseLeave={() => setExportDropdownOpen(false)}
                   >
                     <button
-                      onClick={() => { exportMatrixCSV(); setExportDropdownOpen(false); }}
+                      onClick={() => { exportResearchMatrixCSV(); setExportDropdownOpen(false); }}
                       className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center space-x-2 font-medium"
                     >
-                      <span>📊 Ekspor Matriks (CSV)</span>
+                      <span>📊 Ekspor Riset Sheet (408 CSV)</span>
                     </button>
                     <button
                       onClick={() => { exportDataJSON(); setExportDropdownOpen(false); }}

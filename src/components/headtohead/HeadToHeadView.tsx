@@ -1,423 +1,439 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   ArrowLeftRight, Check, X, Shield, Sparkles, Building2, 
-  ChevronRight, ArrowRight, TrendingUp, AlertTriangle 
+  ChevronRight, ArrowRight, TrendingUp, AlertTriangle, CheckCircle2, 
+  HelpCircle, ExternalLink, Filter, Search, RotateCcw, Database
 } from 'lucide-react';
-import { getConfidenceBadge } from '../../utils/helpers';
+
+const BANK_OPTIONS = [
+  { slug: 'bri', label: 'BRI', fullName: 'Bank Rakyat Indonesia', logo: '🟦', isFocus: true },
+  { slug: 'mandiri', label: 'Mandiri', fullName: 'Bank Mandiri', logo: '🟨', isFocus: false },
+  { slug: 'bca', label: 'BCA', fullName: 'Bank Central Asia', logo: '🔵', isFocus: false },
+  { slug: 'bni', label: 'BNI', fullName: 'Bank Negara Indonesia', logo: '🟧', isFocus: false },
+  { slug: 'btn', label: 'BTN', fullName: 'Bank Tabungan Negara', logo: '🔷', isFocus: false },
+  { slug: 'bsi', label: 'BSI', fullName: 'Bank Syariah Indonesia', logo: '🟩', isFocus: false }
+];
 
 export const HeadToHeadView: React.FC = () => {
   const { 
-    banks, 
-    categories, 
-    technologies, 
-    findings, 
-    setSelectedFindingModalId 
+    researchItems,
+    setSelectedResearchCell 
   } = useApp();
 
-  const bri = banks.find(b => b.id === 'bank-bri')!;
-  const competitorBanks = banks.filter(b => b.id !== 'bank-bri');
-  const [selectedCompetitorId, setSelectedCompetitorId] = useState<string>('bank-mandiri');
+  const [bankASlug, setBankASlug] = useState<string>('bri');
+  const [bankBSlug, setBankBSlug] = useState<string>('mandiri');
 
-  const competitor = banks.find(b => b.id === selectedCompetitorId)!;
+  const [workshopFilter, setWorkshopFilter] = useState<string>('all');
+  const [domainFilter, setDomainFilter] = useState<string>('all');
+  const [comparisonFilter, setComparisonFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Findings
-  const briFindings = findings.filter(f => f.bankId === 'bank-bri');
-  const compFindings = findings.filter(f => f.bankId === competitor.id);
+  const bankA = BANK_OPTIONS.find(b => b.slug === bankASlug) || BANK_OPTIONS[0];
+  const bankB = BANK_OPTIONS.find(b => b.slug === bankBSlug) || BANK_OPTIONS[1];
 
-  const briTechIds = new Set(briFindings.map(f => f.technologyId));
-  const compTechIds = new Set(compFindings.map(f => f.technologyId));
+  const allDomains = useMemo(() => {
+    return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
+  }, [researchItems]);
 
-  // Category comparison logic
-  const categoryDiffs = categories.map(cat => {
-    const catTechs = technologies.filter(t => t.categoryId === cat.id);
-    
-    const shared = catTechs.filter(t => briTechIds.has(t.id) && compTechIds.has(t.id));
-    const onlyBri = catTechs.filter(t => briTechIds.has(t.id) && !compTechIds.has(t.id));
-    const onlyComp = catTechs.filter(t => !briTechIds.has(t.id) && compTechIds.has(t.id));
+  // Comparison metrics across 408 items
+  const {
+    comparisons,
+    bothVerifiedCount,
+    onlyAVerifiedCount,
+    onlyBVerifiedCount,
+    bothBelumCount,
+    differentMerkCount
+  } = useMemo(() => {
+    let bothV = 0;
+    let onlyAV = 0;
+    let onlyBV = 0;
+    let bothB = 0;
+    let diffMerk = 0;
+
+    const list = researchItems.map(item => {
+      const detailA = item.banks[bankASlug] || { merk: '-', status: 'Belum', link: '', pic: 'Admin' };
+      const detailB = item.banks[bankBSlug] || { merk: '-', status: 'Belum', link: '', pic: 'Admin' };
+
+      const isAVerified = detailA.status === 'Terverifikasi';
+      const isBVerified = detailB.status === 'Terverifikasi';
+      const isAHasData = detailA.status === 'Terverifikasi' || detailA.status === 'Inferensi';
+      const isBHasData = detailB.status === 'Terverifikasi' || detailB.status === 'Inferensi';
+
+      let diffType: 'both-verified' | 'only-a' | 'only-b' | 'both-data' | 'both-none' = 'both-none';
+
+      if (isAVerified && isBVerified) {
+        diffType = 'both-verified';
+        bothV++;
+      } else if (isAVerified && !isBVerified) {
+        diffType = 'only-a';
+        onlyAV++;
+      } else if (!isAVerified && isBVerified) {
+        diffType = 'only-b';
+        onlyBV++;
+      } else if (isAHasData || isBHasData) {
+        diffType = 'both-data';
+      } else {
+        diffType = 'both-none';
+        bothB++;
+      }
+
+      const hasDiffMerk = detailA.merk && detailB.merk && detailA.merk !== '-' && detailB.merk !== '-' &&
+        detailA.merk.toLowerCase().trim() !== detailB.merk.toLowerCase().trim();
+
+      if (hasDiffMerk) diffMerk++;
+
+      return {
+        item,
+        detailA,
+        detailB,
+        diffType,
+        hasDiffMerk
+      };
+    });
 
     return {
-      category: cat,
-      shared,
-      onlyBri,
-      onlyComp,
-      totalTracked: catTechs.length
+      comparisons: list,
+      bothVerifiedCount: bothV,
+      onlyAVerifiedCount: onlyAV,
+      onlyBVerifiedCount: onlyBV,
+      bothBelumCount: bothB,
+      differentMerkCount: diffMerk
     };
-  });
+  }, [researchItems, bankASlug, bankBSlug]);
 
-  const totalShared = categoryDiffs.reduce((acc, c) => acc + c.shared.length, 0);
-  const totalOnlyBri = categoryDiffs.reduce((acc, c) => acc + c.onlyBri.length, 0);
-  const totalOnlyComp = categoryDiffs.reduce((acc, c) => acc + c.onlyComp.length, 0);
+  // Filtered comparisons
+  const filteredComparisons = useMemo(() => {
+    return comparisons.filter(c => {
+      if (workshopFilter !== 'all' && c.item.workshop !== workshopFilter) return false;
+      if (domainFilter !== 'all' && c.item.domain !== domainFilter) return false;
+
+      if (comparisonFilter === 'both-verified' && c.diffType !== 'both-verified') return false;
+      if (comparisonFilter === 'only-a' && c.diffType !== 'only-a') return false;
+      if (comparisonFilter === 'only-b' && c.diffType !== 'only-b') return false;
+      if (comparisonFilter === 'diff-merk' && !c.hasDiffMerk) return false;
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchCap = c.item.kapabilitas.toLowerCase().includes(q);
+        const matchDom = c.item.domain.toLowerCase().includes(q);
+        const matchMerkA = c.detailA.merk?.toLowerCase().includes(q);
+        const matchMerkB = c.detailB.merk?.toLowerCase().includes(q);
+        if (!matchCap && !matchDom && !matchMerkA && !matchMerkB) return false;
+      }
+
+      return true;
+    });
+  }, [comparisons, workshopFilter, domainFilter, comparisonFilter, searchQuery]);
 
   return (
     <div className="space-y-6 pb-16">
       {/* Page Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-              Head-to-Head: Bank BRI vs {competitor.nama}
+            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+              Head-to-Head: {bankA.label} vs {bankB.label}
             </h2>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
-              F5 · Diff View
+              408 Kapabilitas Riset
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Komparasi langsung per kategori teknologi: temukan persamaan, keunggulan BRI, dan potensi celah arsitektur.
+          <p className="text-xs text-slate-500 mt-1 max-w-2xl">
+            Komparasi langsung implementasi teknologi antara {bankA.fullName} ({bankA.label}) dan {bankB.fullName} ({bankB.label}) berdasarkan 408 kapabilitas dan 13 domain arsitektur.
           </p>
         </div>
 
-        {/* Competitor Selector Pills */}
-        <div className="flex items-center space-x-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
-          <span className="text-xs font-semibold text-slate-500 px-2">Bandingkan dengan:</span>
-          {competitorBanks.map(b => (
+        {/* Bank Selection Switchers */}
+        <div className="flex items-center space-x-3 bg-white p-2 rounded-2xl border border-slate-200 shadow-xs flex-wrap">
+          <div className="flex items-center space-x-1.5 text-xs">
+            <span className="text-slate-400 font-bold text-[10px] uppercase">Bank 1:</span>
+            <select
+              value={bankASlug}
+              onChange={e => setBankASlug(e.target.value)}
+              className="px-2.5 py-1.5 rounded-xl border border-slate-300 font-extrabold text-slate-800 bg-slate-50 text-xs"
+            >
+              {BANK_OPTIONS.map(b => (
+                <option key={b.slug} value={b.slug} disabled={b.slug === bankBSlug}>
+                  {b.logo} {b.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <ArrowLeftRight className="w-4 h-4 text-slate-400" />
+
+          <div className="flex items-center space-x-1.5 text-xs">
+            <span className="text-slate-400 font-bold text-[10px] uppercase">Bank 2:</span>
+            <select
+              value={bankBSlug}
+              onChange={e => setBankBSlug(e.target.value)}
+              className="px-2.5 py-1.5 rounded-xl border border-slate-300 font-extrabold text-slate-800 bg-slate-50 text-xs"
+            >
+              {BANK_OPTIONS.map(b => (
+                <option key={b.slug} value={b.slug} disabled={b.slug === bankASlug}>
+                  {b.logo} {b.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Versus Comparison Summary Ribbon */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Kapabilitas</div>
+          <div className="text-2xl font-black text-slate-900 mt-1">{researchItems.length}</div>
+          <div className="text-[10px] text-slate-500">13 Domain Arsitektur</div>
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-blue-200 bg-blue-50/20 shadow-xs">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700 flex items-center space-x-1">
+            <Shield className="w-3.5 h-3.5 text-blue-600" />
+            <span>Keunggulan {bankA.label}</span>
+          </div>
+          <div className="text-2xl font-black text-blue-900 mt-1">{onlyAVerifiedCount}</div>
+          <div className="text-[10px] text-blue-600">Terverifikasi di {bankA.label} saja</div>
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-orange-200 bg-orange-50/20 shadow-xs">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-orange-700 flex items-center space-x-1">
+            <AlertTriangle className="w-3.5 h-3.5 text-orange-600" />
+            <span>Keunggulan {bankB.label}</span>
+          </div>
+          <div className="text-2xl font-black text-orange-900 mt-1">{onlyBVerifiedCount}</div>
+          <div className="text-[10px] text-orange-600">Celah untuk {bankA.label}</div>
+        </div>
+
+        <div className="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-xs">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 flex items-center space-x-1">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Keduanya Terverifikasi</span>
+          </div>
+          <div className="text-2xl font-black text-emerald-900 mt-1">{bothVerifiedCount}</div>
+          <div className="text-[10px] text-emerald-600">Standar Paritas Bersama</div>
+        </div>
+      </div>
+
+      {/* Filter and Control Bar */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+          {/* Search Box */}
+          <div className="md:col-span-4 relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Cari kapabilitas, domain, atau merk stack..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 focus:bg-white"
+            />
+          </div>
+
+          {/* Workshop Filter */}
+          <div className="md:col-span-2">
+            <select
+              value={workshopFilter}
+              onChange={e => setWorkshopFilter(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+            >
+              <option value="all">Semua Workshop</option>
+              <option value="WS1">WS1: Core & Digital</option>
+              <option value="WS2">WS2: EDW & BI</option>
+              <option value="WS3">WS3: Cloud & Infra</option>
+              <option value="WS4">WS4: Big Data & AI</option>
+            </select>
+          </div>
+
+          {/* Domain Filter */}
+          <div className="md:col-span-3">
+            <select
+              value={domainFilter}
+              onChange={e => setDomainFilter(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+            >
+              <option value="all">Semua Domain ({allDomains.length})</option>
+              {allDomains.map(d => (
+                <option key={d} value={d}>{d}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Comparison Status Filter */}
+          <div className="md:col-span-3">
+            <select
+              value={comparisonFilter}
+              onChange={e => setComparisonFilter(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+            >
+              <option value="all">Semua Status Komparasi</option>
+              <option value="only-a">Hanya Keunggulan {bankA.label}</option>
+              <option value="only-b">Hanya Keunggulan {bankB.label}</option>
+              <option value="both-verified">Keduanya Terverifikasi</option>
+              <option value="diff-merk">Perbedaan Merk / Solusi</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+          <div>
+            Menampilkan <strong className="text-slate-800">{filteredComparisons.length}</strong> dari <strong className="text-slate-800">{researchItems.length}</strong> kapabilitas riset
+          </div>
+          {(searchQuery || workshopFilter !== 'all' || domainFilter !== 'all' || comparisonFilter !== 'all') && (
             <button
-              key={b.id}
-              onClick={() => setSelectedCompetitorId(b.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 ${
-                selectedCompetitorId === b.id
-                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              onClick={() => {
+                setSearchQuery('');
+                setWorkshopFilter('all');
+                setDomainFilter('all');
+                setComparisonFilter('all');
+              }}
+              className="text-blue-600 hover:underline font-semibold flex items-center space-x-1"
             >
-              <span>{b.logo}</span>
-              <span>{b.singkatan}</span>
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset Filter</span>
             </button>
-          ))}
+          )}
         </div>
       </div>
 
-      {/* Versus Banner Comparison Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Left: BRI Summary Card */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-900 to-blue-800 text-white shadow-md relative overflow-hidden">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-2xl">{bri.logo}</span>
-            <span className="px-2.5 py-0.5 bg-blue-500/30 border border-blue-400/40 rounded-full text-[11px] font-extrabold text-blue-200">
-              FOKUS UTAMA
-            </span>
-          </div>
-          <h3 className="text-xl font-extrabold">{bri.singkatan}</h3>
-          <p className="text-xs text-blue-200 mt-1 line-clamp-1">{bri.nama}</p>
-          <div className="mt-4 pt-3 border-t border-blue-700/60 flex justify-between items-baseline">
-            <span className="text-xs text-blue-200">Stack Teridentifikasi:</span>
-            <span className="text-2xl font-extrabold text-white">{briFindings.length}</span>
-          </div>
-          <div className="mt-2 text-[11px] text-blue-200/90 flex items-center space-x-1">
-            <span>Produk Unggulan:</span>
-            <strong className="text-white">{bri.produkDigital[0]}</strong>
-          </div>
-        </div>
-
-        {/* Center: Diff Summary Stat Card */}
-        <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <div className="text-center font-bold text-slate-500 text-xs uppercase tracking-wider mb-3">
-              Ringkasan Perbedaan (Diff Matrix)
-            </div>
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="p-2.5 bg-emerald-50 rounded-xl border border-emerald-100">
-                <div className="text-xl font-extrabold text-emerald-700">{totalShared}</div>
-                <div className="text-[10px] text-emerald-800 font-semibold mt-0.5">Sama (Shared)</div>
-              </div>
-              <div className="p-2.5 bg-blue-50 rounded-xl border border-blue-100">
-                <div className="text-xl font-extrabold text-blue-700">{totalOnlyBri}</div>
-                <div className="text-[10px] text-blue-800 font-semibold mt-0.5">Hanya BRI</div>
-              </div>
-              <div className="p-2.5 bg-orange-50 rounded-xl border border-orange-100">
-                <div className="text-xl font-extrabold text-orange-700">{totalOnlyComp}</div>
-                <div className="text-[10px] text-orange-800 font-semibold mt-0.5">Hanya {competitor.singkatan}</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-3 pt-3 border-t border-slate-100 text-center">
-            <span className="text-xs text-slate-500 font-medium">
-              Tingkat Keselarasan Arsitektur: <strong>{Math.round((totalShared / (totalShared + totalOnlyBri + totalOnlyComp || 1)) * 100)}%</strong>
-            </span>
-          </div>
-        </div>
-
-        {/* Right: Competitor Summary Card */}
-        <div 
-          className="p-6 rounded-2xl text-white shadow-md relative overflow-hidden"
-          style={{ backgroundColor: competitor.brandColor }}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-2xl">{competitor.logo}</span>
-            <span className="px-2.5 py-0.5 bg-white/20 border border-white/30 rounded-full text-[11px] font-extrabold text-white">
-              KOMPETITOR
-            </span>
-          </div>
-          <h3 className="text-xl font-extrabold">{competitor.singkatan}</h3>
-          <p className="text-xs text-white/80 mt-1 line-clamp-1">{competitor.nama}</p>
-          <div className="mt-4 pt-3 border-t border-white/20 flex justify-between items-baseline">
-            <span className="text-xs text-white/80">Stack Teridentifikasi:</span>
-            <span className="text-2xl font-extrabold text-white">{compFindings.length}</span>
-          </div>
-          <div className="mt-2 text-[11px] text-white/90 flex items-center space-x-1">
-            <span>Produk Unggulan:</span>
-            <strong className="text-white">{competitor.produkDigital[0]}</strong>
-          </div>
-        </div>
-      </div>
-
-      {/* MBB Strategic Battlecard: Moat vs Vulnerability vs Counter-Tactics */}
-      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
-        <div className="flex items-center justify-between flex-wrap gap-4 border-b border-slate-800 pb-4">
-          <div>
-            <div className="flex items-center space-x-2 text-orange-400 font-extrabold text-xs uppercase tracking-wider">
-              <Sparkles className="w-4 h-4" />
-              <span>MBB Strategic Battlecard: BRI vs {competitor.singkatan}</span>
-            </div>
-            <h3 className="text-xl font-extrabold text-white mt-1">
-              Architectural Moat & Titik Kritis Perbandingan Head-to-Head
-            </h3>
-          </div>
-          <span className="px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">
-            Deep-Dive Profiling
-          </span>
-        </div>
-
-        {/* 3 Pillars Grid: Moat, Vulnerability, Counter-Tactics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-          {/* Pillar 1: Architectural Moat */}
-          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3">
-            <div className="flex items-center space-x-2 text-emerald-400 font-extrabold text-xs uppercase">
-              <Shield className="w-4 h-4" />
-              <span>1. Architectural Moat</span>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <span className="font-bold text-blue-300 block text-[11px] uppercase">🟦 Keunggulan Mutlak BRI:</span>
-                <p className="text-slate-300 mt-1 leading-relaxed">
-                  {selectedCompetitorId === 'bank-mandiri'
-                    ? 'Event streaming sejati (Confluent Kafka + Cassandra) berkecepatan 25.000 TPS real-time. 0% ketergantungan lisensi legacy batch ETL.'
-                    : selectedCompetitorId === 'bank-bni'
-                    ? 'Throughput transaksi volume raksasa, jaringan 1.000.000+ AgenBRILink, dan kestabilan hybrid cluster OpenShift on-premise.'
-                    : selectedCompetitorId === 'bank-bsi'
-                    ? 'Skalabilitas ekosistem perbankan mikro tanpa hambatan fragmentasi data merger; kecepatan release cycle harian.'
-                    : 'Diversifikasi ekosistem super-app BRImo yang matang dan kapasitas data lakehouse mutasi historis rekening.'}
-                </p>
-              </div>
-
-              <div className="pt-2 border-t border-slate-700/60">
-                <span className="font-bold text-orange-300 block text-[11px] uppercase">
-                  {competitor.logo} Keunggulan {competitor.singkatan}:
-                </span>
-                <p className="text-slate-300 mt-1 leading-relaxed">
-                  {selectedCompetitorId === 'bank-mandiri'
-                    ? 'Ekosistem lifestyle di AWS Jakarta (Livin\' Sukha) dengan rilis mingguan + data science MLOps terpusat di Dataiku.'
-                    : selectedCompetitorId === 'bank-bca'
-                    ? 'Engine core perbankan proprietary transaksi tinggi, Cloudera AI Inference terpusat on-premise, dan Red Hat 3scale API Management.'
-                    : selectedCompetitorId === 'bank-bni'
-                    ? 'APM Dynatrace Perform dengan Davis AI memberikan zero-blindspot monitoring di seluruh microservices wondr.'
-                    : selectedCompetitorId === 'bank-bsi'
-                    ? 'Standarisasi enkripsi HashiCorp Vault dan migrasi Core Banking Temenos R10->R24 tuntas Mei 2026.'
-                    : 'Monopoli digitalisasi data perumahan & KPR nasional yang terintegrasi di bale by BTN.'}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Pillar 2: Critical Vulnerability / SPOF */}
-          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3">
-            <div className="flex items-center space-x-2 text-rose-400 font-extrabold text-xs uppercase">
-              <AlertTriangle className="w-4 h-4" />
-              <span>2. Titik Lemah / SPOF</span>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <span className="font-bold text-rose-300 block text-[11px] uppercase">
-                  ⚠️ Celah Arsitektur {competitor.singkatan}:
-                </span>
-                <p className="text-slate-300 mt-1 leading-relaxed">
-                  {selectedCompetitorId === 'bank-mandiri'
-                    ? 'Terkunci lisensi mahal IBM DataStage (batch harian T+1) & Oracle Exadata, membatasi fleksibilitas real-time fraud inference.'
-                    : selectedCompetitorId === 'bank-bca'
-                    ? 'Ketergantungan infrastruktur on-premise murni dengan beban CapEx server komputasi masif dan sistem core proprietary tertutup.'
-                    : selectedCompetitorId === 'bank-bni'
-                    ? 'Beban operasional transisi migrasi nasabah dari BNI Mobile Banking lama ke aplikasi wondr.'
-                    : selectedCompetitorId === 'bank-bsi'
-                    ? 'Kompleksitas harmonisasi database dan modul syariah dari konsolidasi 3 eks-bank syariah.'
-                    : 'Footprint legacy backoffice berbasis arsitektur lama rentan bottleneck skalabilitas.'}
-                </p>
-              </div>
-
-              <div className="pt-2 border-t border-slate-700/60">
-                <span className="font-bold text-amber-300 block text-[11px] uppercase">
-                  🔍 Area Waspada bagi BRI:
-                </span>
-                <p className="text-slate-300 mt-1 leading-relaxed">
-                  {selectedCompetitorId === 'bank-mandiri'
-                    ? 'Perlu mengantisipasi time-to-market fitur lifestyle non-core perbankan agar nasabah muda tidak beralih ke Livin\'.'
-                    : selectedCompetitorId === 'bank-bca'
-                    ? 'Mempertahankan keunggulan rating Play Store BRImo (4.7) dan ekosistem mikro AgenBRILink di hadapan dominasi transaksi merchant BCA.'
-                    : 'Kebutuhan adopsi full-stack tracing end-to-end agar resolusi insiden transaksi setara standar Dynatrace.'}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Pillar 3: Counter-Tactics Playbook */}
-          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3">
-            <div className="flex items-center space-x-2 text-blue-400 font-extrabold text-xs uppercase">
-              <Sparkles className="w-4 h-4" />
-              <span>3. Rekomendasi MBB Counter-Tactics</span>
-            </div>
-            <div className="space-y-2 text-slate-300 leading-relaxed">
-              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-700/60">
-                <strong className="text-white block text-[11px]">1. Kunci Keunggulan Real-Time</strong>
-                Maksimalkan Kafka streaming untuk keputusan kredit mikro instan dalam hitungan detik yang tidak mampu ditandingi kompetitor batch.
-              </div>
-              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-700/60">
-                <strong className="text-white block text-[11px]">2. Pilot Hybrid Hyperscaler</strong>
-                Eksplorasi deployment terisolasi di AWS/GCP Jakarta Region khusus fitur lifestyle non-core BRImo tanpa memindahkan data nasabah inti.
-              </div>
-              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-700/60">
-                <strong className="text-white block text-[11px]">3. Pertahankan Kedaulatan TCO</strong>
-                Hindari vendor lock-in software proprietary monolithic demi menjaga rasio belanja inovasi (*Change-the-Bank*) di atas 38%.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Category by Category Breakdown */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-bold text-slate-900 flex items-center space-x-2">
-          <span>Perbandingan Rinci per Kategori (11 Domain)</span>
-        </h3>
-
-        {categoryDiffs.map(diff => {
-          return (
-            <div 
-              key={diff.category.id}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:border-slate-300 transition"
-            >
-              {/* Category Header */}
-              <div className="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center space-x-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                  <h4 className="font-extrabold text-slate-900 text-sm">
-                    {diff.category.nama}
-                  </h4>
-                </div>
-
-                <div className="flex items-center space-x-3 text-xs">
-                  <span className="text-emerald-700 font-semibold">
-                    ✓ {diff.shared.length} Bersama
-                  </span>
-                  <span className="text-blue-700 font-semibold">
-                    ★ {diff.onlyBri.length} Hanya BRI
-                  </span>
-                  <span className="text-orange-700 font-semibold">
-                    ▲ {diff.onlyComp.length} Hanya {competitor.singkatan}
-                  </span>
-                </div>
-              </div>
-
-              {/* 3 Columns Comparison */}
-              <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                {/* Col 1: Hanya BRI */}
-                <div className="p-3.5 bg-blue-50/40 rounded-xl border border-blue-100 flex flex-col justify-between">
-                  <div>
-                    <div className="font-bold text-blue-900 flex items-center justify-between mb-2">
-                      <span>Keunggulan Eksklusif BRI</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-extrabold">
-                        {diff.onlyBri.length}
-                      </span>
-                    </div>
-                    {diff.onlyBri.length === 0 ? (
-                      <div className="text-slate-400 italic py-2">Tidak ada stack eksklusif di kategori ini.</div>
-                    ) : (
-                      <div className="space-y-2">
-                        {diff.onlyBri.map(t => {
-                          const f = findings.find(x => x.bankId === 'bank-bri' && x.technologyId === t.id);
-                          return (
-                            <div 
-                              key={t.id}
-                              onClick={() => f && setSelectedFindingModalId(f.id)}
-                              className="p-2 bg-white rounded-lg border border-blue-200 hover:border-blue-300 cursor-pointer transition shadow-2xs"
-                            >
-                              <div className="font-bold text-slate-900">{t.nama}</div>
-                              <div className="text-[11px] text-slate-500">{t.vendor}</div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+      {/* Head-to-Head Comparison Table */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="bg-slate-100/90 border-b border-slate-200 text-slate-700 font-bold">
+                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200">No</th>
+                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200">WS</th>
+                <th className="py-3.5 px-3 w-48 border-r border-slate-200">Domain & Kategori</th>
+                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200">Kapabilitas / Sistem</th>
+                <th className="py-3.5 px-3 min-w-[200px] border-r border-slate-200 bg-blue-50/70 text-blue-950 text-center">
+                  <div className="flex items-center justify-center space-x-1.5">
+                    <span>{bankA.logo}</span>
+                    <span className="font-black">{bankA.label}</span>
+                    {bankA.isFocus && <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.2 rounded font-bold">FOKUS</span>}
                   </div>
-                </div>
-
-                {/* Col 2: Shared Tech */}
-                <div className="p-3.5 bg-emerald-50/40 rounded-xl border border-emerald-100 flex flex-col justify-between">
-                  <div>
-                    <div className="font-bold text-emerald-900 flex items-center justify-between mb-2">
-                      <span>Stack Bersama (Sama-sama Memakai)</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-extrabold">
-                        {diff.shared.length}
-                      </span>
-                    </div>
-                    {diff.shared.length === 0 ? (
-                      <div className="text-slate-400 italic py-2">Belum ada titik temu di kategori ini.</div>
-                    ) : (
-                      <div className="space-y-2">
-                        {diff.shared.map(t => {
-                          const fBri = findings.find(x => x.bankId === 'bank-bri' && x.technologyId === t.id);
-                          return (
-                            <div 
-                              key={t.id}
-                              onClick={() => fBri && setSelectedFindingModalId(fBri.id)}
-                              className="p-2 bg-white rounded-lg border border-emerald-200 hover:border-emerald-300 cursor-pointer transition shadow-2xs"
-                            >
-                              <div className="font-bold text-slate-900 flex items-center justify-between">
-                                <span>{t.nama}</span>
-                                <span className="text-emerald-600 font-bold text-[10px]">✓ Kedua Bank</span>
-                              </div>
-                              <div className="text-[11px] text-slate-500">{t.vendor}</div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                </th>
+                <th className="py-3.5 px-3 min-w-[200px] border-r border-slate-200 bg-amber-50/70 text-amber-950 text-center">
+                  <div className="flex items-center justify-center space-x-1.5">
+                    <span>{bankB.logo}</span>
+                    <span className="font-black">{bankB.label}</span>
                   </div>
-                </div>
+                </th>
+                <th className="py-3.5 px-3 w-36 text-center">Analisis Paritas</th>
+              </tr>
+            </thead>
 
-                {/* Col 3: Hanya Kompetitor */}
-                <div className="p-3.5 bg-orange-50/40 rounded-xl border border-orange-100 flex flex-col justify-between">
-                  <div>
-                    <div className="font-bold text-orange-950 flex items-center justify-between mb-2">
-                      <span>Celah / Hanya di {competitor.singkatan}</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-orange-100 text-orange-900 font-extrabold">
-                        {diff.onlyComp.length}
-                      </span>
-                    </div>
-                    {diff.onlyComp.length === 0 ? (
-                      <div className="text-slate-400 italic py-2">Kompetitor tidak memiliki stack unik di kategori ini.</div>
-                    ) : (
-                      <div className="space-y-2">
-                        {diff.onlyComp.map(t => {
-                          const fComp = findings.find(x => x.bankId === competitor.id && x.technologyId === t.id);
-                          return (
-                            <div 
-                              key={t.id}
-                              onClick={() => fComp && setSelectedFindingModalId(fComp.id)}
-                              className="p-2 bg-white rounded-lg border border-orange-200 hover:border-orange-300 cursor-pointer transition shadow-2xs"
-                            >
-                              <div className="font-bold text-slate-900">{t.nama}</div>
-                              <div className="text-[11px] text-slate-500">{t.vendor}</div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+            <tbody className="divide-y divide-slate-100">
+              {filteredComparisons.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-12 text-center text-slate-400">
+                    Tidak ada kapabilitas yang cocok dengan filter yang dipilih.
+                  </td>
+                </tr>
+              ) : (
+                filteredComparisons.map(({ item, detailA, detailB, diffType, hasDiffMerk }) => {
+                  return (
+                    <tr key={item.id} className="hover:bg-slate-50/80 transition">
+                      <td className="py-3 px-3 text-center font-mono text-slate-400 border-r border-slate-100 align-top">
+                        {item.no}
+                      </td>
+
+                      <td className="py-3 px-2 text-center border-r border-slate-100 align-top">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+                          {item.workshop}
+                        </span>
+                      </td>
+
+                      <td className="py-3 px-3 border-r border-slate-100 align-top">
+                        <div className="font-semibold text-slate-800 leading-tight">{item.domain}</div>
+                        <div className="text-[10px] text-slate-400 mt-1">{item.kategori}</div>
+                      </td>
+
+                      <td className="py-3 px-4 font-bold text-slate-900 border-r border-slate-100 align-top">
+                        <div className="leading-snug">{item.kapabilitas}</div>
+                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">ID: {item.id}</div>
+                      </td>
+
+                      {/* Bank A Cell */}
+                      <td className="py-2.5 px-3 border-r border-slate-100 align-top bg-blue-50/10">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankASlug })}
+                          className={`w-full text-left p-2 rounded-xl border text-xs transition hover:scale-101 ${
+                            detailA.status === 'Terverifikasi'
+                              ? 'bg-emerald-50 border-emerald-200 text-emerald-950'
+                              : detailA.status === 'Inferensi'
+                              ? 'bg-amber-50 border-amber-200 text-amber-950'
+                              : 'bg-slate-50 border-slate-200 text-slate-400'
+                          }`}
+                        >
+                          <div className="font-bold leading-tight line-clamp-2">
+                            {detailA.merk || '–'}
+                          </div>
+                          <div className="flex items-center justify-between mt-1 text-[9px]">
+                            <span className="font-bold">
+                              {detailA.status === 'Terverifikasi' ? '✓ Verified' : detailA.status === 'Inferensi' ? '⚠ Inferensi' : '– Belum'}
+                            </span>
+                            {detailA.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400" />}
+                          </div>
+                        </button>
+                      </td>
+
+                      {/* Bank B Cell */}
+                      <td className="py-2.5 px-3 border-r border-slate-100 align-top bg-amber-50/10">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankBSlug })}
+                          className={`w-full text-left p-2 rounded-xl border text-xs transition hover:scale-101 ${
+                            detailB.status === 'Terverifikasi'
+                              ? 'bg-emerald-50 border-emerald-200 text-emerald-950'
+                              : detailB.status === 'Inferensi'
+                              ? 'bg-amber-50 border-amber-200 text-amber-950'
+                              : 'bg-slate-50 border-slate-200 text-slate-400'
+                          }`}
+                        >
+                          <div className="font-bold leading-tight line-clamp-2">
+                            {detailB.merk || '–'}
+                          </div>
+                          <div className="flex items-center justify-between mt-1 text-[9px]">
+                            <span className="font-bold">
+                              {detailB.status === 'Terverifikasi' ? '✓ Verified' : detailB.status === 'Inferensi' ? '⚠ Inferensi' : '– Belum'}
+                            </span>
+                            {detailB.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400" />}
+                          </div>
+                        </button>
+                      </td>
+
+                      {/* Status Paritas */}
+                      <td className="py-3 px-3 text-center align-top">
+                        {diffType === 'both-verified' ? (
+                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            Paritas Bersama
+                          </span>
+                        ) : diffType === 'only-a' ? (
+                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
+                            Unggul {bankA.label}
+                          </span>
+                        ) : diffType === 'only-b' ? (
+                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-orange-100 text-orange-800 border border-orange-200">
+                            Unggul {bankB.label}
+                          </span>
+                        ) : hasDiffMerk ? (
+                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-purple-100 text-purple-800 border border-purple-200">
+                            Beda Solusi
+                          </span>
+                        ) : (
+                          <span className="text-slate-400 text-[10px]">– Belum Terbukti</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

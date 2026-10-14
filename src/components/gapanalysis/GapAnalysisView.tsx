@@ -1,218 +1,433 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   TrendingUp, AlertTriangle, CheckCircle2, ArrowRight, 
-  Lightbulb, ShieldCheck, Sparkles, Zap, Building2 
+  Lightbulb, ShieldCheck, Sparkles, Zap, Building2, 
+  Filter, Search, ExternalLink, HelpCircle, ArrowUpRight, RotateCcw
 } from 'lucide-react';
+
+const WORKSHOP_PILLARS: Record<string, { label: string; desc: string; color: string; bg: string; border: string }> = {
+  WS1: { label: 'WS1: Core & Digital Banking', desc: 'Core CBS, Mobile App, Digital Bank', color: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-200' },
+  WS2: { label: 'WS2: EDW, MDM & BI', desc: 'Data Warehouse, MDM, BI & Reporting', color: 'text-indigo-700', bg: 'bg-indigo-50', border: 'border-indigo-200' },
+  WS3: { label: 'WS3: Cloud, Infra & ITSM', desc: 'Cloud, Data Center, Network & ITSM', color: 'text-cyan-700', bg: 'bg-cyan-50', border: 'border-cyan-200' },
+  WS4: { label: 'WS4: Big Data & AI', desc: 'Hadoop, AI/ML, NLP & Generative AI', color: 'text-purple-700', bg: 'bg-purple-50', border: 'border-purple-200' }
+};
+
+const COMPETITORS = [
+  { slug: 'mandiri', label: 'Mandiri', fullName: 'Bank Mandiri', logo: '🟨' },
+  { slug: 'bca', label: 'BCA', fullName: 'Bank Central Asia', logo: '🔵' },
+  { slug: 'bni', label: 'BNI', fullName: 'Bank Negara Indonesia', logo: '🟧' },
+  { slug: 'btn', label: 'BTN', fullName: 'Bank Tabungan Negara', logo: '🔷' },
+  { slug: 'bsi', label: 'BSI', fullName: 'Bank Syariah Indonesia', logo: '🟩' }
+];
 
 export const GapAnalysisView: React.FC = () => {
   const { 
-    technologies, 
-    categories, 
-    banks, 
-    findings, 
-    setSelectedFindingModalId 
+    researchItems,
+    setSelectedResearchCell 
   } = useApp();
 
-  const briFindings = findings.filter(f => f.bankId === 'bank-bri');
-  const briTechIds = new Set(briFindings.map(f => f.technologyId));
+  const [activeTab, setActiveTabState] = useState<'gaps' | 'advantages' | 'consensus'>('gaps');
+  const [workshopFilter, setWorkshopFilter] = useState('all');
+  const [domainFilter, setDomainFilter] = useState('all');
+  const [competitorFilter, setCompetitorFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Gaps where BRI does NOT have the tech, but 1 or more competitors DO
-  const gapTechnologies = technologies.filter(t => !briTechIds.has(t.id)).map(tech => {
-    const adoptingBanks = findings
-      .filter(f => f.technologyId === tech.id && f.bankId !== 'bank-bri')
-      .map(f => {
-        const b = banks.find(x => x.id === f.bankId);
-        return { bank: b, finding: f };
+  const allDomains = useMemo(() => {
+    return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
+  }, [researchItems]);
+
+  // Dynamic analysis from 408 items
+  const {
+    gapsList,
+    advantagesList,
+    consensusList
+  } = useMemo(() => {
+    const gaps: any[] = [];
+    const advantages: any[] = [];
+    const consensus: any[] = [];
+
+    researchItems.forEach(item => {
+      const bri = item.banks.bri || { merk: '-', status: 'Belum', link: '', pic: 'Admin' };
+      const isBriVerified = bri.status === 'Terverifikasi';
+
+      // Check competitors
+      const verifiedCompetitors: any[] = [];
+      COMPETITORS.forEach(comp => {
+        const cDetail = item.banks[comp.slug];
+        if (cDetail && cDetail.status === 'Terverifikasi') {
+          verifiedCompetitors.push({
+            bank: comp,
+            detail: cDetail
+          });
+        }
       });
 
-    const category = categories.find(c => c.id === tech.categoryId);
+      // 1. GAP for BRI: Competitors verified, but BRI is NOT verified (Belum or Inferensi)
+      if (verifiedCompetitors.length > 0 && !isBriVerified) {
+        gaps.push({
+          item,
+          bri,
+          verifiedCompetitors,
+          urgency: verifiedCompetitors.length >= 2 ? 'Tinggi' : 'Sedang'
+        });
+      }
 
-    // Determine impact urgency
-    let priority: 'Tinggi' | 'Sedang' | 'Rendah' = 'Sedang';
-    let rekomendasi = '';
+      // 2. ADVANTAGE for BRI: BRI is verified, and NO competitor is verified
+      if (isBriVerified && verifiedCompetitors.length === 0) {
+        advantages.push({
+          item,
+          bri
+        });
+      }
 
-    if (tech.id === 'tech-aws-hybrid' || tech.id === 'tech-gcp') {
-      priority = 'Tinggi';
-      rekomendasi = 'Mandiri telah memanfaatkan AWS Region Jakarta untuk ekosistem lifestyle Livin\' Sukha. BRI perlu mengkaji hybrid cloud terisolasi untuk fitur non-core lifestyle BRImo guna memangkas time-to-market.';
-    } else if (tech.id === 'tech-dataiku' || tech.id === 'tech-fico-scoring') {
-      priority = 'Tinggi';
-      rekomendasi = 'Mandiri menggunakan collaborative data science platform terpusat (Dataiku). BRI dapat memperkuat MLOps pipeline internal agar data scientist bisnis dapat deploy model credit scoring mandiri.';
-    } else if (tech.id === 'tech-hashicorp-vault') {
-      priority = 'Tinggi';
-      rekomendasi = 'Mandiri & BSI mengonfirmasi HashiCorp Vault untuk automated zero-trust secrets rotation. Standar mitigasi ransomware dan kepatuhan UU PDP.';
-    } else if (tech.id === 'tech-angular') {
-      priority = 'Rendah';
-      rekomendasi = 'Stack backoffice legacy di BTN. BRI lebih unggul dengan standarisasi React & Next.js modern.';
-    } else {
-      priority = 'Sedang';
-      rekomendasi = 'Perlu dimonitor melalui pilot project arsitektur untuk menjaga paritas kapabilitas dengan kompetitor.';
-    }
-
-    return {
-      tech,
-      category,
-      adoptingBanks,
-      priority,
-      rekomendasi
-    };
-  }).filter(g => g.adoptingBanks.length > 0);
-
-  // BRI Advantages (Technologies where BRI leads)
-  const briLeadingTechs = technologies.filter(t => briTechIds.has(t.id)).map(tech => {
-    const competitorAdoptions = findings.filter(f => f.technologyId === tech.id && f.bankId !== 'bank-bri');
-    const category = categories.find(c => c.id === tech.categoryId);
+      // 3. CONSENSUS: BRI is verified and >= 2 competitors are verified
+      if (isBriVerified && verifiedCompetitors.length >= 2) {
+        consensus.push({
+          item,
+          bri,
+          verifiedCompetitors
+        });
+      }
+    });
 
     return {
-      tech,
-      category,
-      competitorCount: competitorAdoptions.length,
-      isExclusive: competitorAdoptions.length === 0
+      gapsList: gaps,
+      advantagesList: advantages,
+      consensusList: consensus
     };
-  }).filter(b => b.isExclusive);
+  }, [researchItems]);
+
+  // Filter current list
+  const activeList = activeTab === 'gaps' ? gapsList : activeTab === 'advantages' ? advantagesList : consensusList;
+
+  const filteredList = useMemo(() => {
+    return activeList.filter(entry => {
+      const { item } = entry;
+      if (workshopFilter !== 'all' && item.workshop !== workshopFilter) return false;
+      if (domainFilter !== 'all' && item.domain !== domainFilter) return false;
+
+      if (activeTab === 'gaps' && competitorFilter !== 'all') {
+        const hasSpecificComp = entry.verifiedCompetitors?.some((vc: any) => vc.bank.slug === competitorFilter);
+        if (!hasSpecificComp) return false;
+      }
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchCap = item.kapabilitas.toLowerCase().includes(q);
+        const matchDom = item.domain.toLowerCase().includes(q);
+        const matchKat = item.kategori.toLowerCase().includes(q);
+        const matchBri = entry.bri?.merk?.toLowerCase().includes(q);
+        const matchComp = entry.verifiedCompetitors?.some((vc: any) => vc.detail.merk?.toLowerCase().includes(q));
+        if (!matchCap && !matchDom && !matchKat && !matchBri && !matchComp) return false;
+      }
+
+      return true;
+    });
+  }, [activeList, workshopFilter, domainFilter, competitorFilter, searchQuery, activeTab]);
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
       <div>
         <div className="flex items-center space-x-2">
-          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
             Analisis Kesenjangan & Peluang Strategis (Gap Analysis)
           </h2>
           <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800">
-            V1.5 · Strategic Insights
+            408 Kapabilitas Riset
           </span>
         </div>
-        <p className="text-xs text-slate-500 mt-1">
-          Identifikasi otomatis perbedaan teknologi yang telah diadopsi kompetitor (Mandiri, BNI, BTN, BSI) beserta rekomendasi taktis bagi tim arsitek BRI.
+        <p className="text-xs text-slate-500 mt-1 max-w-3xl">
+          Pemetaan sistematis celah teknologi di mana kompetitor (Mandiri, BCA, BNI, BTN, BSI) telah terverifikasi mengadopsi solusi modern, dibandingkan dengan keunggulan eksklusif dan standar konsensus industri Bank BRI.
         </p>
       </div>
 
-      {/* Summary Highlights */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-5 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl border border-orange-200">
-          <div className="flex items-center space-x-2 text-orange-800 font-extrabold text-sm mb-1">
-            <AlertTriangle className="w-4 h-4 text-orange-600" />
-            <span>Potensi Celah Teknologi (Gap untuk BRI)</span>
+      {/* Strategic Triage Summary Tabs */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Tab 1: Celah Arsitektur */}
+        <button
+          onClick={() => setActiveTabState('gaps')}
+          className={`p-5 rounded-2xl border text-left transition flex flex-col justify-between ${
+            activeTab === 'gaps'
+              ? 'bg-gradient-to-br from-orange-50 to-amber-50 border-orange-300 ring-2 ring-orange-500/20 shadow-xs'
+              : 'bg-white border-slate-200 hover:border-slate-300'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-extrabold text-xs text-orange-800 uppercase tracking-wider flex items-center space-x-1.5">
+              <AlertTriangle className="w-4 h-4 text-orange-600" />
+              <span>Celah untuk BRI (Gaps)</span>
+            </span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-200/80 text-orange-900">
+              Prioritas Tindakan
+            </span>
           </div>
-          <div className="text-2xl font-black text-orange-950 mt-2">
-            {gapTechnologies.length} Komponen Stack
+          <div className="text-3xl font-black text-orange-950 mt-3">
+            {gapsList.length}
           </div>
-          <p className="text-xs text-orange-900/80 mt-1 leading-relaxed">
-            Ditemukan pada kompetitor namun belum terdeteksi adopsinya di ekosistem BRI. Memerlukan evaluasi apakah ini merupakan kebutuhan strategis atau perbedaan fokus bisnis.
+          <p className="text-[11px] text-orange-800/80 mt-1">
+            Kompetitor telah terverifikasi resmi, BRI masih inferensi/belum terdata
           </p>
-        </div>
+        </button>
 
-        <div className="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200">
-          <div className="flex items-center space-x-2 text-blue-800 font-extrabold text-sm mb-1">
-            <Sparkles className="w-4 h-4 text-blue-600" />
-            <span>Keunggulan Kompetitif Eksklusif BRI</span>
+        {/* Tab 2: Keunggulan Eksklusif BRI */}
+        <button
+          onClick={() => setActiveTabState('advantages')}
+          className={`p-5 rounded-2xl border text-left transition flex flex-col justify-between ${
+            activeTab === 'advantages'
+              ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-300 ring-2 ring-blue-500/20 shadow-xs'
+              : 'bg-white border-slate-200 hover:border-slate-300'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-extrabold text-xs text-blue-800 uppercase tracking-wider flex items-center space-x-1.5">
+              <ShieldCheck className="w-4 h-4 text-blue-600" />
+              <span>Keunggulan Terbukti BRI</span>
+            </span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-200/80 text-blue-900">
+              Differentiator
+            </span>
           </div>
-          <div className="text-2xl font-black text-blue-950 mt-2">
-            {briLeadingTechs.length} Komponen Stack
+          <div className="text-3xl font-black text-blue-950 mt-3">
+            {advantagesList.length}
           </div>
-          <p className="text-xs text-blue-900/80 mt-1 leading-relaxed">
-            Teknologi skala masif (Cassandra cluster, MinIO S3 on-premise, Sabrina NLP engine) yang memberi keunggulan unjuk kerja bagi operasional ultra-mikro BRI.
+          <p className="text-[11px] text-blue-800/80 mt-1">
+            Implementasi BRI terverifikasi resmi, belum ditemukan di bank lain
           </p>
-        </div>
+        </button>
+
+        {/* Tab 3: Standar Konsensus Industri */}
+        <button
+          onClick={() => setActiveTabState('consensus')}
+          className={`p-5 rounded-2xl border text-left transition flex flex-col justify-between ${
+            activeTab === 'consensus'
+              ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-300 ring-2 ring-emerald-500/20 shadow-xs'
+              : 'bg-white border-slate-200 hover:border-slate-300'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-extrabold text-xs text-emerald-800 uppercase tracking-wider flex items-center space-x-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Standar Paritas Industri</span>
+            </span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-200/80 text-emerald-900">
+              Konsensus
+            </span>
+          </div>
+          <div className="text-3xl font-black text-emerald-950 mt-3">
+            {consensusList.length}
+          </div>
+          <p className="text-[11px] text-emerald-800/80 mt-1">
+            Diadopsi dan terverifikasi di BRI dan ≥ 2 bank kompetitor
+          </p>
+        </button>
       </div>
 
-      {/* Gaps List Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-base font-extrabold text-slate-900 flex items-center space-x-2">
-            <AlertTriangle className="w-4 h-4 text-orange-500" />
-            <span>Daftar Celah Arsitektur & Rekomendasi Roadmap</span>
-          </h3>
-          <span className="text-xs text-slate-500">
-            Dikelompokkan berdasarkan tingkat urgensi
-          </span>
-        </div>
+      {/* Filter Bar */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+          <div className="md:col-span-4 relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Cari kapabilitas, domain, atau merk solusi..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 focus:bg-white"
+            />
+          </div>
 
-        <div className="space-y-3">
-          {gapTechnologies.map(item => {
-            return (
-              <div 
-                key={item.tech.id}
-                className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs hover:border-slate-300 transition space-y-3"
+          <div className="md:col-span-3">
+            <select
+              value={workshopFilter}
+              onChange={e => setWorkshopFilter(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+            >
+              <option value="all">Semua Workshop (WS1 - WS4)</option>
+              <option value="WS1">WS1: Core & Digital Banking</option>
+              <option value="WS2">WS2: EDW, MDM & BI</option>
+              <option value="WS3">WS3: Cloud, Infra & ITSM</option>
+              <option value="WS4">WS4: Big Data & AI</option>
+            </select>
+          </div>
+
+          <div className="md:col-span-3">
+            <select
+              value={domainFilter}
+              onChange={e => setDomainFilter(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+            >
+              <option value="all">Semua Domain ({allDomains.length})</option>
+              {allDomains.map(d => (
+                <option key={d} value={d}>{d}</option>
+              ))}
+            </select>
+          </div>
+
+          {activeTab === 'gaps' && (
+            <div className="md:col-span-2">
+              <select
+                value={competitorFilter}
+                onChange={e => setCompetitorFilter(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
               >
-                <div className="flex items-start justify-between flex-wrap gap-2">
-                  <div className="space-y-0.5">
-                    <div className="flex items-center space-x-2">
-                      <h4 className="font-extrabold text-slate-900 text-sm">{item.tech.nama}</h4>
-                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">
-                        {item.category?.nama}
-                      </span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
-                        item.priority === 'Tinggi' 
-                          ? 'bg-rose-100 text-rose-800 border border-rose-200' 
-                          : item.priority === 'Sedang'
-                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                          : 'bg-slate-100 text-slate-700'
-                      }`}>
-                        Prioritas {item.priority}
-                      </span>
-                    </div>
-                    <div className="text-xs text-slate-500">
-                      Vendor / Pemilik: <strong className="text-slate-700">{item.tech.vendor}</strong>
-                    </div>
-                  </div>
+                <option value="all">Semua Bank Kompetitor</option>
+                {COMPETITORS.map(c => (
+                  <option key={c.slug} value={c.slug}>{c.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
 
-                  {/* Competitor badges */}
-                  <div className="flex items-center space-x-1.5">
-                    <span className="text-[11px] text-slate-500 font-medium mr-1">Diadopsi oleh:</span>
-                    {item.adoptingBanks.map(({ bank, finding }) => (
-                      <button
-                        key={bank?.id}
-                        onClick={() => setSelectedFindingModalId(finding.id)}
-                        className="px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 border border-orange-200 text-orange-900 text-xs font-bold transition flex items-center space-x-1"
-                        title="Klik untuk melihat bukti temuan"
-                      >
-                        <span>{bank?.logo}</span>
-                        <span>{bank?.singkatan}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {item.tech.deskripsi}
-                </p>
-
-                {/* Recommendation Box */}
-                <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-200/80 flex items-start space-x-2 text-xs">
-                  <Lightbulb className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold text-blue-950 block mb-0.5">Rekomendasi untuk Tim Arsitektur BRI:</span>
-                    <p className="text-blue-900 leading-relaxed">
-                      {item.rekomendasi}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+          <div>
+            Menampilkan <strong className="text-slate-800">{filteredList.length}</strong> kapabilitas riset
+          </div>
+          {(searchQuery || workshopFilter !== 'all' || domainFilter !== 'all' || competitorFilter !== 'all') && (
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setWorkshopFilter('all');
+                setDomainFilter('all');
+                setCompetitorFilter('all');
+              }}
+              className="text-blue-600 hover:underline font-semibold flex items-center space-x-1"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset Filter</span>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* BRI Exclusive Strengths */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
-        <h3 className="text-base font-extrabold text-slate-900 flex items-center space-x-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span>Keunggulan Kompetitif BRI yang Belum Dimiliki Kompetitor</span>
-        </h3>
-        <p className="text-xs text-slate-500">
-          Infrastruktur unik yang menopang volume transaksi skala raksasa BRI (AgenBRILink, UMKM micro-lending):
-        </p>
+      {/* Main Results Table */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="bg-slate-100/90 border-b border-slate-200 text-slate-700 font-bold">
+                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200">No</th>
+                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200">Workshop</th>
+                <th className="py-3.5 px-3 w-48 border-r border-slate-200">Domain & Kategori</th>
+                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200">Kapabilitas / Sistem</th>
+                <th className="py-3.5 px-3 w-64 border-r border-slate-200 bg-blue-50/70 text-blue-950">Status Bank BRI</th>
+                <th className="py-3.5 px-3 min-w-[240px]">
+                  {activeTab === 'gaps' ? 'Kompetitor yang Mengadopsi' : activeTab === 'advantages' ? 'Analisis Keunggulan' : 'Standar Konsensus Kompetitor'}
+                </th>
+              </tr>
+            </thead>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {briLeadingTechs.map(item => (
-            <div key={item.tech.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
-              <div className="font-extrabold text-slate-900">{item.tech.nama}</div>
-              <div className="text-[11px] text-blue-600 font-medium">{item.category?.nama}</div>
-              <p className="text-slate-600 text-[11px] mt-1 line-clamp-2">{item.tech.deskripsi}</p>
-            </div>
-          ))}
+            <tbody className="divide-y divide-slate-100">
+              {filteredList.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-slate-400">
+                    Tidak ada kapabilitas yang cocok dengan filter aktif.
+                  </td>
+                </tr>
+              ) : (
+                filteredList.map((entry, idx) => {
+                  const { item, bri } = entry;
+                  return (
+                    <tr key={item.id} className="hover:bg-slate-50/80 transition">
+                      <td className="py-3 px-3 text-center font-mono text-slate-400 border-r border-slate-100 align-top">
+                        {item.no}
+                      </td>
+
+                      <td className="py-3 px-2 text-center border-r border-slate-100 align-top">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+                          {item.workshop}
+                        </span>
+                      </td>
+
+                      <td className="py-3 px-3 border-r border-slate-100 align-top">
+                        <div className="font-semibold text-slate-800 leading-tight">{item.domain}</div>
+                        <div className="text-[10px] text-slate-400 mt-1">{item.kategori}</div>
+                      </td>
+
+                      <td className="py-3 px-4 font-bold text-slate-900 border-r border-slate-100 align-top">
+                        <div className="leading-snug">{item.kapabilitas}</div>
+                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">ID: {item.id}</div>
+                      </td>
+
+                      {/* BRI Status */}
+                      <td className="py-2.5 px-3 border-r border-slate-100 align-top bg-blue-50/10">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: 'bri' })}
+                          className={`w-full text-left p-2 rounded-xl border text-xs transition hover:scale-101 ${
+                            bri?.status === 'Terverifikasi'
+                              ? 'bg-emerald-50 border-emerald-200 text-emerald-950 font-bold'
+                              : bri?.status === 'Inferensi'
+                              ? 'bg-amber-50 border-amber-200 text-amber-950 font-semibold'
+                              : 'bg-slate-50 border-slate-200 text-slate-400'
+                          }`}
+                        >
+                          <div className="leading-tight">{bri?.merk || '– Belum Terkonfirmasi'}</div>
+                          <div className="flex items-center justify-between mt-1 text-[9px]">
+                            <span className="font-bold">
+                              {bri?.status === 'Terverifikasi' ? '✓ Verified' : bri?.status === 'Inferensi' ? '⚠ Inferensi' : '– Belum'}
+                            </span>
+                            {bri?.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400" />}
+                          </div>
+                        </button>
+                      </td>
+
+                      {/* Competitors Adoptions */}
+                      <td className="py-2.5 px-3 align-top space-y-1.5">
+                        {activeTab === 'gaps' && (
+                          <div className="space-y-1">
+                            {entry.verifiedCompetitors?.map((vc: any, vIdx: number) => (
+                              <button
+                                key={vIdx}
+                                type="button"
+                                onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: vc.bank.slug })}
+                                className="w-full text-left p-1.5 rounded-lg bg-orange-50/70 hover:bg-orange-100/70 border border-orange-200 text-slate-900 flex items-center justify-between text-xs transition"
+                              >
+                                <div>
+                                  <span className="font-bold mr-1.5">{vc.bank.logo} {vc.bank.label}:</span>
+                                  <span className="font-medium text-orange-950">{vc.detail.merk}</span>
+                                </div>
+                                <span className="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 text-[9px] font-bold rounded">
+                                  ✓ Verified
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {activeTab === 'advantages' && (
+                          <div className="p-2 rounded-xl bg-blue-50/60 border border-blue-200 text-blue-900 text-xs">
+                            <div className="font-bold flex items-center space-x-1">
+                              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                              <span>Keunggulan Kompetitif BRI</span>
+                            </div>
+                            <p className="text-[11px] text-blue-700/80 mt-0.5">
+                              Implementasi telah terverifikasi resmi sementara kompetitor belum memiliki jejak pembuktian publik yang sepadan.
+                            </p>
+                          </div>
+                        )}
+
+                        {activeTab === 'consensus' && (
+                          <div className="space-y-1">
+                            <span className="text-[10px] text-slate-400 font-medium">Bank kompetitor yang juga terverifikasi:</span>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {entry.verifiedCompetitors?.map((vc: any, vIdx: number) => (
+                                <span key={vIdx} className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-[10px]">
+                                  {vc.bank.logo} {vc.bank.label}: {vc.detail.merk}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
