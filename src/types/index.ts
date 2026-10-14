@@ -3,6 +3,28 @@ export type ReviewStatus = 'Draft' | 'Reviewed' | 'Published';
 export type TechType = 'open-source' | 'komersial' | 'in-house';
 export type EvidenceType = 'publik' | 'wawancara';
 export type UserRole = 'Viewer' | 'Analyst' | 'Admin';
+export type VerificationStatus = 'Terverifikasi' | 'Inferensi' | 'Belum';
+
+export interface BankCapabilityDetail {
+  bankCode: string; // 'BRI' | 'Mandiri' | 'BCA' | 'BNI' | 'BTN' | 'BSI'
+  merk: string;
+  link: string;
+  url?: string;
+  pic: string;
+  status: VerificationStatus;
+}
+
+export interface ResearchItem {
+  id: string;
+  no: number;
+  workshop: string; // 'WS1' | 'WS2' | 'WS3' | 'WS4'
+  domain: string;
+  kategori: string;
+  kapabilitas: string;
+  banks: {
+    [key: string]: BankCapabilityDetail;
+  };
+}
 
 export interface Bank {
   id: string;

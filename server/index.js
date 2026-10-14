@@ -312,7 +312,67 @@ app.delete('/api/interviews/:id', async (req, res) => {
   }
 });
 
-// 7. Auth & Users
+// 7. Research Matrix (408 Capabilities from Sheet)
+app.get('/api/research-matrix', async (req, res) => {
+  try {
+    const records = await query('SELECT * FROM research_records ORDER BY no ASC');
+    if (!records || records.length === 0) {
+      const matrixJson = fs.readFileSync(path.join(__dirname, 'researchMatrix.json'), 'utf8');
+      return res.json(JSON.parse(matrixJson));
+    }
+    const capMap = new Map();
+    records.forEach(r => {
+      const capId = `cap-${r.no}`;
+      if (!capMap.has(capId)) {
+        capMap.set(capId, {
+          id: capId,
+          no: r.no,
+          workshop: r.workshop,
+          domain: r.domain,
+          kategori: r.kategori,
+          kapabilitas: r.kapabilitas,
+          banks: {}
+        });
+      }
+      capMap.get(capId).banks[r.bankCode.toLowerCase()] = {
+        bankCode: r.bankCode,
+        merk: r.merk || '-',
+        link: r.link || '',
+        url: r.url || '',
+        pic: r.pic || 'Mrs Utami',
+        status: r.status || 'Belum'
+      };
+    });
+    res.json(Array.from(capMap.values()));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/research-matrix/:capId/:bankCode', async (req, res) => {
+  try {
+    const { capId, bankCode } = req.params;
+    const { merk, link, url, pic, status, userName } = req.body;
+    const no = parseInt(capId.replace('cap-', '')) || 1;
+    
+    await run(
+      `UPDATE research_records SET
+        merk = COALESCE(?, merk),
+        link = COALESCE(?, link),
+        url = COALESCE(?, url),
+        pic = COALESCE(?, pic),
+        status = COALESCE(?, status)
+       WHERE no = ? AND LOWER(bankCode) = LOWER(?)`,
+      [merk, link, url, pic, status, no, bankCode]
+    );
+    await recordAudit('usr-1', userName || 'Analyst', 'UPDATE', 'Finding', `Pembaruan riset kapabilitas #${no} bank ${bankCode.toUpperCase()} (${status || 'Updated'})`);
+    res.json({ success: true, capId, bankCode, merk, status });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 8. Auth & Users
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;

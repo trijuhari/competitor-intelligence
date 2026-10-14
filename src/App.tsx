@@ -15,6 +15,7 @@ import { StrategicDecisionMatrixView } from './components/strategy/StrategicDeci
 import { TcoCostSimulatorView } from './components/strategy/TcoCostSimulatorView';
 import { GenAiReadinessView } from './components/strategy/GenAiReadinessView';
 import { FindingDetailModal } from './components/matrix/FindingDetailModal';
+import { ResearchDetailModal } from './components/matrix/ResearchDetailModal';
 import { ShieldCheck, Lock, ExternalLink } from 'lucide-react';
 
 export const AppContent: React.FC = () => {
@@ -105,6 +106,7 @@ export const AppContent: React.FC = () => {
 
       {/* Global Finding Details Drawer/Modal */}
       <FindingDetailModal />
+      <ResearchDetailModal />
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 mt-16 py-8 text-xs text-slate-500">

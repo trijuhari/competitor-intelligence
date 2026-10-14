@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { 
   Bank, Category, Technology, Finding, Evidence, Interview, User, AuditLog, 
-  UserRole, ConfidenceLevel, ReviewStatus 
+  UserRole, ConfidenceLevel, ReviewStatus, ResearchItem, BankCapabilityDetail 
 } from '../types';
 import { 
   INITIAL_BANKS, INITIAL_CATEGORIES, INITIAL_TECHNOLOGIES, 
   INITIAL_FINDINGS, INITIAL_EVIDENCES, INITIAL_INTERVIEWS, 
   INITIAL_USERS, INITIAL_AUDIT_LOGS 
 } from '../data/seedData';
+import researchMatrixData from '../data/researchMatrix.json';
 import { api } from '../services/api';
 
 interface AppContextType {
@@ -21,6 +22,13 @@ interface AppContextType {
   users: User[];
   auditLogs: AuditLog[];
   isDbConnected: boolean;
+
+  // Research Matrix (408 Capabilities from Sheet)
+  researchItems: ResearchItem[];
+  selectedResearchCell: { capId: string; bankCode: string } | null;
+  setSelectedResearchCell: (cell: { capId: string; bankCode: string } | null) => void;
+  updateResearchCell: (capId: string, bankCode: string, updates: Partial<BankCapabilityDetail>) => Promise<void>;
+  exportResearchMatrixCSV: () => void;
 
   // Auth & Roles
   isAuthenticated: boolean;
@@ -144,6 +152,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [presentationMode, setPresentationMode] = useState<boolean>(() => window.location.pathname.includes('presentation'));
 
+  // Research Matrix (408 Capabilities)
+  const RESEARCH_STORAGE_KEY = 'competitor_intel_bri_research_matrix_v1';
+  const [researchItems, setResearchItems] = useState<ResearchItem[]>(() => {
+    const saved = localStorage.getItem(RESEARCH_STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse cached research matrix', e);
+      }
+    }
+    return researchMatrixData as unknown as ResearchItem[];
+  });
+
+  const [selectedResearchCell, setSelectedResearchCell] = useState<{ capId: string; bankCode: string } | null>(null);
+
   const navigate = (path: string) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);
@@ -265,7 +289,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     const fetchBackendData = async () => {
       try {
-        const [b, c, t, f, e, inv, u, logs] = await Promise.all([
+        const [b, c, t, f, e, inv, u, logs, resMatrix] = await Promise.all([
           api.getBanks(),
           api.getCategories(),
           api.getTechnologies(),
@@ -273,7 +297,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           api.getEvidences(),
           api.getInterviews(),
           api.getUsers().catch(() => INITIAL_USERS),
-          api.getAuditLogs()
+          api.getAuditLogs(),
+          api.getResearchMatrix().catch(() => [])
         ]);
 
         if (b && b.length > 0) setBanks(b);
@@ -284,6 +309,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (inv && inv.length > 0) setInterviews(inv);
         if (u && u.length > 0) setUsers(u);
         if (logs && logs.length > 0) setAuditLogs(logs);
+        if (resMatrix && resMatrix.length > 0) setResearchItems(resMatrix);
 
         setIsDbConnected(true);
       } catch (err) {
@@ -586,6 +612,94 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     URL.revokeObjectURL(url);
   };
 
+  const updateResearchCell = async (capId: string, bankCode: string, updates: Partial<BankCapabilityDetail>) => {
+    const bankKey = bankCode.toLowerCase();
+    setResearchItems(prev => {
+      const next = prev.map(item => {
+        if (item.id !== capId) return item;
+        const currentBank = item.banks[bankKey] || {
+          bankCode: bankCode.toUpperCase(),
+          merk: '-',
+          link: '',
+          url: '',
+          pic: 'Admin',
+          status: 'Belum'
+        };
+        return {
+          ...item,
+          banks: {
+            ...item.banks,
+            [bankKey]: {
+              ...currentBank,
+              ...updates
+            }
+          }
+        };
+      });
+      localStorage.setItem(RESEARCH_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+
+    try {
+      await api.updateResearchCell(capId, bankCode, updates, currentUser.nama);
+    } catch (err) {
+      console.warn('Backend update failed, kept in local state:', err);
+    }
+
+    addAuditLog('UPDATE', 'Finding', `Pembaruan riset kapabilitas #${capId} bank ${bankCode.toUpperCase()} (${updates.status || 'Updated'})`);
+  };
+
+  const exportResearchMatrixCSV = () => {
+    const headers = [
+      'No', 'Workshop', 'Domain', 'Kategori', 'Kapabilitas/Sistem yang Dicari',
+      'BRI (Merk)', 'BRI (Status)', 'BRI (Link)', 'BRI (PIC)',
+      'Mandiri (Merk)', 'Mandiri (Status)', 'Mandiri (Link)', 'Mandiri (PIC)',
+      'BCA (Merk)', 'BCA (Status)', 'BCA (Link)', 'BCA (PIC)',
+      'BNI (Merk)', 'BNI (Status)', 'BNI (Link)', 'BNI (PIC)',
+      'BTN (Merk)', 'BTN (Status)', 'BTN (Link)', 'BTN (PIC)',
+      'BSI (Merk)', 'BSI (Status)', 'BSI (Link)', 'BSI (PIC)'
+    ];
+
+    const escapeCSV = (val: any) => {
+      const str = String(val || '').replace(/"/g, '""');
+      return `"${str}"`;
+    };
+
+    const rows = researchItems.map(item => {
+      const bri = item.banks?.bri || ({} as any);
+      const mandiri = item.banks?.mandiri || ({} as any);
+      const bca = item.banks?.bca || ({} as any);
+      const bni = item.banks?.bni || ({} as any);
+      const btn = item.banks?.btn || ({} as any);
+      const bsi = item.banks?.bsi || ({} as any);
+
+      return [
+        item.no,
+        escapeCSV(item.workshop),
+        escapeCSV(item.domain),
+        escapeCSV(item.kategori),
+        escapeCSV(item.kapabilitas),
+        escapeCSV(bri.merk), escapeCSV(bri.status), escapeCSV(bri.link), escapeCSV(bri.pic),
+        escapeCSV(mandiri.merk), escapeCSV(mandiri.status), escapeCSV(mandiri.link), escapeCSV(mandiri.pic),
+        escapeCSV(bca.merk), escapeCSV(bca.status), escapeCSV(bca.link), escapeCSV(bca.pic),
+        escapeCSV(bni.merk), escapeCSV(bni.status), escapeCSV(bni.link), escapeCSV(bni.pic),
+        escapeCSV(btn.merk), escapeCSV(btn.status), escapeCSV(btn.link), escapeCSV(btn.pic),
+        escapeCSV(bsi.merk), escapeCSV(bsi.status), escapeCSV(bsi.link), escapeCSV(bsi.pic)
+      ].join(',');
+    });
+
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Banking_Technology_Research_Matrix_408_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const resetAllData = async () => {
     setTechnologies(INITIAL_TECHNOLOGIES);
     setFindings(INITIAL_FINDINGS);
@@ -619,6 +733,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         users,
         auditLogs,
         isDbConnected,
+
+        // Research Matrix (408 Capabilities from Sheet)
+        researchItems,
+        selectedResearchCell,
+        setSelectedResearchCell,
+        updateResearchCell,
+        exportResearchMatrixCSV,
 
         // Auth & Routing
         isAuthenticated,

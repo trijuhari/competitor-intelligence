@@ -172,6 +172,22 @@ export const api = {
     return res.json();
   },
 
+  async getResearchMatrix(): Promise<any[]> {
+    const res = await fetch(`${API_BASE}/research-matrix`);
+    if (!res.ok) throw new Error('Failed to fetch research matrix');
+    return res.json();
+  },
+
+  async updateResearchCell(capId: string, bankCode: string, updates: any, userName?: string): Promise<any> {
+    const res = await fetch(`${API_BASE}/research-matrix/${capId}/${bankCode}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...updates, userName })
+    });
+    if (!res.ok) throw new Error('Failed to update research cell');
+    return res.json();
+  },
+
   async resetData(): Promise<void> {
     const res = await fetch(`${API_BASE}/reset-data`, {
       method: 'POST'
