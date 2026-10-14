@@ -79,70 +79,70 @@ export const PresentationView: React.FC = () => {
     briImplication: string;
   }> = {
     'cat-core-banking': {
-      actionTitle: "CORE BANKING: Strategi 'Hollowing the Core' Mendominasi Himbara Guna Menghindari Risiko Migrasi Big-Bang",
-      subheadline: "Seluruh bank tier-1 mempertahankan mainframe / ledger relational sembari mengekstraksi customer inquiry ke sidecar microservices.",
-      tradeoff: "Keseimbangan antara stabilitas rekonsiliasi buku besar (GL ACID) vs agilitas perputaran produk digital.",
-      briImplication: "Pertahankan stabilitas core Silverlake / legacy dengan memperkuat decoupling layer (Cassandra read-cache) agar transaksi nasabah masif tidak mengganggu core batch settlement."
-    },
-    'cat-cloud': {
-      actionTitle: "CLOUD INFRASTRUCTURE: Bank Mandiri Melakukan Manuver Agresif dengan AWS Hybrid Cloud Region Jakarta",
-      subheadline: "Divergensi filosofi infrastruktur: BRI mengandalkan kekuatan skala on-premise, sementara Mandiri mengintegrasikan AWS Outposts untuk lifestyle Livin' Sukha.",
-      tradeoff: "Kedaulatan data & efisiensi CapEx on-premise vs kecepatan go-to-market modul non-finansial berbasis cloud.",
-      briImplication: "BRI perlu mengevaluasi isolasi 'Landing Zone' cloud lokal khusus untuk merchant & lifestyle marketplace BRImo tanpa membebani on-premise core network."
-    },
-    'cat-container': {
-      actionTitle: "CONTAINER PLATFORM: Red Hat OpenShift Menjadi Standar De-Facto Enterprise Kubernetes di Sektor Perbankan",
-      subheadline: "Kebutuhan sertifikasi kepatuhan PCI-DSS dan dukungan enterprise support 24/7 menjadikan OpenShift pilihan seragam Himbara.",
-      tradeoff: "Biaya lisensi enterprise support premium vs fleksibilitas komputasi vanila Kubernetes murni.",
-      briImplication: "Standardisasi multi-cluster OpenShift di BRI sudah tepat; fokus berikutnya adalah governance multi-tenancy dan otomasi cost allocation (FinOps) antar-squad."
-    },
-    'cat-api': {
-      actionTitle: "API MANAGEMENT: Standarisasi SNAP BI Mengubah API Gateway dari Komponen Teknis Menjadi Kanal Monetisasi",
-      subheadline: "Volume Open Banking BRI memimpin berkat ribuan mitra fintech; Mandiri dan BNI mengejar agresif dengan Kong dan Apigee.",
-      tradeoff: "Throughput super-tinggi dan latency sub-50ms vs inspeksi keamanan payload mendalam (WAF & dynamic rate limiting).",
-      briImplication: "Perkuat keunggulan volume SNAP BRI dengan otomatisasi self-service developer portal dan deteksi anomali fraud API berbasis AI."
-    },
-    'cat-messaging': {
-      actionTitle: "EVENT STREAMING: Apache Kafka Menjadi Syaraf Utama Pemrosesan Transaksi Finansial Real-Time Himbara",
-      subheadline: "Divergensi dari legacy message queuing (IBM MQ) menuju event streaming terdistribusi berdaya tampung puluhan ribu TPS.",
-      tradeoff: "Jaminan 'exactly-once processing' tanpa duplikasi vs performa throughput ekstrem di saat peak season transaksi.",
-      briImplication: "Fondasi Kafka Confluent BRI (penopang 25.000+ TPS AgenBRILink) adalah aset strategis terkuat; perluas integrasi ke scoring risiko fraud real-time saat transaksi berlangsung."
-    },
-    'cat-database': {
-      actionTitle: "DATABASE & DISTRIBUTED STORAGE: Polarisasi Antara Oracle Exadata (Relasional) dan Apache Cassandra (NoSQL)",
-      subheadline: "Arsitektur dual-engine: Exadata untuk transaksi finansial ketat, Cassandra untuk audit mutasi dan data historis berukuran petabyte.",
-      tradeoff: "Integritas transaksi absolut vs skalabilitas linier tanpa batas dan ketiadaan Single Point of Failure.",
-      briImplication: "Implementasi Cassandra cluster multi-DC di BRI terbukti menjadi benteng resiliensi mutasi BRImo; kompetitor masih berupaya mengejar arsitektur serupa."
-    },
-    'cat-devops': {
-      actionTitle: "DEVOPS & AUTOMATION: Standarisasi GitLab Enterprise & DevSecOps Memperpendek Release Cycle",
-      subheadline: "Pergeseran paradigma dari 'release bulanan terkontrol' menuju deployment harian berbasis automated security pipeline.",
-      tradeoff: "Kepatuhan audit Change Management perbankan vs kecepatan developer squad merilis fitur baru.",
-      briImplication: "Terapkan policy-as-code otomatis dalam pipeline CI/CD BRI agar compliance scan tidak menjadi 'bottleneck' perilisan fitur baru di BRImo."
-    },
-    'cat-observability': {
-      actionTitle: "OBSERVABILITY & APM: Konsolidasi ke Dynatrace Menjadikan AI-Driven Telemetry Standar Baru Keandalan",
-      subheadline: "BNI (wondr) dan Mandiri (Livin') memprioritaskan end-to-end distributed tracing nasabah dengan bantuan Davis AI.",
-      tradeoff: "Biaya investasi monitoring berlisensi premium vs kerugian reputasi akibat downtime aplikasi saat transaksi nasabah padat.",
-      briImplication: "Pastikan seluruh microservices BRImo terhubung dalam satu single pane of glass observability untuk memangkas Mean Time to Resolution (MTTR) < 5 menit."
-    },
-    'cat-security': {
-      actionTitle: "CYBER RESILIENCE: Implementasi Zero-Trust & Centralized Secrets Pasca Berlakunya UU No. 27/2022 (UU PDP)",
-      subheadline: "Adopsi HashiCorp Vault dan Keycloak untuk rotasi kredensial dinamis dan manajemen hak akses terpusat.",
-      tradeoff: "Disiplin rotasi kredensial ketat tanpa celah vs kemudahan integrasi bagi pengembang aplikasi lama.",
-      briImplication: "Tuntaskan eliminasi static credentials di repositori BRI; terapkan dynamic ephemeral tokens untuk memenuhi standar OJK dan kepatuhan UU PDP."
+      actionTitle: "CORE BANKING: Polarisasi Silverlake SIBS vs TCS BaNCS & Migrasi Temenos R24 Syariah",
+      subheadline: "BRI, Mandiri, dan BTN mempertahankan Silverlake SIBS (+ SAP ERP); BCA dengan sistem inti proprietary tertutup; BNI mengandalkan TCS BaNCS; dan BSI menuntaskan migrasi Temenos Transact R10->R24 pada Mei 2026.",
+      tradeoff: "Keseimbangan antara stabilitas rekonsiliasi buku besar GL ACID vs agilitas modernisasi sistem inti digital.",
+      briImplication: "Pertahankan stabilitas core Silverlake SIBS dan perkuat integrasi SAP ERP dengan sidecar microservices read-cache (Cassandra & Kafka) agar transaksi nasabah masif tidak membebani core batch."
     },
     'cat-mobile': {
-      actionTitle: "MOBILE ARCHITECTURE: Pertarungan Super-App Mendorong Adopsi Native Modular (Kotlin & Swift Clean Architecture)",
-      subheadline: "BRImo dan Livin' mengabaikan hybrid framework demi performa native, keamanan hardware Keystore, dan fluiditas antarmuka.",
-      tradeoff: "Biaya ganda mempertahankan dua tim terpisah (Android & iOS) vs keamanan tingkat tinggi dan skor rating aplikasi di app store.",
-      briImplication: "Keputusan BRImo tetap pada Kotlin & Swift murni sudah tepat secara performa; optimalkan modular dynamic feature loading agar ukuran aplikasi tetap ramping."
+      actionTitle: "SUPER-APP ECOSYSTEM: BRImo Memimpin Rating (4.7) di Hadapan wondr by BNI, Livin', dan Byond by BSI",
+      subheadline: "Pertarungan mobile super-app perbankan nasional: BRImo unggul rating 4.7 (>1 juta ulasan), Livin' Mandiri ekspansif di lifestyle, wondr BNI meluncurkan arsitektur 3 dimensi, dan Byond BSI mencapai 99.99% availability.",
+      tradeoff: "Performa native (Kotlin/Swift Clean Arch) dengan SDK keamanan tingkat tinggi vs kecepatan rilis fitur dan ukuran aplikasi.",
+      briImplication: "Pertahankan keunggulan rating kepuasan pengguna BRImo (4.7) dan akselerasi modular feature loading agar performa tetap responsif di perangkat spesifikasi menengah-bawah."
     },
-    'cat-ai': {
-      actionTitle: "AI & ML INFRASTRUCTURE: Akselerasi dari Rule-Based Chatbot Menuju Real-Time Scoring & Generative AI Pipelines",
-      subheadline: "Kedaulatan model credit scoring dan asisten virtual cerdas (Sabrina) menjadi motor pertumbuhan ekonomi inklusif.",
-      tradeoff: "Investasi GPU cluster komputasi on-premise vs ketergantungan pada model komersial tertutup.",
-      briImplication: "Kembangkan standarisasi MLOps internal (Kubeflow/MLflow) untuk mempercepat deployment model credit scoring UMKM ultra-mikro secara mandiri dan terukur."
+    'cat-front-end': {
+      actionTitle: "CORPORATE & WHOLESALE PORTAL: Integrasi Single Sign-On QLola by BRI Melawan Kopra & BNIdirect",
+      subheadline: "Konsolidasi layanan korporasi dan cash management: QLola by BRI (CMS, Trade, SCM, Global FX) bersaing ketat dengan Kopra by Mandiri, BNIdirect, dan BEWIZE by BSI.",
+      tradeoff: "Konsolidasi modul multi-produk dalam satu platform terpadu (SSO) vs kompleksitas otorisasi dan performa render portal web.",
+      briImplication: "Tingkatkan integrasi otomatis QLola Supply Chain Management dengan ekosistem pinjaman rekanan UMKM BRI guna memperdalam retensi likuiditas nasabah korporasi."
+    },
+    'cat-payment-api': {
+      actionTitle: "OPEN FINANCE & PAYMENT: Standarisasi QRIS Tap, BI-FAST, dan Orkestrasi BRIAPI via Google Apigee",
+      subheadline: "Kepatuhan SNAP BI dan adopsi API Gateway enterprise: BRIAPI bermitra dengan Google Apigee, BCA mengadopsi Red Hat 3scale, seluruh bank mendukung QRIS cross-border dan BI-FAST Rp2.500.",
+      tradeoff: "Throughput API super-tinggi (sub-50ms latency) vs inspeksi keamanan payload mendalam, enkripsi SNAP, dan pencegahan fraud.",
+      briImplication: "Perkuat dominasi volume BRIAPI dengan developer portal mandiri, deteksi anomali real-time, dan ekspansi monetisasi BaaS ke ekosistem fintech."
+    },
+    'cat-big-data': {
+      actionTitle: "DATA LAKEHOUSE & INTEGRASI: Cloudera EIDP Mendominasi, BNI Merintis Apache Iceberg Open Lakehouse",
+      subheadline: "Fondasi data nasabah terpusat: Mandiri memanfaatkan Cloudera EIDP (Hadoop/CDP) dan Tableau BI; BNI mengadopsi Cloudera Data Services dengan Apache Iceberg; BRI mengandalkan backbone BRIBRAIN data platform.",
+      tradeoff: "Integritas single source of truth enterprise vs fleksibilitas self-service analytics dan pemrosesan data real-time.",
+      briImplication: "Modernisasi pipeline data analitik BRI menuju open lakehouse format (Iceberg/Delta) untuk memangkas latensi ingest data transaksi ke model underwriting BRIBRAIN."
+    },
+    'cat-ai-ml': {
+      actionTitle: "AI & ACCELERATED COMPUTING: Lompatan Sovereign LLM on-Premise BNI (NVIDIA NIM) & BRIBRAIN BRI",
+      subheadline: "Revolusi AI perbankan: BNI mengoperasikan Cloudera AI Inference + NVIDIA NIM (LLM sovereign on-premise) dan AI-KYC dokumen cepat; BCA menerapkan Cloudera AI Workbench terpusat; BRI memperkuat credit underwriting BRIBRAIN dan Sabrina AI.",
+      tradeoff: "Investasi CapEx GPU komputasi on-premise untuk kedaulatan data vs ketergantungan API model LLM publik.",
+      briImplication: "Evaluasi akselerasi GPU on-premise cluster untuk LLM internal BRImo guna meningkatkan kecerdasan Sabrina dan deteksi fraud interaktif tanpa mengekspos data ke cloud luar."
+    },
+    'cat-back-end': {
+      actionTitle: "BACKEND & CONCURRENCY: Migrasi Java Enterprise ke Microservices Go (Golang) Berkecepatan Tinggi",
+      subheadline: "Transformasi backend: Spring Boot mendominasi business logic perbankan, sementara Go (Golang) diadopsi secara masif untuk engine transaksi berkonkurensi tinggi di BRI, Mandiri, dan BCA.",
+      tradeoff: "Kematangan library perbankan enterprise (Java/Spring) vs efisiensi memori ekstrem dan startup time kilat (Go).",
+      briImplication: "Standarisasi template microservices Go untuk seluruh modul transaksi finansial berfrekuensi tinggi BRImo dan AgenBRILink."
+    },
+    'cat-database': {
+      actionTitle: "DATABASE & DISTRIBUTED STORAGE: Apache Cassandra Membentengi Resiliensi Skala Masif Transaksi BRI",
+      subheadline: "Strategi dual-database: RDBMS relasional (Oracle Exadata & PostgreSQL) untuk integritas akun, dipadukan Apache Cassandra multi-node untuk log audit dan histori mutasi tak terbatas.",
+      tradeoff: "Konsistensi ACID ketat vs skalabilitas horizontal write-throughput tinggi tanpa Single Point of Failure (SPOF).",
+      briImplication: "Pertahankan keunggulan kluster Cassandra multi-data center BRI sebagai diferensiator utama penanganan lonjakan transaksi libur nasional."
+    },
+    'cat-cloud-infra': {
+      actionTitle: "CLOUD & DC INFRASTRUCTURE: Kepatuhan POJK 11/2022 & Manuver Hybrid Multi-Cloud Terkontrol",
+      subheadline: "Mandat data residency onshore OJK: Seluruh 6 bank menempatkan DC/DRC di Indonesia; BCA mengoperasikan DC Tier III/IV mandiri (2025); BRI bermitra dengan Google Cloud Jakarta & Cisco UCS; Mandiri mengembangkan Mandiri Private Cloud.",
+      tradeoff: "Kedaulatan data penuh on-premise vs kelincahan provisioning infrastruktur container cloud-native.",
+      briImplication: "Optimalkan orkestrasi Red Hat OpenShift hybrid antara Tier 4 Data Center on-premise BRI dengan Google Cloud Jakarta Region untuk workload digital dinamis."
+    },
+    'cat-devops': {
+      actionTitle: "DEVOPS & ITSM: Automasi CI/CD OpenShift, Ansible, dan Integrasi ITSM Atlassian Jira",
+      subheadline: "Pola DevSecOps industri: BRI berkolaborasi dengan Atlassian & iZeno; BCA menerapkan Ansible Automation dan automated testing di atas OpenShift; Mandiri mengintegrasikan pipeline Livin' DevSecOps.",
+      tradeoff: "Disiplin kontrol audit perubahan perbankan (ITSM/CAB) vs kecepatan deployment software berkelanjutan.",
+      briImplication: "Otomasi security gating (SAST/DAST/SCA) dalam pipeline CI/CD BRI agar verifikasi keamanan berjalan otomatis tanpa menghambat jadwal rilis sprint."
+    },
+    'cat-security': {
+      actionTitle: "REGULATORY & AI FRAUD: Kepatuhan UU PDP 27/2022, POJK 12/2021, dan Pemantauan Fraud AI Real-Time",
+      subheadline: "Kepatuhan regulasi komprehensif: Seluruh 6 bank tunduk pada UU PDP, POJK 11/2022, POJK 12/2021 bank digital, dan penjaminan LPS Rp2 Miliar; didukung sistem AI monitoring fraud transaksi dan pemblokiran judi online.",
+      tradeoff: "Friksi verifikasi identitas e-KYC nasabah vs kepatuhan pencegahan pencucian uang dan kebocoran data.",
+      briImplication: "Perkuat sistem risk scoring BRIBRAIN terintegrasi dengan pemantauan anomali transaksi real-time untuk memitigasi risiko social engineering dan transaksi terlarang."
     }
   };
 
@@ -164,11 +164,11 @@ export const PresentationView: React.FC = () => {
             <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
               Enterprise Tech Stack Intelligence:<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-orange-400">
-                Bank BRI vs. Peer Himbara Banks
+                Bank BRI vs. Top 5 Peer Banks
               </span>
             </h1>
             <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Analisis komparatif empiris arsitektur teknologi, postur infrastruktur, dan diferensiasi kapabilitas digital Bank BRI terhadap Bank Mandiri, BNI, BTN, dan BSI di 11 domain strategis.
+              Analisis komparatif empiris arsitektur teknologi, postur infrastruktur, dan diferensiasi kapabilitas digital Bank BRI terhadap Bank Mandiri, BCA, BNI, BTN, dan BSI di 11 domain strategis.
             </p>
           </div>
 
@@ -180,7 +180,7 @@ export const PresentationView: React.FC = () => {
             </div>
             <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="text-slate-500 block text-[10px] uppercase font-bold">Peer Group</span>
-              <strong className="text-white">Mandiri · BNI · BTN · BSI</strong>
+              <strong className="text-white">Mandiri · BCA · BNI · BTN · BSI</strong>
             </div>
             <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="text-slate-500 block text-[10px] uppercase font-bold">Scope Domains</span>
@@ -383,14 +383,14 @@ export const PresentationView: React.FC = () => {
               BENCHMARK HEATMAP & COVERAGE
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Matriks Kematangan Kapabilitas Teknologi 5 Bank Himbara
+              Matriks Kematangan Kapabilitas Teknologi 6 Bank (BRI · Mandiri · BCA · BNI · BTN · BSI)
             </h2>
             <p className="text-xs text-slate-400 mt-1">
-              Distribusi 40+ temuan teknologi terverifikasi di seluruh domain arsitektur.
+              Distribusi 170+ temuan teknologi terverifikasi di seluruh domain arsitektur.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {banks.map(bank => {
               const bankFindings = publishedFindings.filter(f => f.bankId === bank.id);
               const confirmedCount = bankFindings.filter(f => f.confidence === 'Confirmed').length;
@@ -428,7 +428,7 @@ export const PresentationView: React.FC = () => {
                       <strong className="text-emerald-400 font-mono">{confirmedCount}</strong>
                     </div>
                     <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-400">
-                      Fokus Utama: <span className="text-slate-200 font-semibold">{isBRI ? 'Inklusi & Skala Mikro' : bank.id === 'bank-mandiri' ? 'Lifestyle & Korporasi' : bank.id === 'bank-bni' ? 'Global & wondr App' : bank.id === 'bank-btn' ? 'KPR & Mortgage' : 'Perbankan Syariah'}</span>
+                      Fokus Utama: <span className="text-slate-200 font-semibold">{isBRI ? 'Inklusi & Skala Mikro' : bank.id === 'bank-mandiri' ? 'Lifestyle & Korporasi' : bank.id === 'bank-bca' ? 'Transaksi Ritel & Digital Ecosystem' : bank.id === 'bank-bni' ? 'Global & wondr App' : bank.id === 'bank-btn' ? 'KPR & Mortgage' : 'Perbankan Syariah'}</span>
                     </div>
                   </div>
                 </div>
@@ -438,7 +438,7 @@ export const PresentationView: React.FC = () => {
 
           <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 leading-relaxed flex items-center justify-between">
             <div>
-              <span className="text-orange-400 font-bold">Konteks Eksekutif:</span> BRI memiliki portofolio komponen stack terverifikasi terbanyak (11 kategori penuh), namun Mandiri menunjukkan kecepatan integrasi ekosistem cloud publik tercepat di segmen lifestyle.
+              <span className="text-orange-400 font-bold">Konteks Eksekutif:</span> BRI memiliki portofolio komponen stack terverifikasi terbanyak (11 kategori penuh), BCA mendominasi efisiensi transaksi ritel proprietary & on-premise AI, sementara Mandiri dan BNI memimpin modernisasi open lakehouse & cloud.
             </div>
           </div>
         </div>
@@ -650,6 +650,7 @@ export const PresentationView: React.FC = () => {
                 {[
                   { id: 'all', label: 'Semua' },
                   { id: 'bank-mandiri', label: 'Mandiri' },
+                  { id: 'bank-bca', label: 'BCA' },
                   { id: 'bank-bni', label: 'BNI' },
                   { id: 'bank-btn', label: 'BTN' },
                   { id: 'bank-bsi', label: 'BSI' }

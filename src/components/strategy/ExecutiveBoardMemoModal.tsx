@@ -137,7 +137,7 @@ export const ExecutiveBoardMemoModal: React.FC<ExecutiveBoardMemoModalProps> = (
           <div className="space-y-3">
             <h2 className="text-sm font-extrabold text-blue-900 uppercase tracking-wider flex items-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-blue-600" />
-              <span>2. MATRIKS BENCHMARKING MAKRO 5 BANK HIMBARA</span>
+              <span>2. MATRIKS BENCHMARKING MAKRO 6 BANK TERKEMUKA</span>
             </h2>
             
             <div className="border border-slate-200 rounded-xl overflow-hidden">
@@ -160,6 +160,13 @@ export const ExecutiveBoardMemoModal: React.FC<ExecutiveBoardMemoModalProps> = (
                     <td className="p-2.5 font-black text-blue-900">9.3 / 10</td>
                   </tr>
                   <tr>
+                    <td className="p-2.5 font-bold text-slate-900">🏦 Bank BCA</td>
+                    <td className="p-2.5">Proprietary CBS Core + Cloudera AI on-prem + Red Hat 3scale</td>
+                    <td className="p-2.5 text-blue-700">Throughput transaksi ritel masif & Tier III/IV DC mandiri</td>
+                    <td className="p-2.5 text-slate-600">CapEx hardware on-premise tinggi & core tertutup</td>
+                    <td className="p-2.5 font-bold text-slate-800">9.1 / 10</td>
+                  </tr>
+                  <tr>
                     <td className="p-2.5 font-bold text-slate-900">🔷 Bank Mandiri</td>
                     <td className="p-2.5">Hybrid AWS Cloud + Exadata Core + Dataiku</td>
                     <td className="p-2.5 text-blue-700">Ekosistem lifestyle Livin' & Data Science MLOps</td>
@@ -168,24 +175,24 @@ export const ExecutiveBoardMemoModal: React.FC<ExecutiveBoardMemoModalProps> = (
                   </tr>
                   <tr>
                     <td className="p-2.5 font-bold text-slate-900">🟧 Bank BNI</td>
-                    <td className="p-2.5">Dynatrace AI APM + wondr native microservices</td>
-                    <td className="p-2.5 text-blue-700">Zero-blindspot user journey monitoring</td>
-                    <td className="p-2.5 text-slate-600">Transisi migrasi dari mobile banking lama</td>
-                    <td className="p-2.5 font-bold text-slate-800">8.2 / 10</td>
-                  </tr>
-                  <tr>
-                    <td className="p-2.5 font-bold text-slate-900">🟨 Bank BTN</td>
-                    <td className="p-2.5">Spring Boot Microservices + Red Hat OpenShift</td>
-                    <td className="p-2.5 text-blue-700">Digitalisasi proses underwriting KPR</td>
-                    <td className="p-2.5 text-slate-600">Jejak aplikasi backoffice AngularJS legacy</td>
-                    <td className="p-2.5 font-bold text-slate-800">7.4 / 10</td>
+                    <td className="p-2.5">Cloudera AI + NVIDIA NIM + TCS BaNCS Core</td>
+                    <td className="p-2.5 text-blue-700">Sovereign LLM on-premise & AI-KYC cepat</td>
+                    <td className="p-2.5 text-slate-600">Transisi migrasi dari mobile banking lama ke wondr</td>
+                    <td className="p-2.5 font-bold text-slate-800">8.4 / 10</td>
                   </tr>
                   <tr>
                     <td className="p-2.5 font-bold text-slate-900">🟩 Bank BSI</td>
-                    <td className="p-2.5">PostgreSQL EDB + HashiCorp Vault Zero-Trust</td>
-                    <td className="p-2.5 text-blue-700">Kepatuhan enkripsi & keamanan pasca-merger</td>
-                    <td className="p-2.5 text-slate-600">Harmonisasi skema data eks-3 bank syariah</td>
+                    <td className="p-2.5">Temenos Transact R10 ke R24 + Byond Super-App</td>
+                    <td className="p-2.5 text-blue-700">Migrasi core syariah modern & availability 99.99%</td>
+                    <td className="p-2.5 text-slate-600">Harmonisasi modul core syariah pasca-merger</td>
                     <td className="p-2.5 font-bold text-slate-800">7.6 / 10</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2.5 font-bold text-slate-900">🟨 Bank BTN</td>
+                    <td className="p-2.5">Silverlake SIBS + Bale by BTN + OpenShift</td>
+                    <td className="p-2.5 text-blue-700">Digitalisasi ekosistem perumahan & KPR</td>
+                    <td className="p-2.5 text-slate-600">Kapasitas data lakehouse analitik perumahan</td>
+                    <td className="p-2.5 font-bold text-slate-800">7.2 / 10</td>
                   </tr>
                 </tbody>
               </table>

@@ -208,10 +208,12 @@ export const HeadToHeadView: React.FC = () => {
                 <p className="text-slate-300 mt-1 leading-relaxed">
                   {selectedCompetitorId === 'bank-mandiri'
                     ? 'Ekosistem lifestyle di AWS Jakarta (Livin\' Sukha) dengan rilis mingguan + data science MLOps terpusat di Dataiku.'
+                    : selectedCompetitorId === 'bank-bca'
+                    ? 'Engine core perbankan proprietary transaksi tinggi, Cloudera AI Inference terpusat on-premise, dan Red Hat 3scale API Management.'
                     : selectedCompetitorId === 'bank-bni'
                     ? 'APM Dynatrace Perform dengan Davis AI memberikan zero-blindspot monitoring di seluruh microservices wondr.'
                     : selectedCompetitorId === 'bank-bsi'
-                    ? 'Standarisasi enkripsi HashiCorp Vault dan PostgreSQL EDB pasca-merger memenuhi zero-trust UU PDP.'
+                    ? 'Standarisasi enkripsi HashiCorp Vault dan migrasi Core Banking Temenos R10->R24 tuntas Mei 2026.'
                     : 'Monopoli digitalisasi data perumahan & KPR nasional yang terintegrasi di bale by BTN.'}
                 </p>
               </div>
@@ -232,11 +234,13 @@ export const HeadToHeadView: React.FC = () => {
                 <p className="text-slate-300 mt-1 leading-relaxed">
                   {selectedCompetitorId === 'bank-mandiri'
                     ? 'Terkunci lisensi mahal IBM DataStage (batch harian T+1) & Oracle Exadata, membatasi fleksibilitas real-time fraud inference.'
+                    : selectedCompetitorId === 'bank-bca'
+                    ? 'Ketergantungan infrastruktur on-premise murni dengan beban CapEx server komputasi masif dan sistem core proprietary tertutup.'
                     : selectedCompetitorId === 'bank-bni'
                     ? 'Beban operasional transisi migrasi nasabah dari BNI Mobile Banking lama ke aplikasi wondr.'
                     : selectedCompetitorId === 'bank-bsi'
-                    ? 'Kompleksitas rekonsiliasi database historis eks-3 bank syariah yang masih rentan bottleneck sinkronisasi.'
-                    : 'Footprint legacy backoffice berbasis AngularJS v1 rentan celah keamanan unpatched.'}
+                    ? 'Kompleksitas harmonisasi database dan modul syariah dari konsolidasi 3 eks-bank syariah.'
+                    : 'Footprint legacy backoffice berbasis arsitektur lama rentan bottleneck skalabilitas.'}
                 </p>
               </div>
 
@@ -247,6 +251,8 @@ export const HeadToHeadView: React.FC = () => {
                 <p className="text-slate-300 mt-1 leading-relaxed">
                   {selectedCompetitorId === 'bank-mandiri'
                     ? 'Perlu mengantisipasi time-to-market fitur lifestyle non-core perbankan agar nasabah muda tidak beralih ke Livin\'.'
+                    : selectedCompetitorId === 'bank-bca'
+                    ? 'Mempertahankan keunggulan rating Play Store BRImo (4.7) dan ekosistem mikro AgenBRILink di hadapan dominasi transaksi merchant BCA.'
                     : 'Kebutuhan adopsi full-stack tracing end-to-end agar resolusi insiden transaksi setara standar Dynatrace.'}
                 </p>
               </div>
