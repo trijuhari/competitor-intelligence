@@ -5,14 +5,15 @@ import {
   ChevronRight, ArrowRight, TrendingUp, AlertTriangle, CheckCircle2, 
   HelpCircle, ExternalLink, Filter, Search, RotateCcw, Database
 } from 'lucide-react';
+import { BankLogo } from '../common/BankLogo';
 
 const BANK_OPTIONS = [
-  { slug: 'bri', label: 'BRI', fullName: 'Bank Rakyat Indonesia', logo: '🟦', isFocus: true },
-  { slug: 'mandiri', label: 'Mandiri', fullName: 'Bank Mandiri', logo: '🟨', isFocus: false },
-  { slug: 'bca', label: 'BCA', fullName: 'Bank Central Asia', logo: '🔵', isFocus: false },
-  { slug: 'bni', label: 'BNI', fullName: 'Bank Negara Indonesia', logo: '🟧', isFocus: false },
-  { slug: 'btn', label: 'BTN', fullName: 'Bank Tabungan Negara', logo: '🔷', isFocus: false },
-  { slug: 'bsi', label: 'BSI', fullName: 'Bank Syariah Indonesia', logo: '🟩', isFocus: false }
+  { slug: 'bri', label: 'BRI', fullName: 'Bank Rakyat Indonesia', isFocus: true },
+  { slug: 'mandiri', label: 'Mandiri', fullName: 'Bank Mandiri', isFocus: false },
+  { slug: 'bca', label: 'BCA', fullName: 'Bank Central Asia', isFocus: false },
+  { slug: 'bni', label: 'BNI', fullName: 'Bank Negara Indonesia', isFocus: false },
+  { slug: 'btn', label: 'BTN', fullName: 'Bank Tabungan Negara', isFocus: false },
+  { slug: 'bsi', label: 'BSI', fullName: 'Bank Syariah Indonesia', isFocus: false }
 ];
 
 export const HeadToHeadView: React.FC = () => {
@@ -129,9 +130,13 @@ export const HeadToHeadView: React.FC = () => {
   return (
     <div className="space-y-6 pb-16">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center -space-x-2">
+              <BankLogo bankCode={bankA.slug} size="sm" className="ring-2 ring-white dark:ring-slate-900 shadow-xs" />
+              <BankLogo bankCode={bankB.slug} size="sm" className="ring-2 ring-white dark:ring-slate-900 shadow-xs" />
+            </div>
             <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               Head-to-Head: {bankA.label} vs {bankB.label}
             </h2>
@@ -144,40 +149,117 @@ export const HeadToHeadView: React.FC = () => {
           </p>
         </div>
 
-        {/* Bank Selection Switchers */}
-        <div className="flex items-center space-x-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-2 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card flex-wrap">
-          <div className="flex items-center space-x-2 text-xs px-2">
-            <span className="text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider">Bank 1:</span>
+        {/* Bank Selection Switchers - Strictly 1 Line Horizontal */}
+        <div 
+          className="flex flex-row items-center gap-2 sm:gap-2.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card shrink-0 flex-nowrap whitespace-nowrap overflow-x-auto"
+          style={{ flexWrap: 'nowrap' }}
+        >
+          {/* Bank 1 Selector */}
+          <div className="flex items-center gap-2 bg-slate-50/90 dark:bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-200/70 dark:border-slate-700/70 shadow-2xs shrink-0">
+            <BankLogo bankCode={bankA.slug} size={24} className="shrink-0" />
+            <span className="text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider shrink-0">Bank 1:</span>
             <select
               value={bankASlug}
               onChange={e => setBankASlug(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 font-black text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 text-xs focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-2xs"
+              className="w-32 sm:w-40 md:w-44 bg-transparent font-black text-slate-800 dark:text-slate-200 text-xs focus:outline-hidden cursor-pointer truncate"
             >
               {BANK_OPTIONS.map(b => (
-                <option key={b.slug} value={b.slug} disabled={b.slug === bankBSlug}>
-                  {b.logo} {b.label}
+                <option key={b.slug} value={b.slug} disabled={b.slug === bankBSlug} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-semibold">
+                  {b.label} – {b.fullName}
                 </option>
               ))}
             </select>
           </div>
 
-          <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500">
-            <ArrowLeftRight className="w-4 h-4" />
-          </div>
+          {/* Interactive Swap Button */}
+          <button
+            type="button"
+            onClick={() => {
+              const temp = bankASlug;
+              setBankASlug(bankBSlug);
+              setBankBSlug(temp);
+            }}
+            title="Tukar Posisi Bank 1 & 2"
+            aria-label="Tukar Posisi Bank"
+            className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-blue-600 dark:bg-slate-800 dark:hover:bg-blue-600 text-slate-400 hover:text-white dark:text-slate-400 dark:hover:text-white flex items-center justify-center transition-all shrink-0 shadow-2xs cursor-pointer active:scale-95"
+          >
+            <ArrowLeftRight className="w-3.5 h-3.5" />
+          </button>
 
-          <div className="flex items-center space-x-2 text-xs px-2">
-            <span className="text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider">Bank 2:</span>
+          {/* Bank 2 Selector */}
+          <div className="flex items-center gap-2 bg-slate-50/90 dark:bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-200/70 dark:border-slate-700/70 shadow-2xs shrink-0">
+            <BankLogo bankCode={bankB.slug} size={24} className="shrink-0" />
+            <span className="text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider shrink-0">Bank 2:</span>
             <select
               value={bankBSlug}
               onChange={e => setBankBSlug(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 font-black text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 text-xs focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-2xs"
+              className="w-32 sm:w-40 md:w-44 bg-transparent font-black text-slate-800 dark:text-slate-200 text-xs focus:outline-hidden cursor-pointer truncate"
             >
               {BANK_OPTIONS.map(b => (
-                <option key={b.slug} value={b.slug} disabled={b.slug === bankASlug}>
-                  {b.logo} {b.label}
+                <option key={b.slug} value={b.slug} disabled={b.slug === bankASlug} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-semibold">
+                  {b.label} – {b.fullName}
                 </option>
               ))}
             </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Visual Matchup Card */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border border-slate-800/80 shadow-card p-5 text-white">
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+          {/* Bank A Side */}
+          <div className="md:col-span-5 flex items-center space-x-4 bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10 hover:border-blue-500/30 transition">
+            <BankLogo bankCode={bankA.slug} size={52} className="shadow-lg shrink-0" />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center space-x-2">
+                <h3 className="text-lg font-black text-white tracking-tight truncate">{bankA.fullName}</h3>
+                {bankA.isFocus && (
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-blue-500 text-white shrink-0 uppercase tracking-wider">
+                    Fokus
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-slate-400 font-medium mt-0.5">Kode: {bankA.label} • Bank Utama</p>
+              <div className="flex items-center space-x-3 mt-2 text-[11px] text-slate-300">
+                <span className="flex items-center space-x-1 font-semibold text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{comparisons.filter(c => c.detailA.status === 'Terverifikasi').length} Terverifikasi</span>
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-blue-300 font-semibold">{onlyAVerifiedCount} Keunggulan</span>
+              </div>
+            </div>
+          </div>
+
+          {/* VS Center Badge */}
+          <div className="md:col-span-1 flex flex-col items-center justify-center my-2 md:my-0">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-lg shadow-amber-500/20 ring-4 ring-slate-900">
+              VS
+            </div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Duel</span>
+          </div>
+
+          {/* Bank B Side */}
+          <div className="md:col-span-5 flex items-center space-x-4 bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10 hover:border-amber-500/30 transition">
+            <BankLogo bankCode={bankB.slug} size={52} className="shadow-lg shrink-0" />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center space-x-2">
+                <h3 className="text-lg font-black text-white tracking-tight truncate">{bankB.fullName}</h3>
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-slate-700 text-slate-300 shrink-0 uppercase tracking-wider">
+                  Benchmark
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 font-medium mt-0.5">Kode: {bankB.label} • Kompetitor Komparasi</p>
+              <div className="flex items-center space-x-3 mt-2 text-[11px] text-slate-300">
+                <span className="flex items-center space-x-1 font-semibold text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{comparisons.filter(c => c.detailB.status === 'Terverifikasi').length} Terverifikasi</span>
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-orange-300 font-semibold">{onlyBVerifiedCount} Keunggulan</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -190,22 +272,32 @@ export const HeadToHeadView: React.FC = () => {
           <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">13 Domain Arsitektur</div>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-50/80 dark:from-blue-950/40 to-indigo-50/40 dark:to-indigo-950/20 p-4 rounded-2xl border border-blue-200/80 dark:border-blue-900/50 shadow-card hover:shadow-card-hover transition-all">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-blue-800 dark:text-blue-300 flex items-center space-x-1.5">
-            <Shield className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            <span>Keunggulan {bankA.label}</span>
+        <div className="bg-gradient-to-br from-blue-50/80 dark:from-blue-950/40 to-indigo-50/40 dark:to-indigo-950/20 p-4 rounded-2xl border border-blue-200/80 dark:border-blue-900/50 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="text-[10px] font-extrabold uppercase tracking-wider text-blue-800 dark:text-blue-300 flex items-center space-x-1.5">
+              <Shield className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>Keunggulan {bankA.label}</span>
+            </div>
+            <BankLogo bankCode={bankA.slug} size={22} className="shrink-0" />
           </div>
-          <div className="text-3xl font-black text-blue-950 dark:text-blue-100 mt-1 tracking-tight">{onlyAVerifiedCount}</div>
-          <div className="text-[10px] text-blue-700 dark:text-blue-400 font-medium">Terverifikasi di {bankA.label} saja</div>
+          <div>
+            <div className="text-3xl font-black text-blue-950 dark:text-blue-100 mt-2 tracking-tight">{onlyAVerifiedCount}</div>
+            <div className="text-[10px] text-blue-700 dark:text-blue-400 font-medium">Terverifikasi di {bankA.label} saja</div>
+          </div>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50/80 dark:from-orange-950/40 to-amber-50/40 dark:to-amber-950/20 p-4 rounded-2xl border border-orange-200/80 dark:border-orange-900/50 shadow-card hover:shadow-card-hover transition-all">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-orange-800 dark:text-orange-300 flex items-center space-x-1.5">
-            <AlertTriangle className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400" />
-            <span>Keunggulan {bankB.label}</span>
+        <div className="bg-gradient-to-br from-orange-50/80 dark:from-orange-950/40 to-amber-50/40 dark:to-amber-950/20 p-4 rounded-2xl border border-orange-200/80 dark:border-orange-900/50 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="text-[10px] font-extrabold uppercase tracking-wider text-orange-800 dark:text-orange-300 flex items-center space-x-1.5">
+              <AlertTriangle className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400" />
+              <span>Keunggulan {bankB.label}</span>
+            </div>
+            <BankLogo bankCode={bankB.slug} size={22} className="shrink-0" />
           </div>
-          <div className="text-3xl font-black text-orange-950 dark:text-orange-100 mt-1 tracking-tight">{onlyBVerifiedCount}</div>
-          <div className="text-[10px] text-orange-700 dark:text-orange-400 font-medium">Celah arsitektur bagi {bankA.label}</div>
+          <div>
+            <div className="text-3xl font-black text-orange-950 dark:text-orange-100 mt-2 tracking-tight">{onlyBVerifiedCount}</div>
+            <div className="text-[10px] text-orange-700 dark:text-orange-400 font-medium">Celah arsitektur bagi {bankA.label}</div>
+          </div>
         </div>
 
         <div className="bg-gradient-to-br from-emerald-50/80 dark:from-emerald-950/40 to-teal-50/40 dark:to-teal-950/20 p-4 rounded-2xl border border-emerald-200/80 dark:border-emerald-900/50 shadow-card hover:shadow-card-hover transition-all">
@@ -230,7 +322,8 @@ export const HeadToHeadView: React.FC = () => {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-750"
-            />
+            >
+            </input>
           </div>
 
           {/* Workshop Filter */}
@@ -310,15 +403,15 @@ export const HeadToHeadView: React.FC = () => {
                 <th className="py-3.5 px-3 w-48 border-r border-slate-200 dark:border-slate-700">Domain & Kategori</th>
                 <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200 dark:border-slate-700">Kapabilitas / Sistem</th>
                 <th className="py-3.5 px-3 min-w-[200px] border-r border-slate-200 dark:border-slate-700 bg-blue-50/70 dark:bg-blue-950/50 text-blue-950 dark:text-blue-200 text-center">
-                  <div className="flex items-center justify-center space-x-1.5">
-                    <span>{bankA.logo}</span>
+                  <div className="flex items-center justify-center space-x-2">
+                    <BankLogo bankCode={bankA.slug} size={22} className="shadow-2xs" />
                     <span className="font-black">{bankA.label}</span>
                     {bankA.isFocus && <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.2 rounded font-bold">FOKUS</span>}
                   </div>
                 </th>
                 <th className="py-3.5 px-3 min-w-[200px] border-r border-slate-200 dark:border-slate-700 bg-amber-50/70 dark:bg-amber-950/50 text-amber-950 dark:text-amber-200 text-center">
-                  <div className="flex items-center justify-center space-x-1.5">
-                    <span>{bankB.logo}</span>
+                  <div className="flex items-center justify-center space-x-2">
+                    <BankLogo bankCode={bankB.slug} size={22} className="shadow-2xs" />
                     <span className="font-black">{bankB.label}</span>
                   </div>
                 </th>

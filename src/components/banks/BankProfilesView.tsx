@@ -5,6 +5,7 @@ import {
   MessageSquare, Layers, CheckCircle2, Lock, AlertTriangle, 
   HelpCircle, Search, Filter, RotateCcw, Database, ArrowRight 
 } from 'lucide-react';
+import { BankLogo } from '../common/BankLogo';
 
 const WORKSHOP_META: Record<string, { label: string; color: string; bg: string; border: string }> = {
   WS1: { label: 'WS1: Core & Digital', color: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-200' },
@@ -125,7 +126,7 @@ export const BankProfilesView: React.FC = () => {
       </div>
 
       {/* Bank Tabs Selector */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+      <div className="flex items-center space-x-2.5 overflow-x-auto pb-2 scrollbar-none">
         {banks.map(bank => {
           const isSelected = bank.id === currentBank.id;
           return (
@@ -138,8 +139,8 @@ export const BankProfilesView: React.FC = () => {
                   : 'bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm text-slate-600 dark:text-slate-400 border-slate-200/80 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white shadow-2xs'
               }`}
             >
-              <span className="text-xl">{bank.logo}</span>
-              <span className="tracking-tight">{bank.singkatan}</span>
+              <BankLogo bankCode={bank.singkatan} size="sm" />
+              <span className="tracking-tight text-sm font-extrabold">{bank.singkatan}</span>
               {bank.isFokusUtama && (
                 <span className="text-[9px] bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wider shadow-2xs">
                   FOKUS
@@ -164,8 +165,8 @@ export const BankProfilesView: React.FC = () => {
 
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-start space-x-4">
-            <div className="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0 shadow-lg">
-              {currentBank.logo}
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white p-2 flex items-center justify-center shrink-0 shadow-xl border border-white/40">
+              <BankLogo bankCode={currentBank.singkatan} size={56} />
             </div>
             <div>
               <div className="flex items-center space-x-2 flex-wrap">
@@ -179,6 +180,23 @@ export const BankProfilesView: React.FC = () => {
               <p className="text-sm text-white/90 mt-1.5 max-w-xl leading-relaxed">
                 {currentBank.deskripsi}
               </p>
+
+              {/* Digital Products Pills */}
+              {currentBank.produkDigital && currentBank.produkDigital.length > 0 && (
+                <div className="flex items-center flex-wrap gap-1.5 mt-3">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-white/75 mr-1">
+                    Produk Digital Unggulan:
+                  </span>
+                  {currentBank.produkDigital.map((prod, idx) => (
+                    <span 
+                      key={idx} 
+                      className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-white/15 backdrop-blur-md border border-white/20 text-white shadow-2xs"
+                    >
+                      {prod}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
