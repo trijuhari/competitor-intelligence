@@ -2,76 +2,117 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   BarChart3, Grid3X3, ArrowLeftRight, Building2, Cpu, 
-  TrendingUp, Shield, Download, CheckCircle2, ChevronDown, 
-  LogOut, Lock, User as UserIcon, FileText, Compass, DollarSign, Bot, Database,
-  FileSpreadsheet, Sun, Moon, PanelLeftClose, PanelLeftOpen
+  TrendingUp, Download, ChevronDown, 
+  LogOut, Sun, Moon, Database, RefreshCw, History, ShieldCheck,
+  FileSpreadsheet
 } from 'lucide-react';
+
 export const Navbar: React.FC = () => {
   const { 
     currentUser, 
     currentPath, 
     navigate, 
     logout, 
-    findings,
-    isDbConnected,
     exportDataJSON,
-    exportMatrixCSV,
     exportResearchMatrixCSV,
     researchItems,
-    setIsSyncModalOpen,
+    auditLogs,
     isSyncing,
+    setIsSyncModalOpen,
     theme,
-    toggleTheme,
-    isSidebarOpen,
-    toggleSidebar
+    toggleTheme
   } = useApp();
 
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
+  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
 
-  // Stats for badge from 408 capabilities
-  const verifiedCount = React.useMemo(() => {
-    let count = 0;
-    researchItems.forEach(item => {
-      Object.values(item.banks).forEach(b => {
-        if (b.status === 'Terverifikasi') count++;
-      });
-    });
-    return count;
-  }, [researchItems]);
+  // Single Role: Administrator
+  const roleBadgeInfo = { 
+    label: 'Portal Administrator', 
+    color: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800' 
+  };
 
-  // Determine nav items based on user role
-  const isRoleAdmin = currentUser.role === 'Admin';
-  const isRoleAnalyst = currentUser.role === 'Analyst';
-  const isRoleExecutive = currentUser.role === 'Viewer';
+  // 1. Menu Portal & Analitik (Primary Header Navigation - shown on all pages)
+  const portalNavItems = [
+    { 
+      path: '/executive/dashboard', 
+      label: 'Executive Overview', 
+      icon: BarChart3,
+      isActive: currentPath === '/executive/dashboard' || currentPath === '/' || currentPath.includes('dashboard')
+    },
+    { 
+      path: '/analyst/matrix', 
+      label: 'Matriks Riset (408)', 
+      icon: Grid3X3, 
+      badge: `${researchItems.length}`,
+      isActive: currentPath.includes('matrix')
+    },
+    { 
+      path: '/analyst/head-to-head', 
+      label: 'Head-to-Head Battlecard', 
+      icon: ArrowLeftRight,
+      isActive: currentPath.includes('head-to-head')
+    },
+    { 
+      path: '/analyst/gap-analysis', 
+      label: 'Gap Analysis', 
+      icon: TrendingUp,
+      isActive: currentPath.includes('gap-analysis')
+    },
+    { 
+      path: '/analyst/banks', 
+      label: 'Profil 6 Bank', 
+      icon: Building2,
+      isActive: currentPath.includes('banks')
+    },
+    { 
+      path: '/analyst/tech-catalog', 
+      label: 'Katalog Kapabilitas', 
+      icon: Cpu,
+      isActive: currentPath.includes('tech-catalog')
+    },
+  ];
 
-  const roleBadgeInfo = isRoleAdmin
-    ? { label: 'Portal Administrator', color: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800' }
-    : isRoleAnalyst
-    ? { label: 'Workspace Analis', color: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800' }
-    : { label: 'Portal Executive', color: 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800' };
+  // 2. Menu Tata Kelola & Audit (Admin Dropdown Items)
+  const adminMenuItems = [
+    {
+      path: '/admin/findings',
+      label: 'Temuan Riset (408)',
+      icon: Database,
+      badge: `${researchItems.length}`,
+      badgeColor: 'bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300'
+    },
+    {
+      path: '/admin/sync',
+      label: 'Sinkronisasi & Backup',
+      icon: RefreshCw,
+      badge: isSyncing ? 'Sync...' : 'Live',
+      badgeColor: isSyncing ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300'
+    },
+    {
+      path: '/admin/audit',
+      label: 'Log Audit Trail',
+      icon: History,
+      badge: `${auditLogs.length}`,
+      badgeColor: 'bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300'
+    },
+    {
+      path: '/admin/checklist',
+      label: 'Checklist Kesiapan',
+      icon: ShieldCheck,
+      badge: '100%',
+      badgeColor: 'bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-300'
+    }
+  ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 shadow-xs transition-colors duration-200">
-      {/* Top Bar with Branding & Role Context */}
+    <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 shadow-xs transition-colors duration-200">
+      {/* Top Bar with Branding & Administrator Actions */}
       <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Brand & Sidebar Toggle */}
+          {/* Brand */}
           <div className="flex items-center space-x-3">
-            {/* Sidebar Toggle Button */}
-            <button
-              onClick={toggleSidebar}
-              className="p-2 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/70 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-2xs transition-all active:scale-95 flex items-center justify-center shrink-0"
-              title={isSidebarOpen ? "Sembunyikan Sidebar Navigasi" : "Buka Sidebar Navigasi"}
-              aria-label="Toggle sidebar"
-            >
-              {isSidebarOpen ? (
-                <PanelLeftClose className="w-4 h-4 text-slate-600 dark:text-slate-300" />
-              ) : (
-                <PanelLeftOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              )}
-            </button>
-
-            <div className="flex items-center space-x-3.5 cursor-pointer" onClick={() => navigate(isRoleAdmin ? '/admin' : isRoleAnalyst ? '/analyst/matrix' : '/executive/dashboard')}>
+            <div className="flex items-center space-x-3.5 cursor-pointer" onClick={() => navigate('/executive/dashboard')}>
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#002B49] via-[#00529C] to-blue-500 flex items-center justify-center text-white shadow-md shadow-blue-900/25 ring-1 ring-white/20 shrink-0 transform transition-transform hover:scale-105">
                 <span className="text-xl">🏦</span>
               </div>
@@ -92,71 +133,48 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Metrics & Actions */}
+          {/* Quick Actions (Export, Theme, Admin Hub Dropdown) */}
           <div className="flex items-center space-x-2">
-            {/* Database Connection Badge */}
-            <div className={`hidden lg:flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border transition-all ${
-              isDbConnected 
-                ? 'bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/80 shadow-2xs' 
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
-            }`}>
-              <span className={`w-2 h-2 rounded-full ${isDbConnected ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
-              <span>{isDbConnected ? 'SQLite Live' : 'Offline Mode'}</span>
-            </div>
+            {/* Export Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/70 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-2xs transition-all duration-150"
+                title="Ekspor Data"
+              >
+                <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                <span className="hidden sm:inline">Export</span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
 
-            {/* Google Sheets Sync Button */}
-            <button
-              onClick={() => setIsSyncModalOpen(true)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-emerald-300/80 dark:border-emerald-700 bg-emerald-50/80 dark:bg-emerald-950/40 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold shadow-2xs transition-all active:scale-95"
-              title="Pusat Sinkronisasi Google Sheets"
-            >
-              <FileSpreadsheet className={`w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 ${isSyncing ? 'animate-spin' : ''}`} />
-              <span className="hidden md:inline">Google Sheet</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            </button>
-
-            {/* Export Menu (Only Admin and Analyst) */}
-            {!isRoleExecutive && (
-              <div className="relative">
-                <button
-                  onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
-                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/70 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-2xs transition-all duration-150"
-                  title="Ekspor Data"
+              {exportDropdownOpen && (
+                <div 
+                  className="absolute right-0 mt-2 w-52 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-800 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-black/5"
+                  onMouseLeave={() => setExportDropdownOpen(false)}
                 >
-                  <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-                  <span className="hidden sm:inline">Export</span>
-                  <ChevronDown className="w-3 h-3 text-slate-400" />
-                </button>
-
-                {exportDropdownOpen && (
-                  <div 
-                    className="absolute right-0 mt-2 w-52 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-800 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-black/5"
-                    onMouseLeave={() => setExportDropdownOpen(false)}
+                  <button
+                    onClick={() => { exportResearchMatrixCSV(); setExportDropdownOpen(false); }}
+                    className="w-full text-left px-3.5 py-2.5 text-xs text-slate-700 dark:text-slate-200 hover:bg-blue-50/70 dark:hover:bg-slate-800/80 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-2.5 font-medium transition"
                   >
-                    <button
-                      onClick={() => { exportResearchMatrixCSV(); setExportDropdownOpen(false); }}
-                      className="w-full text-left px-3.5 py-2.5 text-xs text-slate-700 dark:text-slate-200 hover:bg-blue-50/70 dark:hover:bg-slate-800/80 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-2.5 font-medium transition"
-                    >
-                      <span className="text-base">📊</span>
-                      <div>
-                        <div className="font-semibold text-slate-800 dark:text-slate-100">Ekspor Riset CSV</div>
-                        <div className="text-[10px] text-slate-400 dark:text-slate-500">408 kapabilitas × 6 bank</div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => { exportDataJSON(); setExportDropdownOpen(false); }}
-                      className="w-full text-left px-3.5 py-2.5 text-xs text-slate-700 dark:text-slate-200 hover:bg-blue-50/70 dark:hover:bg-slate-800/80 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-2.5 font-medium transition"
-                    >
-                      <span className="text-base">💾</span>
-                      <div>
-                        <div className="font-semibold text-slate-800 dark:text-slate-100">Cadangkan Full JSON</div>
-                        <div className="text-[10px] text-slate-400 dark:text-slate-500">Seluruh tabel & log audit</div>
-                      </div>
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+                    <span className="text-base">📊</span>
+                    <div>
+                      <div className="font-semibold text-slate-800 dark:text-slate-100">Ekspor Riset CSV</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500">408 kapabilitas × 6 bank</div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => { exportDataJSON(); setExportDropdownOpen(false); }}
+                    className="w-full text-left px-3.5 py-2.5 text-xs text-slate-700 dark:text-slate-200 hover:bg-blue-50/70 dark:hover:bg-slate-800/80 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-2.5 font-medium transition"
+                  >
+                    <span className="text-base">💾</span>
+                    <div>
+                      <div className="font-semibold text-slate-800 dark:text-slate-100">Cadangkan Full JSON</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500">Seluruh tabel & log audit</div>
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Light / Dark Mode Toggle Button */}
             <button
@@ -172,25 +190,167 @@ export const Navbar: React.FC = () => {
               )}
             </button>
 
-            {/* User Profile Badge */}
-            <div className="flex items-center space-x-2 pl-2 pr-3 py-1 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/90 text-xs shadow-2xs">
-              <span className="text-base">{currentUser.avatar || '👤'}</span>
-              <div className="text-left leading-tight hidden md:block">
-                <div className="font-bold text-slate-800 dark:text-slate-100">{currentUser.nama.split(' ')[0]}</div>
-                <div className="text-[10px] text-blue-700 dark:text-blue-400 font-extrabold uppercase tracking-wide">{currentUser.role}</div>
-              </div>
-            </div>
+            {/* Administrator & Tata Kelola Dropdown Trigger */}
+            <div className="relative">
+              <button
+                onClick={() => setIsAdminMenuOpen(!isAdminMenuOpen)}
+                className={`flex items-center space-x-2.5 pl-2.5 pr-3 py-1.5 rounded-xl border text-xs font-semibold shadow-2xs transition-all active:scale-95 ${
+                  isAdminMenuOpen || currentPath.startsWith('/admin')
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/70 text-blue-800 dark:text-blue-300 ring-2 ring-blue-500/20'
+                    : 'border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100'
+                }`}
+                title="Menu Tata Kelola & Audit Administrator"
+              >
+                <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-sm font-bold shadow-xs shrink-0">
+                  👨‍💼
+                </div>
+                <div className="text-left leading-tight hidden sm:block">
+                  <div className="font-extrabold text-xs text-slate-900 dark:text-white flex items-center gap-1">
+                    <span>Admin</span>
+                    <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform duration-200 ${isAdminMenuOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  <div className="text-[10px] text-blue-600 dark:text-blue-400 font-extrabold uppercase tracking-wider">
+                    Tata Kelola & Audit
+                  </div>
+                </div>
+                <span className="sm:hidden">
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                </span>
+              </button>
 
-            {/* Logout Button */}
-            <button
-              onClick={logout}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-red-200/80 dark:border-red-900/60 bg-red-50/70 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-700 dark:text-red-300 text-xs font-bold flex items-center space-x-1 transition shadow-2xs active:scale-95"
-              title="Keluar dari akun"
-            >
-              <LogOut className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
-              <span className="hidden sm:inline">Keluar</span>
-            </button>
+              {/* Backdrop for closing dropdown */}
+              {isAdminMenuOpen && (
+                <div 
+                  className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px]" 
+                  onClick={() => setIsAdminMenuOpen(false)} 
+                />
+              )}
+
+              {/* Dropdown Menu Popup */}
+              {isAdminMenuOpen && (
+                <div className="absolute right-0 mt-2 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-200/90 dark:border-slate-800 p-2.5 z-50 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-black/5 space-y-2">
+                  {/* Admin User Header Info */}
+                  <div className="p-3 rounded-2xl bg-gradient-to-br from-slate-900 via-blue-950 to-blue-900 text-white shadow-md">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2.5 min-w-0">
+                        <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-lg font-bold shadow-sm shrink-0">
+                          👨‍💼
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-extrabold text-xs text-white leading-tight truncate">{currentUser.nama}</div>
+                          <div className="text-[10px] text-blue-300 font-mono mt-0.5 truncate">{currentUser.email}</div>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-blue-500/30 border border-blue-400/40 text-blue-200 shrink-0">
+                        Admin
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Section: TATA KELOLA & AUDIT */}
+                  <div className="space-y-0.5">
+                    <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center justify-between">
+                      <span>TATA KELOLA & AUDIT</span>
+                      <span className="text-[9px] text-amber-600 dark:text-amber-400 font-extrabold">ADMIN</span>
+                    </div>
+
+                    {adminMenuItems.map(item => {
+                      const Icon = item.icon;
+                      const isActive = currentPath === item.path;
+                      return (
+                        <button
+                          key={item.path}
+                          onClick={() => {
+                            navigate(item.path);
+                            setIsAdminMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left transition-all group ${
+                            isActive
+                              ? 'bg-blue-600 text-white font-bold shadow-sm'
+                              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2.5">
+                            <div className={`p-1.5 rounded-lg ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
+                              <Icon className="w-3.5 h-3.5" />
+                            </div>
+                            <span className="text-xs font-semibold">{item.label}</span>
+                          </div>
+                          <span className={`px-2 py-0.5 rounded-md text-[9px] font-black ${
+                            isActive ? 'bg-white/20 text-white' : item.badgeColor
+                          }`}>
+                            {item.badge}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Quick SQLite Status & Sync Action */}
+                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 flex items-center justify-between text-[11px]">
+                    <div className="flex items-center space-x-1.5 font-bold text-slate-600 dark:text-slate-300">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span>SQLite: <strong className="text-slate-900 dark:text-white">{researchItems.length} Live</strong></span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsAdminMenuOpen(false);
+                        setIsSyncModalOpen(true);
+                      }}
+                      className="inline-flex items-center space-x-1 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 font-bold transition"
+                    >
+                      <FileSpreadsheet className="w-3.5 h-3.5" />
+                      <span>Sync Sheet</span>
+                    </button>
+                  </div>
+
+                  {/* Divider & Tombol Keluar (Disatukan di menu) */}
+                  <div className="border-t border-slate-100 dark:border-slate-800 pt-1">
+                    <button
+                      onClick={() => {
+                        setIsAdminMenuOpen(false);
+                        logout();
+                      }}
+                      className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-left text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition active:scale-98"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Keluar dari Akun (Logout)</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+        </div>
+
+        {/* Global Navigation Row: PORTAL & ANALITIK (Rendered on ALL pages without sidebar) */}
+        <div className="pb-2.5 overflow-x-auto scrollbar-none flex items-center">
+          <nav className="inline-flex p-1 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur rounded-2xl border border-slate-200/70 dark:border-slate-700/70 space-x-1">
+            {portalNavItems.map(item => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-150 ${
+                    item.isActive
+                      ? 'bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-300 font-bold shadow-xs ring-1 ring-slate-200/70 dark:ring-slate-600'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-700/60'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{item.label}</span>
+                  {item.badge && (
+                    <span className={`px-1.5 py-0.2 rounded-md text-[9px] font-black ${
+                      item.isActive ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                    }`}>
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
         </div>
       </div>
     </header>

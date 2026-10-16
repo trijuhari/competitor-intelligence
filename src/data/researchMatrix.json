@@ -149,19 +149,19 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "General Ledger (GL) — nama produk belum teridentifikasi",
+        "link": "https://www.bni.co.id/portals/1/bni/perusahaan/hubunganinvestor/docs/prospektus-kinerja-saham.pdf?utm_source=chatgpt.com",
+        "url": "https://www.bni.co.id/portals/1/bni/perusahaan/hubunganinvestor/docs/prospektus-kinerja-saham.pdf?utm_source=chatgpt.com",
+        "pic": "Husen",
         "status": "Belum"
       },
       "btn": {
         "bankCode": "BTN",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
-        "status": "Belum"
+        "merk": "SAP General Ledger (GL) & Business Warehouse (BW)",
+        "link": "https://www.btn.co.id/en/About/Gallery/Announcement/Listing/2026/09/04/132-BTN-PFAD-IX-2026?utm_source=chatgpt.com",
+        "url": "https://www.btn.co.id/en/About/Gallery/Announcement/Listing/2026/09/04/132-BTN-PFAD-IX-2026?utm_source=chatgpt.com",
+        "pic": "Husen",
+        "status": "Terverifikasi"
       },
       "bsi": {
         "bankCode": "BSI",
@@ -1019,10 +1019,10 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "Document Management System (DMS) — pengelolaan dokumen kredit digital; vendor belum teridentifikasi",
+        "link": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/AR-BNI-2025-ID.pdf?utm_source=chatgpt.com",
+        "url": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/AR-BNI-2025-ID.pdf?utm_source=chatgpt.com",
+        "pic": "Husen",
         "status": "Belum"
       },
       "btn": {
@@ -1069,11 +1069,11 @@
       },
       "bca": {
         "bankCode": "BCA",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
-        "status": "Belum"
+        "merk": "Red Hat Integration (Apache Camel) + Red Hat 3scale API Management",
+        "link": "https://www.redhat.com/en/resources/bca-case-study https://www.redhat.com/en/success-stories/bca",
+        "url": "https://www.redhat.com/en/resources/bca-case-study",
+        "pic": "Annisa",
+        "status": "Terverifikasi"
       },
       "bni": {
         "bankCode": "BNI",
@@ -1085,18 +1085,18 @@
       },
       "btn": {
         "bankCode": "BTN",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "iBridge — aplikasi middleware",
+        "link": "https://www.btn.co.id/en/About/Gallery/Announcement/Listing/2026/07/23/73-BTN-PFAD-VII-2026?utm_source=chatgpt.com",
+        "url": "https://www.btn.co.id/en/About/Gallery/Announcement/Listing/2026/07/23/73-BTN-PFAD-VII-2026?utm_source=chatgpt.com",
+        "pic": "Husen",
         "status": "Belum"
       },
       "bsi": {
         "bankCode": "BSI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "Enterprise Service Bus (ESB)",
+        "link": "https://ir.bankbsi.co.id/misc/AR/AR2022-ID/256/?utm_source=chatgpt.com",
+        "url": "https://ir.bankbsi.co.id/misc/AR/AR2022-ID/256/?utm_source=chatgpt.com",
+        "pic": "Husen",
         "status": "Belum"
       }
     }
@@ -1923,24 +1923,24 @@
     "banks": {
       "bri": {
         "bankCode": "BRI",
-        "merk": "-",
-        "link": "",
+        "merk": "Native (Android / Swift), Flutter",
+        "link": "Dev - BRImo Tech Architecture",
         "url": "",
         "pic": "Mrs Utami",
         "status": "Belum"
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
+        "merk": "Native (Kotlin / Swift), React Native",
+        "link": "Bank Mandiri Official App Tech",
         "url": "",
         "pic": "Mrs Utami",
         "status": "Belum"
       },
       "bca": {
         "bankCode": "BCA",
-        "merk": "-",
-        "link": "",
+        "merk": "Native (Java/Kotlin & Swift)",
+        "link": "BCA Official Mobile Banking",
         "url": "",
         "pic": "Mrs Utami",
         "status": "Belum"
@@ -1955,17 +1955,17 @@
       },
       "btn": {
         "bankCode": "BTN",
-        "merk": "-",
-        "link": "",
-        "url": "",
+        "merk": "Native (Android / Swift), Flutter",
+        "link": "https://www.btn.co.id/id/About-Us/Investor-Relations/Annual-Report; https://www.btn.co.id/id/Digital-Banking/Aplikasi-BTN-Mobile; https://play.google.com/store/apps/details?id=id.co.btn.mobile",
+        "url": "https://www.btn.co.id/id/About-Us/Investor-Relations/Annual-Report",
         "pic": "Mrs Utami",
         "status": "Belum"
       },
       "bsi": {
         "bankCode": "BSI",
-        "merk": "-",
-        "link": "",
-        "url": "",
+        "merk": "Native (Kotlin / Swift), Flutter",
+        "link": "https://www.bankbsi.co.id/hubungan_investor/laporan_tahunan ; https://www.bankbsi.co.id/produk&layanan/layanan_digital/bsi_mobile ; https://play.google.com/store/apps/details?id=com.bsi.smartch",
+        "url": "https://www.bankbsi.co.id/hubungan_investor/laporan_tahunan",
         "pic": "Mrs Utami",
         "status": "Belum"
       }
@@ -5055,18 +5055,18 @@
     "banks": {
       "bri": {
         "bankCode": "BRI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "incapsula/imperva",
+        "link": "https://www.indotelko.com/read/1792020087/trafik-bot-berbasis-ai-meningkat-thales-perkuat-ketahanan-digital-indonesia",
+        "url": "https://www.indotelko.com/read/1792020087/trafik-bot-berbasis-ai-meningkat-thales-perkuat-ketahanan-digital-indonesia",
+        "pic": "Diki",
         "status": "Belum"
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "incapsula/imperva",
+        "link": "https://www.linkedin.com/in/hanschristian17/ (diambil dari linked in salah satu karyanwan dan beberapa sumber dari websiet imperva)",
+        "url": "https://www.linkedin.com/in/hanschristian17/",
+        "pic": "Diki",
         "status": "Belum"
       },
       "bca": {
@@ -5079,10 +5079,10 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "incapsula/imperva",
+        "link": "https://www.imperva.com/resources/customers/case-studies/hibank-indonesia/",
+        "url": "https://www.imperva.com/resources/customers/case-studies/hibank-indonesia/",
+        "pic": "Diki",
         "status": "Belum"
       },
       "btn": {
@@ -8501,11 +8501,11 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
-        "status": "Belum"
+        "merk": "Sertifikasi Governance, Risk, and Compliance (GRCM, GRCE, CCCO)",
+        "link": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/SR-BNI-2025-ID.pdf",
+        "url": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/SR-BNI-2025-ID.pdf",
+        "pic": "Waryono",
+        "status": "Terverifikasi"
       },
       "btn": {
         "bankCode": "BTN",
@@ -12453,11 +12453,11 @@
       },
       "btn": {
         "bankCode": "BTN",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
-        "status": "Belum"
+        "merk": "Alibaba Cloud (IaaS); Google Cloud (via Multipolar Technology)",
+        "link": "https://www.alibabacloud.com/en/customers/bank-btn https://ekonomi.republika.co.id/berita/rv7zw7349/btn-kolaborasi-dengan-alibaba-cloud-manfaatkan-layanan-komputasi-awan https://ekonomi.republika.co.id/berita/rh2bhf383/btn-gandeng-google-cloud-indonesia-dorong-inovasi-layanan-digital",
+        "url": "https://www.alibabacloud.com/en/customers/bank-btn",
+        "pic": "Annisa",
+        "status": "Terverifikasi"
       },
       "bsi": {
         "bankCode": "BSI",
@@ -12859,11 +12859,11 @@
       },
       "btn": {
         "bankCode": "BTN",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
-        "status": "Belum"
+        "merk": "Alibaba Cloud (PaaS)",
+        "link": "https://www.alibabacloud.com/en/customers/bank-btn",
+        "url": "https://www.alibabacloud.com/en/customers/bank-btn",
+        "pic": "Annisa",
+        "status": "Terverifikasi"
       },
       "bsi": {
         "bankCode": "BSI",
@@ -14989,11 +14989,11 @@
       },
       "bca": {
         "bankCode": "BCA",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
-        "status": "Belum"
+        "merk": "Prometheus Operator for Red Hat OpenShift",
+        "link": "https://www.redhat.com/en/resources/bca-case-study (diakses 16 Oktober)",
+        "url": "https://www.redhat.com/en/resources/bca-case-study",
+        "pic": "Annisa",
+        "status": "Terverifikasi"
       },
       "bni": {
         "bankCode": "BNI",
@@ -17069,10 +17069,10 @@
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "DLP Trellix (sebelumnya McAfee)",
+        "link": "https://www.bankmandiri.co.id/documents/38265486/0/SR%252BMandiri%252B2025%252BIndo%252B-%252BLowres%252Bfinal.pdf/ab9aabfb-6d41-1cc6-5233-543e059a4078?t=1774972115230",
+        "url": "https://www.bankmandiri.co.id/documents/38265486/0/SR%252BMandiri%252B2025%252BIndo%252B-%252BLowres%252Bfinal.pdf/ab9aabfb-6d41-1cc6-5233-543e059a4078?t=1774972115230",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bca": {
@@ -17417,10 +17417,10 @@
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "Huawei RG-AP720",
+        "link": "https://www.scribd.com/document/801410406/15-Outline-Spesifikasi",
+        "url": "https://www.scribd.com/document/801410406/15-Outline-Spesifikasi",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bca": {
@@ -19613,26 +19613,26 @@
     "banks": {
       "bri": {
         "bankCode": "BRI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "ISO/IEC 20000-1",
+        "link": "https://finance.detik.com/moneter/d-7114081/128-tahun-bri-kembali-dapatkan-sertifikasi-berstandar-internasional",
+        "url": "https://finance.detik.com/moneter/d-7114081/128-tahun-bri-kembali-dapatkan-sertifikasi-berstandar-internasional",
+        "pic": "I Made",
         "status": "Belum"
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "ISO 20000 for IT Application Support",
+        "link": "https://www.bankmandiri.co.id/en/privacy-and-data-security",
+        "url": "https://www.bankmandiri.co.id/en/privacy-and-data-security",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bca": {
         "bankCode": "BCA",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "ISO/IEC 20000-1:2018",
+        "link": "https://www.bca.co.id/tentang-bca/media-riset/pressroom/siaran-pers/2023/02/06/07/08/memperoleh-sertifikasi-iso-20000-1-2018",
+        "url": "https://www.bca.co.id/tentang-bca/media-riset/pressroom/siaran-pers/2023/02/06/07/08/memperoleh-sertifikasi-iso-20000-1-2018",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bni": {

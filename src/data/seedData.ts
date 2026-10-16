@@ -4834,7 +4834,7 @@ export const INITIAL_USERS: User[] = [
     "id": "usr-2",
     "nama": "Siti Rahmawati (Tech Analyst)",
     "email": "analyst@bri.co.id",
-    "role": "Analyst",
+    "role": "Admin",
     "avatar": "👩‍💻",
     "password": "analyst123"
   },
@@ -4842,7 +4842,7 @@ export const INITIAL_USERS: User[] = [
     "id": "usr-3",
     "nama": "Budi Hartono (Executive Director BRI)",
     "email": "executive@bri.co.id",
-    "role": "Viewer",
+    "role": "Admin",
     "avatar": "👔",
     "password": "bri123"
   }

@@ -65,7 +65,7 @@ export const FindingDetailModal: React.FC = () => {
   const confidenceBadge = getConfidenceBadge(finding.confidence);
   const reviewBadge = getReviewStatusBadge(finding.statusReview);
 
-  const canEdit = currentUser.role === 'Admin' || currentUser.role === 'Analyst';
+  const canEdit = true; // Admin role has full editing rights
 
   // Sync edit form with finding when selected
   const startEditing = () => {

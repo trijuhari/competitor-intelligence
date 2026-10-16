@@ -1,9 +1,7 @@
 import React from 'react';
 import { useApp } from './context/AppContext';
 import { Navbar } from './components/layout/Navbar';
-import { AppSidebar } from './components/layout/AppSidebar';
 import { LoginPage } from './components/auth/LoginPage';
-import { ForbiddenView } from './components/auth/ForbiddenView';
 import { DashboardOverview } from './components/dashboard/DashboardOverview';
 import { MatrixView } from './components/matrix/MatrixView';
 import { HeadToHeadView } from './components/headtohead/HeadToHeadView';
@@ -12,12 +10,10 @@ import { TechCatalogView } from './components/tech/TechCatalogView';
 import { GapAnalysisView } from './components/gapanalysis/GapAnalysisView';
 import { AdminCMSView } from './components/admin/AdminCMSView';
 import { StrategicDecisionMatrixView } from './components/strategy/StrategicDecisionMatrixView';
-import { TcoCostSimulatorView } from './components/strategy/TcoCostSimulatorView';
-import { GenAiReadinessView } from './components/strategy/GenAiReadinessView';
 import { FindingDetailModal } from './components/matrix/FindingDetailModal';
 import { ResearchDetailModal } from './components/matrix/ResearchDetailModal';
 import { GoogleSheetsSyncModal } from './components/sync/GoogleSheetsSyncModal';
-import { ShieldCheck, Lock, ExternalLink, PanelLeftOpen } from 'lucide-react';
+import { ShieldCheck, Lock, ExternalLink } from 'lucide-react';
 
 export const AppContent: React.FC = () => {
   const { 
@@ -26,9 +22,7 @@ export const AppContent: React.FC = () => {
     currentPath, 
     activeTab, 
     isSyncModalOpen,
-    setIsSyncModalOpen,
-    isSidebarOpen,
-    setIsSidebarOpen
+    setIsSyncModalOpen
   } = useApp();
 
   // 1. Unauthenticated or Login Route
@@ -36,23 +30,8 @@ export const AppContent: React.FC = () => {
     return <LoginPage />;
   }
 
-  // 2. Role-based URL Guards
-  const isAdminZone = currentPath.startsWith('/admin');
-  const isAnalystZone = currentPath.startsWith('/analyst');
-
-  const isForbiddenAdmin = isAdminZone && currentUser.role !== 'Admin';
-  const isForbiddenAnalyst = isAnalystZone && currentUser.role !== 'Admin' && currentUser.role !== 'Analyst';
-
   const renderMainContent = () => {
-    if (isForbiddenAdmin) {
-      return <ForbiddenView requiredRole="Administrator" />;
-    }
-
-    if (isForbiddenAnalyst) {
-      return <ForbiddenView requiredRole="Tech Analyst atau Administrator" />;
-    }
-
-    // Role-routed views
+    // Role-routed views (All users are Admin with full access)
     if (currentPath.startsWith('/admin') || activeTab === 'admin') {
       return <AdminCMSView />;
     }
@@ -73,14 +52,6 @@ export const AppContent: React.FC = () => {
       return <StrategicDecisionMatrixView />;
     }
 
-    if (currentPath.includes('tco-simulator') || activeTab === 'tco-simulator') {
-      return <TcoCostSimulatorView />;
-    }
-
-    if (currentPath.includes('genai-readiness') || activeTab === 'genai-readiness') {
-      return <GenAiReadinessView />;
-    }
-
     if (currentPath.includes('tech-catalog') || activeTab === 'tech-catalog') {
       return <TechCatalogView />;
     }
@@ -98,28 +69,9 @@ export const AppContent: React.FC = () => {
       <div>
         <Navbar />
 
-        {/* Floating Reopen Sidebar Tab when collapsed */}
-        {!isSidebarOpen && (
-          <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 px-2 rounded-r-2xl shadow-xl shadow-blue-600/30 flex flex-col items-center gap-1.5 transition-all hover:pr-3 group animate-in fade-in slide-in-from-left duration-200"
-            title="Klik untuk membuka Sidebar Navigasi"
-          >
-            <PanelLeftOpen className="w-4 h-4 group-hover:scale-110 transition-transform" />
-            <span className="text-[10px] font-extrabold uppercase tracking-widest [writing-mode:vertical-lr] rotate-180">
-              Buka Sidebar
-            </span>
-          </button>
-        )}
-
-        <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 transition-all duration-300">
-          <div className="flex flex-col lg:flex-row gap-6 items-start">
-            {isSidebarOpen && <AppSidebar />}
-            <main className="flex-1 min-w-0 w-full transition-all duration-300">
-              {renderMainContent()}
-            </main>
-          </div>
-        </div>
+        <main className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 transition-all duration-300">
+          {renderMainContent()}
+        </main>
       </div>
 
       {/* Global Finding Details Drawer/Modal */}

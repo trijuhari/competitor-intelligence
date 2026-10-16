@@ -1,10 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
-  Filter, Download, Plus, Search, ExternalLink, ShieldCheck, 
+  Filter, Search, ExternalLink, ShieldCheck, 
   CheckCircle2, AlertTriangle, HelpCircle, ChevronLeft, ChevronRight, 
-  RotateCcw, Layers, Database, Sparkles, Server, Cpu, Building2, Eye,
-  FileSpreadsheet
+  RotateCcw, Layers, Database, Sparkles, Server, Cpu, Building2, Eye
 } from 'lucide-react';
 import { VerificationStatus } from '../../types';
 import { formatDashLineBreaks } from '../../utils/helpers';
@@ -52,11 +51,7 @@ const BANK_SLUGS = [
 export const MatrixView: React.FC = () => {
   const { 
     researchItems,
-    setSelectedResearchCell,
-    exportResearchMatrixCSV,
-    currentUser,
-    setActiveTab,
-    setIsSyncModalOpen
+    setSelectedResearchCell
   } = useApp();
 
   // Filters
@@ -178,38 +173,6 @@ export const MatrixView: React.FC = () => {
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-3xl">
             Hasil inventarisasi riset komprehensif arsitektur teknologi perbankan Himbara (BRI, Mandiri, BNI, BTN, BSI) & BCA berdasarkan 4 Workshop, 13 Domain Arsitektur, dan 9 Kategori Sistem.
           </p>
-        </div>
-
-        {/* Primary Actions */}
-        <div className="flex items-center space-x-2.5 flex-wrap">
-          <button
-            onClick={() => setIsSyncModalOpen(true)}
-            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200 text-xs font-bold shadow-xs transition active:scale-95"
-            title="Sinkronisasi dua arah dengan Google Sheets"
-          >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>Sync Google Sheet</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          </button>
-
-          <button
-            onClick={exportResearchMatrixCSV}
-            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-xs transition"
-            title="Download seluruh data matriks ke file CSV spreadsheet"
-          >
-            <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-            <span>Ekspor CSV (408 Baris)</span>
-          </button>
-
-          {(currentUser.role === 'Admin' || currentUser.role === 'Analyst') && (
-            <button
-              onClick={() => setActiveTab('admin')}
-              className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Kelola Data Admin</span>
-            </button>
-          )}
         </div>
       </div>
 

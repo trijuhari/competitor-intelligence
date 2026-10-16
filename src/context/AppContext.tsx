@@ -126,10 +126,8 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 const STORAGE_KEY = 'competitor_intel_bri_himbara_v1';
 const AUTH_STORAGE_KEY = 'competitor_intel_bri_auth_user';
 
-export const getRoleHomeUrl = (role: UserRole): string => {
-  if (role === 'Admin') return '/admin';
-  if (role === 'Analyst') return '/analyst/matrix';
-  return '/executive/dashboard';
+export const getRoleHomeUrl = (_role?: UserRole): string => {
+  return '/admin';
 };
 
 const pathToTab = (path: string): string => {
@@ -138,8 +136,6 @@ const pathToTab = (path: string): string => {
   if (path.includes('head-to-head')) return 'head-to-head';
   if (path.includes('gap-analysis')) return 'gap-analysis';
   if (path.includes('decision-matrix')) return 'decision-matrix';
-  if (path.includes('tco-simulator')) return 'tco-simulator';
-  if (path.includes('genai-readiness')) return 'genai-readiness';
   if (path.includes('tech-catalog')) return 'tech-catalog';
   if (path.includes('banks')) return 'banks';
   if (path.includes('dashboard') || path === '/executive' || path === '/analyst') return 'dashboard';
@@ -213,10 +209,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const saved = localStorage.getItem(AUTH_STORAGE_KEY);
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const u = JSON.parse(saved);
+        return { ...u, role: 'Admin' as UserRole };
       } catch (e) {}
     }
-    return INITIAL_USERS[0];
+    return { ...INITIAL_USERS[0], role: 'Admin' as UserRole };
   });
 
   // Routing State
@@ -339,16 +336,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const setActiveTab = (tab: string) => {
     setActiveTabState(tab);
     let newPath = '/executive/dashboard';
-    if (currentUser.role === 'Admin') {
-      if (tab === 'admin') newPath = '/admin';
-      else if (['matrix', 'head-to-head', 'gap-analysis', 'tech-catalog'].includes(tab)) newPath = `/analyst/${tab}`;
-      else newPath = `/executive/${tab}`;
-    } else if (currentUser.role === 'Analyst') {
-      if (['matrix', 'head-to-head', 'gap-analysis', 'tech-catalog', 'banks'].includes(tab)) newPath = `/analyst/${tab}`;
-      else newPath = `/executive/${tab}`;
-    } else {
-      newPath = `/executive/${tab === 'dashboard' ? 'dashboard' : tab}`;
-    }
+    if (tab === 'admin') newPath = '/admin';
+    else if (['matrix', 'head-to-head', 'gap-analysis', 'tech-catalog', 'banks'].includes(tab)) newPath = `/analyst/${tab}`;
+    else newPath = `/executive/${tab}`;
     window.history.pushState({}, '', newPath);
     setCurrentPath(newPath);
   };
@@ -378,27 +368,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const res = await api.login(trimmedEmail, pass);
       if (res.success && res.user) {
-        setCurrentUser(res.user);
+        const adminUser = { ...res.user, role: 'Admin' as UserRole };
+        setCurrentUser(adminUser);
         setIsAuthenticated(true);
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(res.user));
-        const target = getRoleHomeUrl(res.user.role);
-        navigate(target);
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(adminUser));
+        navigate(getRoleHomeUrl(adminUser.role));
         return { success: true };
       }
     } catch (err: any) {
       // Local fallback in case server offline
       const localMatch = [
         { id: 'usr-1', nama: 'Rinaldi Firmansyah (Lead Admin)', email: 'admin@bri.co.id', role: 'Admin' as UserRole, password: 'admin123', avatar: '👨‍💼' },
-        { id: 'usr-2', nama: 'Siti Rahmawati (Tech Analyst)', email: 'analyst@bri.co.id', role: 'Analyst' as UserRole, password: 'analyst123', avatar: '👩‍💻' },
-        { id: 'usr-3', nama: 'Budi Hartono (Executive Director BRI)', email: 'executive@bri.co.id', role: 'Viewer' as UserRole, password: 'bri123', avatar: '👔' },
+        { id: 'usr-2', nama: 'Siti Rahmawati (Tech Analyst)', email: 'analyst@bri.co.id', role: 'Admin' as UserRole, password: 'analyst123', avatar: '👩‍💻' },
+        { id: 'usr-3', nama: 'Budi Hartono (Executive Director BRI)', email: 'executive@bri.co.id', role: 'Admin' as UserRole, password: 'bri123', avatar: '👔' },
       ].find(u => u.email.toLowerCase() === trimmedEmail.toLowerCase() && u.password === pass);
 
       if (localMatch) {
         const { password: _, ...safeUser } = localMatch;
-        setCurrentUser(safeUser);
+        const adminUser = { ...safeUser, role: 'Admin' as UserRole };
+        setCurrentUser(adminUser);
         setIsAuthenticated(true);
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(safeUser));
-        navigate(getRoleHomeUrl(safeUser.role));
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(adminUser));
+        navigate(getRoleHomeUrl(adminUser.role));
         return { success: true };
       }
       return { success: false, error: err?.message || 'Email atau password salah.' };
@@ -515,15 +506,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAuditLogs(prev => [newLog, ...prev]);
   };
 
-  const switchUserRole = (role: UserRole) => {
-    const matchedUser = users.find(u => u.role === role) || {
-      id: `usr-${role.toLowerCase()}`,
-      nama: `User (${role})`,
-      email: `${role.toLowerCase()}@bri-workshop.id`,
-      role,
-      avatar: role === 'Admin' ? '👨‍💼' : role === 'Analyst' ? '👩‍💻' : '👔'
+  const switchUserRole = (_role: UserRole) => {
+    const adminUser = users.find(u => u.role === 'Admin') || {
+      id: 'usr-admin',
+      nama: 'Administrator BRI',
+      email: 'admin@bri.co.id',
+      role: 'Admin' as UserRole,
+      avatar: '👨‍💼'
     };
-    setCurrentUser(matchedUser);
+    setCurrentUser(adminUser);
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(adminUser));
   };
 
   const addFinding = async (findingData: Omit<Finding, 'id'>) => {

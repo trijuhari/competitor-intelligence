@@ -2,7 +2,7 @@ export type ConfidenceLevel = 'Confirmed' | 'Likely' | 'Indicative';
 export type ReviewStatus = 'Draft' | 'Reviewed' | 'Published';
 export type TechType = 'open-source' | 'komersial' | 'in-house';
 export type EvidenceType = 'publik' | 'wawancara';
-export type UserRole = 'Viewer' | 'Analyst' | 'Admin';
+export type UserRole = 'Admin';
 export type VerificationStatus = 'Terverifikasi' | 'Inferensi' | 'Belum';
 export type ThemeMode = 'light' | 'dark';
 

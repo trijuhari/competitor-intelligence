@@ -4,8 +4,8 @@ import {
   ShieldCheck, CheckCircle2, Plus,
   Upload, Download, RefreshCw, History, 
   Check, X, Save, Search, Database, FileSpreadsheet,
-  ChevronRight, ExternalLink, Menu, Shield, AlertTriangle,
-  Activity, ArrowUpRight, Clock, PanelLeftClose, PanelLeftOpen,
+  Menu, Shield, AlertTriangle,
+  Activity, ArrowUpRight, Clock,
   Grid3X3, ArrowLeftRight, TrendingUp, BarChart3, Building2,
   ChevronLeft, Sparkles
 } from 'lucide-react';
@@ -27,9 +27,7 @@ export const AdminCMSView: React.FC = () => {
     isSyncing,
     isDbConnected,
     syncStatus,
-    exportResearchMatrixCSV,
-    isSidebarOpen,
-    setIsSidebarOpen
+    exportResearchMatrixCSV
   } = useApp();
 
   const [activeAdminSubtab, setActiveAdminSubtab] = useState<AdminTab>('findings');
@@ -123,78 +121,44 @@ export const AdminCMSView: React.FC = () => {
 
       {/* Main Content Area */}
       <div className="space-y-5">
-          {/* Unified Header Bar: Spacious 2-Row Layout */}
-          <div className="p-5 sm:p-6 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
-            {/* Row 1: Breadcrumb, Live Sheet Link & Utility Actions */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800/80">
-              <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-500">
-                {!isSidebarOpen && (
-                  <button
-                    onClick={() => setIsSidebarOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm shadow-blue-600/30 transition active:scale-95 mr-1"
-                    title="Buka Sidebar Navigasi"
-                  >
-                    <PanelLeftOpen className="w-3.5 h-3.5" />
-                    <span>Buka Sidebar</span>
-                  </button>
-                )}
-                <span>Admin Portal</span>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-blue-600 dark:text-blue-400 font-extrabold uppercase tracking-wide">
-                  {currentTabMeta.badge}
-                </span>
-
-                {/* Subtab Switcher Pills directly in Header */}
-                <div className="inline-flex items-center gap-1 p-0.5 bg-slate-100/90 dark:bg-slate-800/90 rounded-xl border border-slate-200/70 dark:border-slate-700/70 text-[11px] font-semibold">
-                  <button 
-                    onClick={() => switchSubtab('findings')} 
-                    className={`px-2.5 py-1 rounded-lg transition ${activeAdminSubtab === 'findings' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 font-bold shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-                  >
-                    Temuan ({researchItems.length})
-                  </button>
-                  <button 
-                    onClick={() => switchSubtab('sync')} 
-                    className={`px-2.5 py-1 rounded-lg transition ${activeAdminSubtab === 'sync' ? 'bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 font-bold shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-                  >
-                    Sync Sheet
-                  </button>
-                  <button 
-                    onClick={() => switchSubtab('audit')} 
-                    className={`px-2.5 py-1 rounded-lg transition ${activeAdminSubtab === 'audit' ? 'bg-white dark:bg-slate-700 text-amber-600 dark:text-amber-400 font-bold shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-                  >
-                    Audit ({auditLogs.length})
-                  </button>
-                  <button 
-                    onClick={() => switchSubtab('checklist')} 
-                    className={`px-2.5 py-1 rounded-lg transition ${activeAdminSubtab === 'checklist' ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-400 font-bold shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-                  >
-                    Checklist
-                  </button>
-                </div>
-
-                {activeAdminSubtab === 'findings' && (
-                  <>
-                    <span className="text-slate-300 dark:text-slate-700">•</span>
-                    <a
-                      href={syncStatus?.sheet_url || 'https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0'}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 font-semibold text-[11px] transition-colors"
-                      title="Buka Google Spreadsheet Riset di tab baru"
-                    >
-                      <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                      <span>Google Sheet Live</span>
-                      <ExternalLink className="w-2.5 h-2.5 opacity-70" />
-                    </a>
-                  </>
-                )}
+          {/* Unified Header Bar */}
+          <div className="p-5 sm:p-6 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div className="space-y-1 max-w-2xl">
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+                  {currentTabMeta.title}
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  {currentTabMeta.subtitle}
+                </p>
               </div>
 
-              {/* Utility Actions (Sync, Backup, Impor) */}
-              <div className="flex items-center flex-wrap gap-2 shrink-0">
+              {/* Action Buttons */}
+              <div className="flex items-center flex-wrap gap-2.5 shrink-0">
+                {activeAdminSubtab === 'findings' && (
+                  <>
+                    <button
+                      onClick={() => setIsAddModalOpen(true)}
+                      className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs flex items-center space-x-2 shadow-md shadow-blue-600/25 active:scale-95 transition-all"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Input Temuan Baru</span>
+                    </button>
+
+                    <button
+                      onClick={exportResearchMatrixCSV}
+                      className="px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-95"
+                      title="Download CSV matriks riset"
+                    >
+                      <Download className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                      <span>Ekspor CSV</span>
+                    </button>
+                  </>
+                )}
+
                 <button
                   onClick={() => setIsSyncModalOpen(true)}
-                  className="px-3 py-1.5 rounded-xl border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-95"
+                  className="px-3 py-2 rounded-xl border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-95"
                   title="Buka Pusat Sinkronisasi Google Sheets"
                 >
                   <FileSpreadsheet className={`w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 ${isSyncing ? 'animate-spin' : ''}`} />
@@ -204,7 +168,7 @@ export const AdminCMSView: React.FC = () => {
 
                 <button
                   onClick={exportDataJSON}
-                  className="px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-95"
+                  className="px-3 py-2 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-95"
                   title="Download seluruh data ke JSON"
                 >
                   <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
@@ -213,46 +177,13 @@ export const AdminCMSView: React.FC = () => {
 
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-95"
+                  className="px-3 py-2 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-95"
                   title="Impor backup data JSON"
                 >
                   <Upload className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                   <span className="hidden sm:inline">Impor JSON</span>
                 </button>
               </div>
-            </div>
-
-            {/* Row 2: Full Title & Primary Action Buttons */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-1">
-              <div className="space-y-1 max-w-3xl">
-                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-                  {currentTabMeta.title}
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                  {currentTabMeta.subtitle}
-                </p>
-              </div>
-
-              {activeAdminSubtab === 'findings' && (
-                <div className="flex items-center space-x-2.5 shrink-0">
-                  <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs flex items-center space-x-2 shadow-md shadow-blue-600/25 active:scale-95 transition-all"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Input Temuan Baru</span>
-                  </button>
-
-                  <button
-                    onClick={exportResearchMatrixCSV}
-                    className="px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-95"
-                    title="Download CSV matriks riset"
-                  >
-                    <Download className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-                    <span>Ekspor CSV</span>
-                  </button>
-                </div>
-              )}
             </div>
           </div>
 

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
-  Lock, Mail, ArrowRight, ShieldCheck, Eye, EyeOff, AlertCircle, 
-  CheckCircle2, KeyRound, Sparkles, Building2, User
+  Lock, Mail, ArrowRight, ShieldCheck, Eye, EyeOff, AlertCircle, KeyRound
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
@@ -25,12 +24,6 @@ export const LoginPage: React.FC = () => {
     if (!result.success) {
       setErrorMessage(result.error || 'Email atau password salah.');
     }
-  };
-
-  const handleQuickLogin = (roleEmail: string, rolePass: string) => {
-    setEmail(roleEmail);
-    setPassword(rolePass);
-    setErrorMessage('');
   };
 
   return (
@@ -67,15 +60,15 @@ export const LoginPage: React.FC = () => {
           <div className="space-y-3 pt-2 text-xs text-slate-400">
             <div className="flex items-center space-x-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Multi-Role Access Control (Admin, Analyst, Executive)</span>
+              <span>Akses Penuh Administrator & Sistem Terpusat</span>
             </div>
             <div className="flex items-center space-x-2">
               <Lock className="w-4 h-4 text-blue-400 shrink-0" />
-              <span>Pemisahan URL & hak akses direktori per peran kerja</span>
+              <span>Akses lengkap ke Dashboard, Matriks 408, CMS & Audit</span>
             </div>
             <div className="flex items-center space-x-2">
               <KeyRound className="w-4 h-4 text-orange-400 shrink-0" />
-              <span>Penyimpanan relasional SQLite & enkripsi sesi lokal</span>
+              <span>Penyimpanan relasional SQLite & sinkronisasi Google Sheets</span>
             </div>
           </div>
         </div>
@@ -84,10 +77,10 @@ export const LoginPage: React.FC = () => {
         <div className="lg:col-span-7 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-8 space-y-6">
           <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Masuk ke Akun Anda
+              Masuk ke Akun Administrator
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Silakan login sesuai peran wewenang Anda untuk membuka zona URL yang sesuai.
+              Silakan masuk dengan akun Administrator untuk mengelola seluruh sistem dan matriks kompetitor.
             </p>
           </div>
 
@@ -111,7 +104,7 @@ export const LoginPage: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  placeholder="admin@bri.co.id / analyst@bri.co.id"
+                  placeholder="admin@bri.co.id"
                   className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400 dark:placeholder-slate-500 transition"
                   required
                 />
@@ -151,82 +144,6 @@ export const LoginPage: React.FC = () => {
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
-
-          {/* Quick Demo Role Logins */}
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-3">
-            <div className="flex items-center justify-between text-slate-400 dark:text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
-              <span>Pilih Role Demo (1-Click Login):</span>
-              <span className="text-blue-600 dark:text-blue-400">Workshop Ready</span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              {/* Admin Card */}
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('admin@bri.co.id', 'admin123')}
-                className={`p-3 rounded-xl border text-left transition ${
-                  email === 'admin@bri.co.id'
-                    ? 'border-blue-500 bg-blue-50/80 dark:bg-blue-950/60 dark:border-blue-500 ring-2 ring-blue-500/20'
-                    : 'border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                }`}
-              >
-                <div className="flex items-center space-x-1.5 font-bold text-slate-900 dark:text-white text-xs">
-                  <span>👨‍💼</span>
-                  <span>Admin</span>
-                </div>
-                <div className="text-[10px] text-blue-700 dark:text-blue-400 font-semibold mt-1">
-                  URL: <code className="bg-blue-100 dark:bg-blue-900/50 px-1 rounded">/admin</code>
-                </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  Full CMS & Audit
-                </div>
-              </button>
-
-              {/* Analyst Card */}
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('analyst@bri.co.id', 'analyst123')}
-                className={`p-3 rounded-xl border text-left transition ${
-                  email === 'analyst@bri.co.id'
-                    ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/60 dark:border-emerald-500 ring-2 ring-emerald-500/20'
-                    : 'border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                }`}
-              >
-                <div className="flex items-center space-x-1.5 font-bold text-slate-900 dark:text-white text-xs">
-                  <span>👩‍💻</span>
-                  <span>Analyst</span>
-                </div>
-                <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold mt-1">
-                  URL: <code className="bg-emerald-100 dark:bg-emerald-900/50 px-1 rounded">/analyst</code>
-                </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  Input & Matriks Stack
-                </div>
-              </button>
-
-              {/* Executive Card */}
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('executive@bri.co.id', 'bri123')}
-                className={`p-3 rounded-xl border text-left transition ${
-                  email === 'executive@bri.co.id'
-                    ? 'border-purple-500 bg-purple-50/80 dark:bg-purple-950/60 dark:border-purple-500 ring-2 ring-purple-500/20'
-                    : 'border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                }`}
-              >
-                <div className="flex items-center space-x-1.5 font-bold text-slate-900 dark:text-white text-xs">
-                  <span>👔</span>
-                  <span>Executive</span>
-                </div>
-                <div className="text-[10px] text-purple-700 dark:text-purple-400 font-semibold mt-1">
-                  URL: <code className="bg-purple-100 dark:bg-purple-900/50 px-1 rounded">/executive</code>
-                </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  KPIs & Analitik Eksekutif
-                </div>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

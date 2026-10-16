@@ -50,7 +50,7 @@ export const ResearchDetailModal: React.FC = () => {
 
   const currentBankObj = banks.find(b => b.singkatan.toLowerCase() === activeBankSlug.toLowerCase());
 
-  const canEdit = currentUser.role === 'Admin' || currentUser.role === 'Analyst';
+  const canEdit = true; // Admin role has full editing rights
 
   const handleStartEdit = () => {
     setEditMerk(currentBankDetail.merk);
