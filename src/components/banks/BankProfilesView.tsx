@@ -112,14 +112,14 @@ export const BankProfilesView: React.FC = () => {
       {/* Page Header */}
       <div>
         <div className="flex items-center space-x-2">
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Profil Bank & Lanskap Arsitektur Teknologi
           </h2>
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300">
             408 Kapabilitas Riset
           </span>
         </div>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
           Eksplorasi mendalam profil implementasi teknologi di setiap bank BUMN (BRI, Mandiri, BNI, BTN, BSI) & BCA berdasarkan 4 Workshop dan 13 Domain Arsitektur.
         </p>
       </div>
@@ -134,8 +134,8 @@ export const BankProfilesView: React.FC = () => {
               onClick={() => setSelectedBankId(bank.id)}
               className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl font-black text-xs transition-all duration-200 border hover:-translate-y-0.5 active:scale-95 ${
                 isSelected
-                  ? 'bg-white text-slate-900 border-slate-300 shadow-card ring-2 ring-blue-500/25'
-                  : 'bg-white/60 backdrop-blur-sm text-slate-600 border-slate-200/80 hover:bg-white hover:text-slate-900 shadow-2xs'
+                  ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-300 dark:border-slate-700 shadow-card ring-2 ring-blue-500/25'
+                  : 'bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm text-slate-600 dark:text-slate-400 border-slate-200/80 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white shadow-2xs'
               }`}
             >
               <span className="text-xl">{bank.logo}</span>
@@ -207,18 +207,18 @@ export const BankProfilesView: React.FC = () => {
           const pct = Math.round((stats.verified / (stats.total || 1)) * 100);
 
           return (
-            <div key={key} className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl border border-slate-200/80 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2.5">
+            <div key={key} className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${meta.bg} ${meta.color} ${meta.border}`}>
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${meta.bg} dark:bg-slate-800 ${meta.color} dark:text-slate-200 ${meta.border} dark:border-slate-700`}>
                   {key}
                 </span>
-                <span className="text-xs font-black text-slate-800">{pct}% Verified</span>
+                <span className="text-xs font-black text-slate-800 dark:text-slate-200">{pct}% Verified</span>
               </div>
-              <div className="text-xs font-extrabold text-slate-900 tracking-tight">{meta.label.split(': ')[1]}</div>
-              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden p-0.5 shadow-inner">
+              <div className="text-xs font-extrabold text-slate-900 dark:text-white tracking-tight">{meta.label.split(': ')[1]}</div>
+              <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden p-0.5 shadow-inner">
                 <div className="bg-gradient-to-r from-blue-600 to-indigo-600 h-full rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
               </div>
-              <div className="text-[10px] text-slate-400 font-medium">
+              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
                 {stats.verified} dari {stats.total} kapabilitas terverifikasi
               </div>
             </div>
@@ -227,16 +227,16 @@ export const BankProfilesView: React.FC = () => {
       </div>
 
       {/* Filter and Control Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           <div className="md:col-span-5 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder={`Cari kapabilitas ${currentBank.singkatan}, merk, atau sumber...`}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 focus:bg-white"
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-750"
             />
           </div>
 
@@ -244,7 +244,7 @@ export const BankProfilesView: React.FC = () => {
             <select
               value={workshopFilter}
               onChange={e => setWorkshopFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
               <option value="all">Semua Workshop</option>
               <option value="WS1">WS1: Core & Digital</option>
@@ -258,7 +258,7 @@ export const BankProfilesView: React.FC = () => {
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
               <option value="all">Semua Status</option>
               <option value="Terverifikasi">Terverifikasi (✓)</option>
@@ -276,7 +276,7 @@ export const BankProfilesView: React.FC = () => {
                   setDomainFilter('all');
                   setStatusFilter('all');
                 }}
-                className="text-xs text-blue-600 hover:underline font-semibold flex items-center space-x-1"
+                className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-semibold flex items-center space-x-1"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset Filter</span>
@@ -285,31 +285,31 @@ export const BankProfilesView: React.FC = () => {
           </div>
         </div>
 
-        <div className="text-xs text-slate-500 pt-2 border-t border-slate-100">
-          Menampilkan <strong className="text-slate-800">{filteredCaps.length}</strong> dari <strong className="text-slate-800">{researchItems.length}</strong> kapabilitas riset di {currentBank.nama}
+        <div className="text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
+          Menampilkan <strong className="text-slate-800 dark:text-slate-200">{filteredCaps.length}</strong> dari <strong className="text-slate-800 dark:text-slate-200">{researchItems.length}</strong> kapabilitas riset di {currentBank.nama}
         </div>
       </div>
 
       {/* Capabilities Table for Current Bank */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-100/90 border-b border-slate-200 text-slate-700 font-bold">
-                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200">No</th>
-                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200">WS</th>
-                <th className="py-3.5 px-3 w-48 border-r border-slate-200">Domain & Kategori</th>
-                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200">Kapabilitas / Sistem</th>
-                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200">Merk / Solusi di {currentBank.singkatan}</th>
-                <th className="py-3.5 px-3 w-32 text-center border-r border-slate-200">Status Bukti</th>
+              <tr className="bg-slate-100/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold">
+                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200 dark:border-slate-700">No</th>
+                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200 dark:border-slate-700">WS</th>
+                <th className="py-3.5 px-3 w-48 border-r border-slate-200 dark:border-slate-700">Domain & Kategori</th>
+                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200 dark:border-slate-700">Kapabilitas / Sistem</th>
+                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200 dark:border-slate-700">Merk / Solusi di {currentBank.singkatan}</th>
+                <th className="py-3.5 px-3 w-32 text-center border-r border-slate-200 dark:border-slate-700">Status Bukti</th>
                 <th className="py-3.5 px-4 min-w-[220px]">Rujukan Sumber Bukti</th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {filteredCaps.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
+                  <td colSpan={7} className="py-12 text-center text-slate-400 dark:text-slate-500">
                     Tidak ada kapabilitas yang cocok dengan filter aktif.
                   </td>
                 </tr>
@@ -323,55 +323,55 @@ export const BankProfilesView: React.FC = () => {
                     <tr 
                       key={item.id} 
                       onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankSlug })}
-                      className="hover:bg-slate-50 transition cursor-pointer group"
+                      className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition cursor-pointer group"
                     >
-                      <td className="py-3 px-3 text-center font-mono text-slate-400 border-r border-slate-100 align-top">
+                      <td className="py-3 px-3 text-center font-mono text-slate-400 dark:text-slate-500 border-r border-slate-100 dark:border-slate-800/60 align-top">
                         {item.no}
                       </td>
 
-                      <td className="py-3 px-2 text-center border-r border-slate-100 align-top">
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+                      <td className="py-3 px-2 text-center border-r border-slate-100 dark:border-slate-800/60 align-top">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                           {item.workshop}
                         </span>
                       </td>
 
-                      <td className="py-3 px-3 border-r border-slate-100 align-top">
-                        <div className="font-semibold text-slate-800 leading-tight">{item.domain}</div>
-                        <div className="text-[10px] text-slate-400 mt-1">{item.kategori}</div>
+                      <td className="py-3 px-3 border-r border-slate-100 dark:border-slate-800/60 align-top">
+                        <div className="font-semibold text-slate-800 dark:text-slate-200 leading-tight">{item.domain}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{item.kategori}</div>
                       </td>
 
-                      <td className="py-3 px-4 font-bold text-slate-900 border-r border-slate-100 align-top">
-                        <div className="leading-snug group-hover:text-blue-600 transition">{item.kapabilitas}</div>
-                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">ID: {item.id}</div>
+                      <td className="py-3 px-4 font-bold text-slate-900 dark:text-white border-r border-slate-100 dark:border-slate-800/60 align-top">
+                        <div className="leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">{item.kapabilitas}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-normal mt-0.5">ID: {item.id}</div>
                       </td>
 
-                      <td className="py-3 px-4 border-r border-slate-100 align-top font-bold text-slate-900">
+                      <td className="py-3 px-4 border-r border-slate-100 dark:border-slate-800/60 align-top font-bold text-slate-900 dark:text-white">
                         <div className="line-clamp-2">{detail.merk || '– Belum terdata'}</div>
                       </td>
 
-                      <td className="py-3 px-3 text-center border-r border-slate-100 align-top">
+                      <td className="py-3 px-3 text-center border-r border-slate-100 dark:border-slate-800/60 align-top">
                         {isVerified && (
-                          <span className="px-2 py-1 rounded-md text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          <span className="px-2 py-1 rounded-md text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                             ✓ Verified
                           </span>
                         )}
                         {isInference && (
-                          <span className="px-2 py-1 rounded-md text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
+                          <span className="px-2 py-1 rounded-md text-[10px] font-extrabold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                             ⚠ Inferensi
                           </span>
                         )}
                         {isBelum && (
-                          <span className="text-slate-400 text-[10px]">– Belum</span>
+                          <span className="text-slate-400 dark:text-slate-500 text-[10px]">– Belum</span>
                         )}
                       </td>
 
-                      <td className="py-3 px-4 align-top text-slate-600">
+                      <td className="py-3 px-4 align-top text-slate-600 dark:text-slate-300">
                         {detail.link ? (
                           <div className="line-clamp-2 text-[11px] leading-relaxed">
                             {detail.link}
                           </div>
                         ) : (
-                          <span className="text-slate-300 italic text-[11px]">Belum ada rujukan bukti</span>
+                          <span className="text-slate-300 dark:text-slate-600 italic text-[11px]">Belum ada rujukan bukti</span>
                         )}
                       </td>
                     </tr>

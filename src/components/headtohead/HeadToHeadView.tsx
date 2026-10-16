@@ -132,26 +132,26 @@ export const HeadToHeadView: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               Head-to-Head: {bankA.label} vs {bankB.label}
             </h2>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300">
               408 Kapabilitas Riset
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1 max-w-2xl">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
             Komparasi langsung implementasi teknologi antara {bankA.fullName} ({bankA.label}) dan {bankB.fullName} ({bankB.label}) berdasarkan 408 kapabilitas dan 13 domain arsitektur.
           </p>
         </div>
 
         {/* Bank Selection Switchers */}
-        <div className="flex items-center space-x-3 bg-white/90 backdrop-blur-md p-2 rounded-2xl border border-slate-200/80 shadow-card flex-wrap">
+        <div className="flex items-center space-x-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-2 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card flex-wrap">
           <div className="flex items-center space-x-2 text-xs px-2">
-            <span className="text-slate-400 font-extrabold text-[10px] uppercase tracking-wider">Bank 1:</span>
+            <span className="text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider">Bank 1:</span>
             <select
               value={bankASlug}
               onChange={e => setBankASlug(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 font-black text-slate-800 bg-slate-50 text-xs focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-2xs"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 font-black text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 text-xs focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-2xs"
             >
               {BANK_OPTIONS.map(b => (
                 <option key={b.slug} value={b.slug} disabled={b.slug === bankBSlug}>
@@ -161,16 +161,16 @@ export const HeadToHeadView: React.FC = () => {
             </select>
           </div>
 
-          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+          <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500">
             <ArrowLeftRight className="w-4 h-4" />
           </div>
 
           <div className="flex items-center space-x-2 text-xs px-2">
-            <span className="text-slate-400 font-extrabold text-[10px] uppercase tracking-wider">Bank 2:</span>
+            <span className="text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider">Bank 2:</span>
             <select
               value={bankBSlug}
               onChange={e => setBankBSlug(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 font-black text-slate-800 bg-slate-50 text-xs focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-2xs"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 font-black text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 text-xs focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-2xs"
             >
               {BANK_OPTIONS.map(b => (
                 <option key={b.slug} value={b.slug} disabled={b.slug === bankASlug}>
@@ -184,52 +184,52 @@ export const HeadToHeadView: React.FC = () => {
 
       {/* Versus Comparison Summary Ribbon */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl border border-slate-200/80 shadow-card hover:shadow-card-hover transition-all">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Total Kapabilitas</div>
-          <div className="text-3xl font-black text-slate-900 mt-1 tracking-tight">{researchItems.length}</div>
-          <div className="text-[10px] text-slate-500 font-medium">13 Domain Arsitektur</div>
+        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">Total Kapabilitas</div>
+          <div className="text-3xl font-black text-slate-900 dark:text-white mt-1 tracking-tight">{researchItems.length}</div>
+          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">13 Domain Arsitektur</div>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/40 p-4 rounded-2xl border border-blue-200/80 shadow-card hover:shadow-card-hover transition-all">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-blue-800 flex items-center space-x-1.5">
-            <Shield className="w-3.5 h-3.5 text-blue-600" />
+        <div className="bg-gradient-to-br from-blue-50/80 dark:from-blue-950/40 to-indigo-50/40 dark:to-indigo-950/20 p-4 rounded-2xl border border-blue-200/80 dark:border-blue-900/50 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-blue-800 dark:text-blue-300 flex items-center space-x-1.5">
+            <Shield className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>Keunggulan {bankA.label}</span>
           </div>
-          <div className="text-3xl font-black text-blue-950 mt-1 tracking-tight">{onlyAVerifiedCount}</div>
-          <div className="text-[10px] text-blue-700 font-medium">Terverifikasi di {bankA.label} saja</div>
+          <div className="text-3xl font-black text-blue-950 dark:text-blue-100 mt-1 tracking-tight">{onlyAVerifiedCount}</div>
+          <div className="text-[10px] text-blue-700 dark:text-blue-400 font-medium">Terverifikasi di {bankA.label} saja</div>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50/80 to-amber-50/40 p-4 rounded-2xl border border-orange-200/80 shadow-card hover:shadow-card-hover transition-all">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-orange-800 flex items-center space-x-1.5">
-            <AlertTriangle className="w-3.5 h-3.5 text-orange-600" />
+        <div className="bg-gradient-to-br from-orange-50/80 dark:from-orange-950/40 to-amber-50/40 dark:to-amber-950/20 p-4 rounded-2xl border border-orange-200/80 dark:border-orange-900/50 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-orange-800 dark:text-orange-300 flex items-center space-x-1.5">
+            <AlertTriangle className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400" />
             <span>Keunggulan {bankB.label}</span>
           </div>
-          <div className="text-3xl font-black text-orange-950 mt-1 tracking-tight">{onlyBVerifiedCount}</div>
-          <div className="text-[10px] text-orange-700 font-medium">Celah arsitektur bagi {bankA.label}</div>
+          <div className="text-3xl font-black text-orange-950 dark:text-orange-100 mt-1 tracking-tight">{onlyBVerifiedCount}</div>
+          <div className="text-[10px] text-orange-700 dark:text-orange-400 font-medium">Celah arsitektur bagi {bankA.label}</div>
         </div>
 
-        <div className="bg-gradient-to-br from-emerald-50/80 to-teal-50/40 p-4 rounded-2xl border border-emerald-200/80 shadow-card hover:shadow-card-hover transition-all">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 flex items-center space-x-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+        <div className="bg-gradient-to-br from-emerald-50/80 dark:from-emerald-950/40 to-teal-50/40 dark:to-teal-950/20 p-4 rounded-2xl border border-emerald-200/80 dark:border-emerald-900/50 shadow-card hover:shadow-card-hover transition-all">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center space-x-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>Keduanya Terverifikasi</span>
           </div>
-          <div className="text-3xl font-black text-emerald-950 mt-1 tracking-tight">{bothVerifiedCount}</div>
-          <div className="text-[10px] text-emerald-700 font-medium">Standar Paritas Bersama</div>
+          <div className="text-3xl font-black text-emerald-950 dark:text-emerald-100 mt-1 tracking-tight">{bothVerifiedCount}</div>
+          <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium">Standar Paritas Bersama</div>
         </div>
       </div>
 
       {/* Filter and Control Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           {/* Search Box */}
           <div className="md:col-span-4 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Cari kapabilitas, domain, atau merk stack..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 focus:bg-white"
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-750"
             />
           </div>
 
@@ -238,7 +238,7 @@ export const HeadToHeadView: React.FC = () => {
             <select
               value={workshopFilter}
               onChange={e => setWorkshopFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
               <option value="all">Semua Workshop</option>
               <option value="WS1">WS1: Core & Digital</option>
@@ -253,7 +253,7 @@ export const HeadToHeadView: React.FC = () => {
             <select
               value={domainFilter}
               onChange={e => setDomainFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
               <option value="all">Semua Domain ({allDomains.length})</option>
               {allDomains.map(d => (
@@ -267,7 +267,7 @@ export const HeadToHeadView: React.FC = () => {
             <select
               value={comparisonFilter}
               onChange={e => setComparisonFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
               <option value="all">Semua Status Komparasi</option>
               <option value="only-a">Hanya Keunggulan {bankA.label}</option>
@@ -278,9 +278,9 @@ export const HeadToHeadView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
           <div>
-            Menampilkan <strong className="text-slate-800">{filteredComparisons.length}</strong> dari <strong className="text-slate-800">{researchItems.length}</strong> kapabilitas riset
+            Menampilkan <strong className="text-slate-800 dark:text-slate-200">{filteredComparisons.length}</strong> dari <strong className="text-slate-800 dark:text-slate-200">{researchItems.length}</strong> kapabilitas riset
           </div>
           {(searchQuery || workshopFilter !== 'all' || domainFilter !== 'all' || comparisonFilter !== 'all') && (
             <button
@@ -290,7 +290,7 @@ export const HeadToHeadView: React.FC = () => {
                 setDomainFilter('all');
                 setComparisonFilter('all');
               }}
-              className="text-blue-600 hover:underline font-semibold flex items-center space-x-1"
+              className="text-blue-600 dark:text-blue-400 hover:underline font-semibold flex items-center space-x-1"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Filter</span>
@@ -300,23 +300,23 @@ export const HeadToHeadView: React.FC = () => {
       </div>
 
       {/* Head-to-Head Comparison Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-100/90 border-b border-slate-200 text-slate-700 font-bold">
-                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200">No</th>
-                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200">WS</th>
-                <th className="py-3.5 px-3 w-48 border-r border-slate-200">Domain & Kategori</th>
-                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200">Kapabilitas / Sistem</th>
-                <th className="py-3.5 px-3 min-w-[200px] border-r border-slate-200 bg-blue-50/70 text-blue-950 text-center">
+              <tr className="bg-slate-100/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold">
+                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200 dark:border-slate-700">No</th>
+                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200 dark:border-slate-700">WS</th>
+                <th className="py-3.5 px-3 w-48 border-r border-slate-200 dark:border-slate-700">Domain & Kategori</th>
+                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200 dark:border-slate-700">Kapabilitas / Sistem</th>
+                <th className="py-3.5 px-3 min-w-[200px] border-r border-slate-200 dark:border-slate-700 bg-blue-50/70 dark:bg-blue-950/50 text-blue-950 dark:text-blue-200 text-center">
                   <div className="flex items-center justify-center space-x-1.5">
                     <span>{bankA.logo}</span>
                     <span className="font-black">{bankA.label}</span>
                     {bankA.isFocus && <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.2 rounded font-bold">FOKUS</span>}
                   </div>
                 </th>
-                <th className="py-3.5 px-3 min-w-[200px] border-r border-slate-200 bg-amber-50/70 text-amber-950 text-center">
+                <th className="py-3.5 px-3 min-w-[200px] border-r border-slate-200 dark:border-slate-700 bg-amber-50/70 dark:bg-amber-950/50 text-amber-950 dark:text-amber-200 text-center">
                   <div className="flex items-center justify-center space-x-1.5">
                     <span>{bankB.logo}</span>
                     <span className="font-black">{bankB.label}</span>
@@ -326,48 +326,48 @@ export const HeadToHeadView: React.FC = () => {
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {filteredComparisons.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
+                  <td colSpan={7} className="py-12 text-center text-slate-400 dark:text-slate-500">
                     Tidak ada kapabilitas yang cocok dengan filter yang dipilih.
                   </td>
                 </tr>
               ) : (
                 filteredComparisons.map(({ item, detailA, detailB, diffType, hasDiffMerk }) => {
                   return (
-                    <tr key={item.id} className="hover:bg-slate-50/80 transition">
-                      <td className="py-3 px-3 text-center font-mono text-slate-400 border-r border-slate-100 align-top">
+                    <tr key={item.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                      <td className="py-3 px-3 text-center font-mono text-slate-400 dark:text-slate-500 border-r border-slate-100 dark:border-slate-800/60 align-top">
                         {item.no}
                       </td>
 
-                      <td className="py-3 px-2 text-center border-r border-slate-100 align-top">
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+                      <td className="py-3 px-2 text-center border-r border-slate-100 dark:border-slate-800/60 align-top">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                           {item.workshop}
                         </span>
                       </td>
 
-                      <td className="py-3 px-3 border-r border-slate-100 align-top">
-                        <div className="font-semibold text-slate-800 leading-tight">{item.domain}</div>
-                        <div className="text-[10px] text-slate-400 mt-1">{item.kategori}</div>
+                      <td className="py-3 px-3 border-r border-slate-100 dark:border-slate-800/60 align-top">
+                        <div className="font-semibold text-slate-800 dark:text-slate-200 leading-tight">{item.domain}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{item.kategori}</div>
                       </td>
 
-                      <td className="py-3 px-4 font-bold text-slate-900 border-r border-slate-100 align-top">
+                      <td className="py-3 px-4 font-bold text-slate-900 dark:text-white border-r border-slate-100 dark:border-slate-800/60 align-top">
                         <div className="leading-snug">{item.kapabilitas}</div>
-                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">ID: {item.id}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-normal mt-0.5">ID: {item.id}</div>
                       </td>
 
                       {/* Bank A Cell */}
-                      <td className="py-2.5 px-3 border-r border-slate-100 align-top bg-blue-50/10">
+                      <td className="py-2.5 px-3 border-r border-slate-100 dark:border-slate-800/60 align-top bg-blue-50/10 dark:bg-blue-950/10">
                         <button
                           type="button"
                           onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankASlug })}
                           className={`w-full text-left p-2 rounded-xl border text-xs transition hover:scale-101 ${
                             detailA.status === 'Terverifikasi'
-                              ? 'bg-emerald-50 border-emerald-200 text-emerald-950'
+                              ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/80 text-emerald-950 dark:text-emerald-200'
                               : detailA.status === 'Inferensi'
-                              ? 'bg-amber-50 border-amber-200 text-amber-950'
-                              : 'bg-slate-50 border-slate-200 text-slate-400'
+                              ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/80 text-amber-950 dark:text-amber-200'
+                              : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'
                           }`}
                         >
                           <div className="font-bold leading-tight line-clamp-2">
@@ -377,22 +377,22 @@ export const HeadToHeadView: React.FC = () => {
                             <span className="font-bold">
                               {detailA.status === 'Terverifikasi' ? '✓ Verified' : detailA.status === 'Inferensi' ? '⚠ Inferensi' : '– Belum'}
                             </span>
-                            {detailA.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400" />}
+                            {detailA.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400 dark:text-slate-500" />}
                           </div>
                         </button>
                       </td>
 
                       {/* Bank B Cell */}
-                      <td className="py-2.5 px-3 border-r border-slate-100 align-top bg-amber-50/10">
+                      <td className="py-2.5 px-3 border-r border-slate-100 dark:border-slate-800/60 align-top bg-amber-50/10 dark:bg-amber-950/10">
                         <button
                           type="button"
                           onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankBSlug })}
                           className={`w-full text-left p-2 rounded-xl border text-xs transition hover:scale-101 ${
                             detailB.status === 'Terverifikasi'
-                              ? 'bg-emerald-50 border-emerald-200 text-emerald-950'
+                              ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/80 text-emerald-950 dark:text-emerald-200'
                               : detailB.status === 'Inferensi'
-                              ? 'bg-amber-50 border-amber-200 text-amber-950'
-                              : 'bg-slate-50 border-slate-200 text-slate-400'
+                              ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/80 text-amber-950 dark:text-amber-200'
+                              : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'
                           }`}
                         >
                           <div className="font-bold leading-tight line-clamp-2">
@@ -402,7 +402,7 @@ export const HeadToHeadView: React.FC = () => {
                             <span className="font-bold">
                               {detailB.status === 'Terverifikasi' ? '✓ Verified' : detailB.status === 'Inferensi' ? '⚠ Inferensi' : '– Belum'}
                             </span>
-                            {detailB.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400" />}
+                            {detailB.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400 dark:text-slate-500" />}
                           </div>
                         </button>
                       </td>
@@ -410,23 +410,23 @@ export const HeadToHeadView: React.FC = () => {
                       {/* Status Paritas */}
                       <td className="py-3 px-3 text-center align-top">
                         {diffType === 'both-verified' ? (
-                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                             Paritas Bersama
                           </span>
                         ) : diffType === 'only-a' ? (
-                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
+                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                             Unggul {bankA.label}
                           </span>
                         ) : diffType === 'only-b' ? (
-                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-orange-100 text-orange-800 border border-orange-200">
+                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800">
                             Unggul {bankB.label}
                           </span>
                         ) : hasDiffMerk ? (
-                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-purple-100 text-purple-800 border border-purple-200">
+                          <span className="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
                             Beda Solusi
                           </span>
                         ) : (
-                          <span className="text-slate-400 text-[10px]">– Belum Terbukti</span>
+                          <span className="text-slate-400 dark:text-slate-500 text-[10px]">– Belum Terbukti</span>
                         )}
                       </td>
                     </tr>

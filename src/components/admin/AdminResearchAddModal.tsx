@@ -118,9 +118,9 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-xs animate-in fade-in zoom-in-95 duration-100">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-xs animate-in fade-in zoom-in-95 duration-100">
         {/* Header */}
-        <div className="p-4 bg-blue-600 text-white flex items-center justify-between">
+        <div className="p-4 bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Plus className="w-5 h-5 text-blue-200" />
             <div>
@@ -135,7 +135,7 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
           <button 
             type="button" 
             onClick={onClose} 
-            className="text-blue-200 hover:text-white p-1 rounded-lg hover:bg-blue-700 transition"
+            className="text-blue-200 hover:text-white p-1 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -144,21 +144,21 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
         {/* Scrollable Form */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-5 space-y-5">
           {/* Section 1: Meta */}
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-            <span className="font-extrabold text-slate-800 text-xs uppercase tracking-wider flex items-center space-x-1.5">
-              <Layers className="w-4 h-4 text-blue-600" />
+          <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700/80 space-y-3">
+            <span className="font-extrabold text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider flex items-center space-x-1.5">
+              <Layers className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>1. Klasifikasi Kapabilitas</span>
             </span>
 
             <div>
-              <label className="block text-slate-700 font-bold mb-1">
+              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                 Kapabilitas / Sistem yang Dicari <span className="text-red-500">*</span>
               </label>
               <textarea
                 rows={2}
                 value={kapabilitas}
                 onChange={e => setKapabilitas(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium text-slate-900 focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-blue-500"
                 placeholder="Contoh: Real-Time Fraud Detection Engine / API Gateway Enterprise"
                 required
               />
@@ -166,11 +166,11 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="block text-slate-700 font-bold mb-1">Workshop</label>
+                <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Workshop</label>
                 <select
                   value={workshop}
                   onChange={e => setWorkshop(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium text-slate-900"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-medium text-slate-900 dark:text-slate-100"
                 >
                   <option value="WS1">WS1: Core & Digital Banking</option>
                   <option value="WS2">WS2: EDW, MDM & BI</option>
@@ -180,13 +180,13 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-slate-700 font-bold mb-1">Domain</label>
+                <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Domain</label>
                 <input
                   type="text"
                   list="add-domains-datalist"
                   value={domain}
                   onChange={e => setDomain(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium text-slate-900"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-medium text-slate-900 dark:text-slate-100"
                   required
                 />
                 <datalist id="add-domains-datalist">
@@ -197,13 +197,13 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-slate-700 font-bold mb-1">Kategori</label>
+                <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Kategori</label>
                 <input
                   type="text"
                   list="add-categories-datalist"
                   value={kategori}
                   onChange={e => setKategori(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium text-slate-900"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-medium text-slate-900 dark:text-slate-100"
                   required
                 />
                 <datalist id="add-categories-datalist">
@@ -216,13 +216,13 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
           </div>
 
           {/* Section 2: Bank Data (Optional pre-fill) */}
-          <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-4">
+          <div className="bg-white dark:bg-slate-850 p-4 rounded-xl border border-slate-200 dark:border-slate-700/80 space-y-4">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <span className="font-extrabold text-slate-800 text-xs uppercase tracking-wider flex items-center space-x-1.5">
-                <Building2 className="w-4 h-4 text-blue-600" />
+              <span className="font-extrabold text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider flex items-center space-x-1.5">
+                <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <span>2. Evaluasi Implementasi di 6 Bank (Opsional)</span>
               </span>
-              <span className="text-[11px] text-slate-400">
+              <span className="text-[11px] text-slate-400 dark:text-slate-500">
                 Dapat diisi sekarang atau dilengkapi nanti.
               </span>
             </div>
@@ -240,12 +240,12 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
                     onClick={() => setActiveBankSlug(b.key)}
                     className={`p-2.5 rounded-xl border text-left transition flex flex-col justify-between ${
                       isActive 
-                        ? 'border-blue-600 bg-blue-50/80 shadow-xs ring-2 ring-blue-500/20' 
-                        : 'border-slate-200 bg-slate-50 hover:bg-slate-100'
+                        ? 'border-blue-600 bg-blue-50/80 dark:bg-blue-950/60 shadow-xs ring-2 ring-blue-500/20' 
+                        : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750'
                     }`}
                   >
-                    <span className="font-extrabold text-xs text-slate-900">{b.label}</span>
-                    <span className="text-[10px] text-slate-500 mt-1 truncate">
+                    <span className="font-extrabold text-xs text-slate-900 dark:text-white">{b.label}</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 truncate">
                       {bDetail.status}
                     </span>
                   </button>
@@ -254,33 +254,33 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
             </div>
 
             {/* Active Bank Fields */}
-            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-3">
-              <div className="font-bold text-xs text-slate-800">
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/60 dark:bg-slate-800/40 space-y-3">
+              <div className="font-bold text-xs text-slate-800 dark:text-slate-200">
                 Rincian Evaluasi Bank {activeBank.bankCode}:
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                     Nama Merk / Solusi Arsitektur
                   </label>
                   <input
                     type="text"
                     value={activeBank.merk}
                     onChange={e => handleBankChange('merk', e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-slate-900 font-semibold"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold"
                     placeholder="Contoh: IBM InfoSphere DataStage"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                     Status Verifikasi
                   </label>
                   <select
                     value={activeBank.status}
                     onChange={e => handleBankChange('status', e.target.value as VerificationStatus)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-bold text-slate-900"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-bold text-slate-900 dark:text-slate-100"
                   >
                     <option value="Belum">– Belum (Belum Ada Data Terkonfirmasi)</option>
                     <option value="Terverifikasi">✓ Terverifikasi (Sumber Resmi)</option>
@@ -290,7 +290,7 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-slate-700 font-bold mb-1">
+                <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                   Link / Sumber Bukti Rujukan
                 </label>
                 <textarea
@@ -302,30 +302,30 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
                     const matchUrl = val.match(/https?:\/\/[^\s\)]+/);
                     if (matchUrl) handleBankChange('url', matchUrl[0]);
                   }}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-slate-900 font-mono text-xs"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-mono text-xs"
                   placeholder="https://... atau Gartner MQ..."
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">URL Langsung</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">URL Langsung</label>
                   <input
                     type="url"
                     value={activeBank.url || ''}
                     onChange={e => handleBankChange('url', e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-slate-900 font-mono text-[11px]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-mono text-[11px]"
                     placeholder="https://..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Dicatat oleh (PIC)</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Dicatat oleh (PIC)</label>
                   <input
                     type="text"
                     value={activeBank.pic || 'Admin'}
                     onChange={e => handleBankChange('pic', e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-slate-900"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
                     placeholder="Admin"
                   />
                 </div>
@@ -334,12 +334,12 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
           </div>
 
           {/* Footer Actions */}
-          <div className="pt-3 border-t border-slate-200 flex items-center justify-end space-x-2">
+          <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-end space-x-2">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold"
+              className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 font-semibold"
             >
               Batal
             </button>

@@ -4,6 +4,7 @@ export type TechType = 'open-source' | 'komersial' | 'in-house';
 export type EvidenceType = 'publik' | 'wawancara';
 export type UserRole = 'Viewer' | 'Analyst' | 'Admin';
 export type VerificationStatus = 'Terverifikasi' | 'Inferensi' | 'Belum';
+export type ThemeMode = 'light' | 'dark';
 
 export interface BankCapabilityDetail {
   bankCode: string; // 'BRI' | 'Mandiri' | 'BCA' | 'BNI' | 'BTN' | 'BSI'
@@ -108,8 +109,8 @@ export interface AuditLog {
   id: string;
   userId: string;
   userName: string;
-  aksi: 'CREATE' | 'UPDATE' | 'DELETE' | 'PUBLISH' | 'IMPORT';
-  entitas: 'Bank' | 'Category' | 'Technology' | 'Finding' | 'Evidence' | 'Interview';
+  aksi: 'CREATE' | 'UPDATE' | 'DELETE' | 'PUBLISH' | 'IMPORT' | 'SYNC';
+  entitas: 'Bank' | 'Category' | 'Technology' | 'Finding' | 'Evidence' | 'Interview' | 'GoogleSheets';
   detail: string;
   timestamp: string;
 }

@@ -142,14 +142,14 @@ export const TcoCostSimulatorView: React.FC = () => {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               TCO & Run-vs-Change Financial Impact Simulator
             </h2>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/70">
               Strategic IT Financial Modeling
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Kuantifikasi beban lisensi teknologi proprietary vs open-source enterprise, dan simulasi pengalihan anggaran pemeliharaan (*OPEX*) ke inovasi (*CAPEX*).
           </p>
         </div>
@@ -158,10 +158,10 @@ export const TcoCostSimulatorView: React.FC = () => {
       {/* Simulator Inputs & Key Financial Outcomes */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Interactive Sliders */}
-        <div className="lg:col-span-1 bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-6">
-          <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
-            <Sliders className="w-5 h-5 text-emerald-600" />
-            <h3 className="font-extrabold text-slate-900 text-sm">
+        <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6">
+          <div className="flex items-center space-x-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <Sliders className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-sm">
               Parameter Keuangan & Target Migrasi BRI
             </h3>
           </div>
@@ -169,8 +169,8 @@ export const TcoCostSimulatorView: React.FC = () => {
           {/* Slider 1: Annual IT Budget */}
           <div className="space-y-2">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-bold text-slate-700">Total Anggaran IT Tahunan:</span>
-              <span className="font-extrabold text-blue-900 text-sm">
+              <span className="font-bold text-slate-700 dark:text-slate-300">Total Anggaran IT Tahunan:</span>
+              <span className="font-extrabold text-blue-900 dark:text-blue-400 text-sm">
                 Rp {annualItBudgetTrillion.toFixed(1)} Triliun
               </span>
             </div>
@@ -181,9 +181,9 @@ export const TcoCostSimulatorView: React.FC = () => {
               step="0.5"
               value={annualItBudgetTrillion}
               onChange={e => setAnnualItBudgetTrillion(parseFloat(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
             />
-            <div className="flex justify-between text-[10px] text-slate-400">
+            <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500">
               <span>Rp 2.0 T</span>
               <span>Rp 4.5 T (Baseline)</span>
               <span>Rp 7.0 T</span>
@@ -193,8 +193,8 @@ export const TcoCostSimulatorView: React.FC = () => {
           {/* Slider 2: Open Source Shift Target */}
           <div className="space-y-2">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-bold text-slate-700">Target Eliminasi Lisensi Proprietary:</span>
-              <span className="font-extrabold text-emerald-700 text-sm">
+              <span className="font-bold text-slate-700 dark:text-slate-300">Target Eliminasi Lisensi Proprietary:</span>
+              <span className="font-extrabold text-emerald-700 dark:text-emerald-400 text-sm">
                 {openSourceShiftPct}% Migrasi
               </span>
             </div>
@@ -205,14 +205,14 @@ export const TcoCostSimulatorView: React.FC = () => {
               step="5"
               value={openSourceShiftPct}
               onChange={e => setOpenSourceShiftPct(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-600"
             />
-            <div className="flex justify-between text-[10px] text-slate-400">
+            <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500">
               <span>10% (Konservatif)</span>
               <span>45% (Moderat)</span>
               <span>90% (Agresif)</span>
             </div>
-            <p className="text-[11px] text-slate-500 italic">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
               Pengalihan lisensi vendor lock-in (IBM, Oracle) ke stack Apache / Cloud-Native.
             </p>
           </div>
@@ -220,8 +220,8 @@ export const TcoCostSimulatorView: React.FC = () => {
           {/* Slider 3: Cloud Native Adoption */}
           <div className="space-y-2">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-bold text-slate-700">Densitas Komputasi Cloud-Native:</span>
-              <span className="font-extrabold text-purple-700 text-sm">
+              <span className="font-bold text-slate-700 dark:text-slate-300">Densitas Komputasi Cloud-Native:</span>
+              <span className="font-extrabold text-purple-700 dark:text-purple-400 text-sm">
                 {cloudNativeAdoptionPct}% Auto-scaling
               </span>
             </div>
@@ -232,9 +232,9 @@ export const TcoCostSimulatorView: React.FC = () => {
               step="5"
               value={cloudNativeAdoptionPct}
               onChange={e => setCloudNativeAdoptionPct(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
+              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-600"
             />
-            <div className="flex justify-between text-[10px] text-slate-400">
+            <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500">
               <span>20%</span>
               <span>60% (Standar)</span>
               <span>90%</span>
@@ -296,39 +296,39 @@ export const TcoCostSimulatorView: React.FC = () => {
           </div>
 
           {/* Output Card 3: Payback Period */}
-          <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg shrink-0">
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/50 dark:border-amber-800/40 flex items-center justify-center font-bold text-lg shrink-0">
               ⏱️
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-500">Estimasi Payback Period</div>
-              <div className="text-2xl font-black text-slate-900">{estimatedPaybackMonths} Bulan</div>
-              <div className="text-[11px] text-slate-500">Waktu balik modal investasi re-architecture</div>
+              <div className="text-xs font-bold text-slate-500 dark:text-slate-400">Estimasi Payback Period</div>
+              <div className="text-2xl font-black text-slate-900 dark:text-white">{estimatedPaybackMonths} Bulan</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400">Waktu balik modal investasi re-architecture</div>
             </div>
           </div>
 
           {/* Output Card 4: Vendor Lock-in Risk */}
-          <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg shrink-0">
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40 flex items-center justify-center font-bold text-lg shrink-0">
               🛡️
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-500">Skor Risiko Vendor Lock-In</div>
-              <div className="text-2xl font-black text-emerald-700">{vendorLockinRisk} / 100</div>
-              <div className="text-[11px] text-slate-500">Kedaulatan teknologi arsitektur BRI sangat aman</div>
+              <div className="text-xs font-bold text-slate-500 dark:text-slate-400">Skor Risiko Vendor Lock-In</div>
+              <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400">{vendorLockinRisk} / 100</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400">Kedaulatan teknologi arsitektur BRI sangat aman</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Benchmark Rasio Run-the-Bank vs Change-the-Bank Himbara */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
         <div>
-          <h3 className="font-extrabold text-slate-900 text-base flex items-center space-x-2">
-            <PieChart className="w-5 h-5 text-blue-600" />
+          <h3 className="font-extrabold text-slate-900 dark:text-white text-base flex items-center space-x-2">
+            <PieChart className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <span>Benchmark Rasio Run-the-Bank (OPEX) vs. Change-the-Bank (CAPEX) Himbara</span>
           </h3>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Bank digital terdepan di dunia (Top Quartile) menjaga porsi <strong>Change-the-Bank di atas 35-45%</strong> untuk memenangkan kompetisi produk.
           </p>
         </div>
@@ -336,11 +336,11 @@ export const TcoCostSimulatorView: React.FC = () => {
         <div className="space-y-4">
           {peerRunChangeData.map((item, idx) => (
             <div key={idx} className={`p-4 rounded-2xl border transition ${
-              item.isFocal ? 'bg-blue-50/70 border-blue-300 shadow-xs' : 'bg-white border-slate-200'
+              item.isFocal ? 'bg-blue-50/70 dark:bg-blue-950/40 border-blue-300 dark:border-blue-800 shadow-xs' : 'bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700/70'
             }`}>
               <div className="flex items-center justify-between mb-2 text-xs">
                 <div className="flex items-center space-x-2">
-                  <span className="font-extrabold text-slate-900 text-sm">{item.bank}</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white text-sm">{item.bank}</span>
                   {item.isFocal && (
                     <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white font-extrabold text-[10px]">
                       TARGET OPTIMAL
@@ -348,15 +348,15 @@ export const TcoCostSimulatorView: React.FC = () => {
                   )}
                 </div>
                 <div className="flex items-center space-x-4 text-xs font-bold">
-                  <span className="text-slate-500">Run: {item.runPct}%</span>
-                  <span className="text-blue-700">Change: {item.changePct}%</span>
+                  <span className="text-slate-500 dark:text-slate-400">Run: {item.runPct}%</span>
+                  <span className="text-blue-700 dark:text-blue-400">Change: {item.changePct}%</span>
                 </div>
               </div>
 
               {/* Stacked Progress Bar */}
-              <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden flex">
+              <div className="w-full h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
                 <div 
-                  className="h-full bg-slate-400 flex items-center justify-center text-[10px] text-white font-bold transition-all duration-500" 
+                  className="h-full bg-slate-400 dark:bg-slate-600 flex items-center justify-center text-[10px] text-white font-bold transition-all duration-500" 
                   style={{ width: `${item.runPct}%` }}
                   title={`Run-the-Bank: ${item.runPct}%`}
                 >
@@ -371,7 +371,7 @@ export const TcoCostSimulatorView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2">
+              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 mt-2">
                 <span>{item.highlight}</span>
               </div>
             </div>
@@ -380,20 +380,20 @@ export const TcoCostSimulatorView: React.FC = () => {
       </div>
 
       {/* Domain License Cost Exposure Breakdown */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
         <div>
-          <h3 className="font-extrabold text-slate-900 text-base flex items-center space-x-2">
-            <Layers className="w-5 h-5 text-emerald-600" />
+          <h3 className="font-extrabold text-slate-900 dark:text-white text-base flex items-center space-x-2">
+            <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             <span>Paparan Biaya Lisensi Per Domain: BRI vs. Bank Mandiri</span>
           </h3>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Analisis detail di mana letak keunggulan biaya struktural BRI dibanding arsitektur Mandiri:
           </p>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100/70 border-b border-slate-200 font-bold text-slate-700">
+            <thead className="bg-slate-100/70 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-300">
               <tr>
                 <th className="py-3 px-4">Domain Arsitektur</th>
                 <th className="py-3 px-4">Pendekatan Bank Mandiri</th>
@@ -403,25 +403,25 @@ export const TcoCostSimulatorView: React.FC = () => {
                 <th className="py-3 px-4">Kesimpulan Finansial MBB</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {licenseExposureDomains.map((row, i) => (
-                <tr key={i} className="hover:bg-slate-50">
-                  <td className="py-3 px-4 font-bold text-slate-900 whitespace-nowrap">
+                <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="py-3 px-4 font-bold text-slate-900 dark:text-white whitespace-nowrap">
                     {row.domain}
                   </td>
-                  <td className="py-3 px-4 text-slate-700 font-medium">
+                  <td className="py-3 px-4 text-slate-700 dark:text-slate-300 font-medium">
                     {row.mandiriApproach}
                   </td>
-                  <td className="py-3 px-4 text-rose-700 font-extrabold whitespace-nowrap">
+                  <td className="py-3 px-4 text-rose-700 dark:text-rose-400 font-extrabold whitespace-nowrap">
                     {row.mandiriCostIdx}
                   </td>
-                  <td className="py-3 px-4 text-slate-900 font-bold">
+                  <td className="py-3 px-4 text-slate-900 dark:text-white font-bold">
                     {row.briApproach}
                   </td>
-                  <td className="py-3 px-4 text-emerald-700 font-extrabold whitespace-nowrap">
+                  <td className="py-3 px-4 text-emerald-700 dark:text-emerald-400 font-extrabold whitespace-nowrap">
                     {row.briCostIdx}
                   </td>
-                  <td className="py-3 px-4 text-slate-600 leading-relaxed">
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-300 leading-relaxed">
                     {row.verdict}
                   </td>
                 </tr>

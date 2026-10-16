@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { 
   Bank, Category, Technology, Finding, Evidence, Interview, User, AuditLog, 
-  UserRole, ConfidenceLevel, ReviewStatus, ResearchItem, BankCapabilityDetail 
+  UserRole, ConfidenceLevel, ReviewStatus, ResearchItem, BankCapabilityDetail,
+  ThemeMode 
 } from '../types';
 import { 
   INITIAL_BANKS, INITIAL_CATEGORIES, INITIAL_TECHNOLOGIES, 
@@ -33,6 +34,31 @@ interface AppContextType {
   deleteResearchCapability: (capId: string) => Promise<void>;
   exportResearchMatrixCSV: () => void;
 
+  // Google Sheets Sync
+  syncStatus: {
+    sheet_url: string;
+    auto_sync: string;
+    auto_sync_interval: string;
+    apps_script_url: string;
+    last_sync_time: string;
+    last_sync_status: string;
+    last_sync_summary: string;
+    totalCapabilities: number;
+    totalEntries: number;
+  };
+  isSyncing: boolean;
+  isSyncModalOpen: boolean;
+  setIsSyncModalOpen: (open: boolean) => void;
+  pullGoogleSheet: (url?: string) => Promise<{ success: boolean; summary: string; error?: string }>;
+  pushGoogleSheet: (webhookUrl?: string) => Promise<{ success: boolean; summary: string; error?: string; requiresWebhook?: boolean; csvContent?: string; tsvContent?: string }>;
+  updateSyncConfig: (config: any) => Promise<void>;
+  refreshSyncStatus: () => Promise<void>;
+
+  // Theme Mode (Light / Dark)
+  theme: ThemeMode;
+  toggleTheme: () => void;
+  setTheme: (theme: ThemeMode) => void;
+
   // Auth & Roles
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
@@ -54,10 +80,6 @@ interface AppContextType {
   setSelectedFindingModalId: (id: string | null) => void;
   selectedCategoryId: string | null;
   setSelectedCategoryId: (id: string | null) => void;
-  
-  // Presentation Mode
-  presentationMode: boolean;
-  setPresentationMode: (active: boolean) => void;
   
   // Filters
   searchQuery: string;
@@ -120,6 +142,37 @@ const pathToTab = (path: string): string => {
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Theme State
+  const THEME_STORAGE_KEY = 'competitor_intel_bri_theme';
+  const [theme, setThemeState] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode | null;
+    if (saved === 'light' || saved === 'dark') return saved;
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      root.style.colorScheme = 'dark';
+    } else {
+      root.classList.remove('dark');
+      root.style.colorScheme = 'light';
+    }
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setThemeState(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  const setTheme = (newTheme: ThemeMode) => {
+    setThemeState(newTheme);
+  };
+
   // Initialize state from localStorage or seedData
   const [banks, setBanks] = useState<Bank[]>(INITIAL_BANKS);
   const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
@@ -153,7 +206,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [selectedTechId, setSelectedTechId] = useState<string | null>(null);
   const [selectedFindingModalId, setSelectedFindingModalId] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [presentationMode, setPresentationMode] = useState<boolean>(() => window.location.pathname.includes('presentation'));
 
   // Research Matrix (408 Capabilities)
   const RESEARCH_STORAGE_KEY = 'competitor_intel_bri_research_matrix_v1';
@@ -171,15 +223,92 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [selectedResearchCell, setSelectedResearchCell] = useState<{ capId: string; bankCode: string } | null>(null);
 
+  // Google Sheets Sync State
+  const [isSyncModalOpen, setIsSyncModalOpen] = useState<boolean>(false);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [syncStatus, setSyncStatus] = useState<{
+    sheet_url: string;
+    auto_sync: string;
+    auto_sync_interval: string;
+    apps_script_url: string;
+    last_sync_time: string;
+    last_sync_status: string;
+    last_sync_summary: string;
+    totalCapabilities: number;
+    totalEntries: number;
+  }>({
+    sheet_url: 'https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0',
+    auto_sync: '0',
+    auto_sync_interval: '0',
+    apps_script_url: '',
+    last_sync_time: '',
+    last_sync_status: 'Siap',
+    last_sync_summary: '',
+    totalCapabilities: 408,
+    totalEntries: 2448
+  });
+
+  const refreshSyncStatus = async () => {
+    try {
+      const status = await api.getSyncStatus();
+      if (status) setSyncStatus(status);
+    } catch (e) {
+      console.warn('Failed to fetch sync status:', e);
+    }
+  };
+
+  const pullGoogleSheet = async (customUrl?: string) => {
+    setIsSyncing(true);
+    try {
+      const result = await api.pullFromGoogleSheet(customUrl, currentUser.nama);
+      if (result.success && result.items && result.items.length > 0) {
+        setResearchItems(result.items);
+        localStorage.setItem(RESEARCH_STORAGE_KEY, JSON.stringify(result.items));
+      }
+      await refreshSyncStatus();
+      addAuditLog('SYNC', 'GoogleSheets', result.summary || 'Sinkronisasi dari Google Sheets berhasil');
+      return { success: true, summary: result.summary };
+    } catch (err: any) {
+      const errorMsg = err?.message || 'Gagal sinkronisasi data dari Google Sheets';
+      await refreshSyncStatus();
+      return { success: false, summary: errorMsg, error: errorMsg };
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const pushGoogleSheet = async (customWebhookUrl?: string) => {
+    setIsSyncing(true);
+    try {
+      const result = await api.pushToGoogleSheet(customWebhookUrl, currentUser.nama);
+      await refreshSyncStatus();
+      if (result.success) {
+        addAuditLog('SYNC', 'GoogleSheets', result.summary || 'Kirim data ke Google Sheets berhasil');
+      }
+      return result;
+    } catch (err: any) {
+      const errorMsg = err?.message || 'Gagal mengirim data ke Google Sheets';
+      await refreshSyncStatus();
+      return { success: false, summary: errorMsg, error: errorMsg };
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const updateSyncConfig = async (config: any) => {
+    try {
+      const updated = await api.updateSyncConfig({ ...config, userName: currentUser.nama });
+      if (updated) setSyncStatus(prev => ({ ...prev, ...updated }));
+    } catch (err) {
+      console.error('Failed to update sync config:', err);
+      throw err;
+    }
+  };
+
   const navigate = (path: string) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);
-    if (path.includes('presentation')) {
-      setPresentationMode(true);
-    } else {
-      setPresentationMode(false);
-      setActiveTabState(pathToTab(path));
-    }
+    setActiveTabState(pathToTab(path));
   };
 
   const setActiveTab = (tab: string) => {
@@ -204,12 +333,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const handlePopState = () => {
       const p = window.location.pathname || '/login';
       setCurrentPath(p);
-      if (p.includes('presentation')) {
-        setPresentationMode(true);
-      } else {
-        setPresentationMode(false);
-        setActiveTabState(pathToTab(p));
-      }
+      setActiveTabState(pathToTab(p));
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -313,6 +437,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (u && u.length > 0) setUsers(u);
         if (logs && logs.length > 0) setAuditLogs(logs);
         if (resMatrix && resMatrix.length > 0) setResearchItems(resMatrix);
+
+        api.getSyncStatus().then(st => { if (st) setSyncStatus(st); }).catch(() => {});
 
         setIsDbConnected(true);
       } catch (err) {
@@ -824,6 +950,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         deleteResearchCapability,
         exportResearchMatrixCSV,
 
+        // Google Sheets Sync
+        syncStatus,
+        isSyncing,
+        isSyncModalOpen,
+        setIsSyncModalOpen,
+        pullGoogleSheet,
+        pushGoogleSheet,
+        updateSyncConfig,
+        refreshSyncStatus,
+
+        // Theme Mode (Light / Dark)
+        theme,
+        toggleTheme,
+        setTheme,
+
         // Auth & Routing
         isAuthenticated,
         login,
@@ -842,8 +983,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedFindingModalId,
         selectedCategoryId,
         setSelectedCategoryId,
-        presentationMode,
-        setPresentationMode,
         searchQuery,
         setSearchQuery,
         confidenceFilter,

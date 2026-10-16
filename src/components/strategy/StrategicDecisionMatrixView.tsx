@@ -209,51 +209,51 @@ export const StrategicDecisionMatrixView: React.FC = () => {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Strategic Decision Matrix & Prioritization Framework
             </h2>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 border border-blue-200">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
               MBB 2x2 & 4R Model
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Panduan pengambilan keputusan Direksi: Menyeimbangkan dampak bisnis (*Strategic Impact*) vs kompleksitas eksekusi (*Implementation Effort*).
           </p>
         </div>
 
         {/* Quick Action Badges */}
         <div className="flex items-center space-x-2 text-xs">
-          <div className="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold flex items-center space-x-1.5">
-            <Zap className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-bold flex items-center space-x-1.5">
+            <Zap className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>{quickWins.length} Quick Wins</span>
           </div>
-          <div className="px-3 py-1.5 rounded-xl bg-purple-50 border border-purple-200 text-purple-800 font-bold flex items-center space-x-1.5">
-            <Rocket className="w-3.5 h-3.5 text-purple-600" />
+          <div className="px-3 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-300 font-bold flex items-center space-x-1.5">
+            <Rocket className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
             <span>{strategicBets.length} Strategic Bets</span>
           </div>
-          <div className="px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 font-bold flex items-center space-x-1.5">
-            <AlertOctagon className="w-3.5 h-3.5 text-rose-600" />
+          <div className="px-3 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 font-bold flex items-center space-x-1.5">
+            <AlertOctagon className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
             <span>{techDebts.length} Tech Debt</span>
           </div>
         </div>
       </div>
 
       {/* 2x2 Interactive Quadrant Matrix Visualization */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-6">
-        <div className="flex items-center justify-between flex-wrap gap-3 border-b border-slate-100 pb-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6">
+        <div className="flex items-center justify-between flex-wrap gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
           <div>
-            <h3 className="font-extrabold text-slate-900 text-base flex items-center space-x-2">
-              <Compass className="w-5 h-5 text-blue-600" />
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-base flex items-center space-x-2">
+              <Compass className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               <span>Matriks Prioritas Inisiatif 2x2 (Effort vs. Impact)</span>
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Klik pada salah satu inisiatif di bawah untuk melihat rincian bukti dan rasionalisasi arsitektur.
             </p>
           </div>
 
           {/* Quick Filters */}
           <div className="flex items-center space-x-2 flex-wrap gap-2 text-xs">
-            <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl">
+            <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
               {[
                 { id: 'all', label: 'Semua Kuadran' },
                 { id: 'quick-win', label: '⚡ Quick Wins' },
@@ -266,8 +266,8 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                   onClick={() => setSelectedQuadrant(tab.id)}
                   className={`px-2.5 py-1 rounded-lg font-bold transition text-xs ${
                     selectedQuadrant === tab.id
-                      ? 'bg-white text-slate-900 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {tab.label}
@@ -278,7 +278,7 @@ export const StrategicDecisionMatrixView: React.FC = () => {
             <select
               value={selected4R}
               onChange={e => setSelected4R(e.target.value)}
-              className="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold"
+              className="px-2.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold"
             >
               <option value="all">Strategi 4R: Semua</option>
               <option value="Rehost">Rehost (Lift & Shift)</option>
@@ -294,8 +294,8 @@ export const StrategicDecisionMatrixView: React.FC = () => {
           {/* Top-Left: QUICK WINS */}
           <div className={`p-5 rounded-2xl border transition ${
             selectedQuadrant === 'all' || selectedQuadrant === 'quick-win'
-              ? 'bg-gradient-to-br from-emerald-50/70 to-teal-50/40 border-emerald-300 shadow-sm'
-              : 'opacity-40 border-slate-200 bg-slate-50'
+              ? 'bg-gradient-to-br from-emerald-50/70 dark:from-emerald-950/40 to-teal-50/40 dark:to-teal-950/20 border-emerald-300 dark:border-emerald-800 shadow-sm'
+              : 'opacity-40 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850'
           }`}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2">
@@ -303,11 +303,11 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                   <Zap className="w-4 h-4" />
                 </span>
                 <div>
-                  <h4 className="font-extrabold text-emerald-950 text-sm">KUADRAN I: QUICK WINS</h4>
-                  <p className="text-[11px] text-emerald-800">Dampak Tinggi (High Impact) · Kompleksitas Rendah (Low Effort)</p>
+                  <h4 className="font-extrabold text-emerald-950 dark:text-emerald-200 text-sm">KUADRAN I: QUICK WINS</h4>
+                  <p className="text-[11px] text-emerald-800 dark:text-emerald-400">Dampak Tinggi (High Impact) · Kompleksitas Rendah (Low Effort)</p>
                 </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs">
+              <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-extrabold text-xs">
                 Time-to-Value: &lt; 6 Bulan
               </span>
             </div>
@@ -317,18 +317,18 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                 <div 
                   key={item.id}
                   onClick={() => item.findingId && setSelectedFindingModalId(item.findingId)}
-                  className="p-3.5 bg-white rounded-xl border border-emerald-200/80 shadow-2xs hover:border-emerald-400 hover:shadow-xs transition cursor-pointer space-y-1.5"
+                  className="p-3.5 bg-white dark:bg-slate-800 rounded-xl border border-emerald-200/80 dark:border-emerald-900/60 shadow-2xs hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-xs transition cursor-pointer space-y-1.5"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-extrabold text-slate-900 text-xs">{item.name}</span>
-                    <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px] shrink-0">
+                    <span className="font-extrabold text-slate-900 dark:text-white text-xs">{item.name}</span>
+                    <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 font-bold text-[10px] shrink-0">
                       {item.strategy4R}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">{item.rationale}</p>
-                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-100">
-                    <span className="text-slate-500">Domain: <strong>{item.domain}</strong></span>
-                    <span className="text-emerald-700 font-bold flex items-center space-x-1">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">{item.rationale}</p>
+                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-100 dark:border-slate-700/80">
+                    <span className="text-slate-500 dark:text-slate-400">Domain: <strong>{item.domain}</strong></span>
+                    <span className="text-emerald-700 dark:text-emerald-400 font-bold flex items-center space-x-1">
                       <span>Status BRI: {item.briStatus}</span>
                       <ArrowUpRight className="w-3 h-3" />
                     </span>
@@ -341,8 +341,8 @@ export const StrategicDecisionMatrixView: React.FC = () => {
           {/* Top-Right: STRATEGIC BETS */}
           <div className={`p-5 rounded-2xl border transition ${
             selectedQuadrant === 'all' || selectedQuadrant === 'strategic-bet'
-              ? 'bg-gradient-to-br from-purple-50/70 to-indigo-50/40 border-purple-300 shadow-sm'
-              : 'opacity-40 border-slate-200 bg-slate-50'
+              ? 'bg-gradient-to-br from-purple-50/70 dark:from-purple-950/40 to-indigo-50/40 dark:to-indigo-950/20 border-purple-300 dark:border-purple-800 shadow-sm'
+              : 'opacity-40 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850'
           }`}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2">
@@ -350,11 +350,11 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                   <Rocket className="w-4 h-4" />
                 </span>
                 <div>
-                  <h4 className="font-extrabold text-purple-950 text-sm">KUADRAN II: STRATEGIC BETS</h4>
-                  <p className="text-[11px] text-purple-800">Dampak Transformasional Tinggi · Butuh Investasi Besar (High Effort)</p>
+                  <h4 className="font-extrabold text-purple-950 dark:text-purple-200 text-sm">KUADRAN II: STRATEGIC BETS</h4>
+                  <p className="text-[11px] text-purple-800 dark:text-purple-400">Dampak Transformasional Tinggi · Butuh Investasi Besar (High Effort)</p>
                 </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-extrabold text-xs">
+              <span className="px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 font-extrabold text-xs">
                 Time-to-Value: 12 - 36 Bulan
               </span>
             </div>
@@ -364,18 +364,18 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                 <div 
                   key={item.id}
                   onClick={() => item.findingId && setSelectedFindingModalId(item.findingId)}
-                  className="p-3.5 bg-white rounded-xl border border-purple-200/80 shadow-2xs hover:border-purple-400 hover:shadow-xs transition cursor-pointer space-y-1.5"
+                  className="p-3.5 bg-white dark:bg-slate-800 rounded-xl border border-purple-200/80 dark:border-purple-900/60 shadow-2xs hover:border-purple-400 dark:hover:border-purple-600 hover:shadow-xs transition cursor-pointer space-y-1.5"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-extrabold text-slate-900 text-xs">{item.name}</span>
-                    <span className="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-bold text-[10px] shrink-0">
+                    <span className="font-extrabold text-slate-900 dark:text-white text-xs">{item.name}</span>
+                    <span className="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 font-bold text-[10px] shrink-0">
                       {item.strategy4R}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">{item.rationale}</p>
-                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-100">
-                    <span className="text-slate-500">Domain: <strong>{item.domain}</strong></span>
-                    <span className="text-purple-700 font-bold flex items-center space-x-1">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">{item.rationale}</p>
+                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-100 dark:border-slate-700/80">
+                    <span className="text-slate-500 dark:text-slate-400">Domain: <strong>{item.domain}</strong></span>
+                    <span className="text-purple-700 dark:text-purple-400 font-bold flex items-center space-x-1">
                       <span>Status BRI: {item.briStatus}</span>
                       <ArrowUpRight className="w-3 h-3" />
                     </span>
@@ -388,8 +388,8 @@ export const StrategicDecisionMatrixView: React.FC = () => {
           {/* Bottom-Left: OPERATIONAL HYGIENE */}
           <div className={`p-5 rounded-2xl border transition ${
             selectedQuadrant === 'all' || selectedQuadrant === 'hygiene'
-              ? 'bg-gradient-to-br from-sky-50/70 to-blue-50/40 border-sky-300 shadow-sm'
-              : 'opacity-40 border-slate-200 bg-slate-50'
+              ? 'bg-gradient-to-br from-sky-50/70 dark:from-sky-950/40 to-blue-50/40 dark:to-blue-950/20 border-sky-300 dark:border-sky-800 shadow-sm'
+              : 'opacity-40 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850'
           }`}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2">
@@ -397,11 +397,11 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                   <ShieldCheck className="w-4 h-4" />
                 </span>
                 <div>
-                  <h4 className="font-extrabold text-sky-950 text-sm">KUADRAN III: OPERATIONAL HYGIENE</h4>
-                  <p className="text-[11px] text-sky-800">Fondasi Wajib / Kepatuhan Regulasi · Kompleksitas Terkelola</p>
+                  <h4 className="font-extrabold text-sky-950 dark:text-sky-200 text-sm">KUADRAN III: OPERATIONAL HYGIENE</h4>
+                  <p className="text-[11px] text-sky-800 dark:text-sky-400">Fondasi Wajib / Kepatuhan Regulasi · Kompleksitas Terkelola</p>
                 </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-extrabold text-xs">
+              <span className="px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 font-extrabold text-xs">
                 Baseline Standar
               </span>
             </div>
@@ -411,18 +411,18 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                 <div 
                   key={item.id}
                   onClick={() => item.findingId && setSelectedFindingModalId(item.findingId)}
-                  className="p-3.5 bg-white rounded-xl border border-sky-200/80 shadow-2xs hover:border-sky-400 hover:shadow-xs transition cursor-pointer space-y-1.5"
+                  className="p-3.5 bg-white dark:bg-slate-800 rounded-xl border border-sky-200/80 dark:border-sky-900/60 shadow-2xs hover:border-sky-400 dark:hover:border-sky-600 hover:shadow-xs transition cursor-pointer space-y-1.5"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-extrabold text-slate-900 text-xs">{item.name}</span>
-                    <span className="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-[10px] shrink-0">
+                    <span className="font-extrabold text-slate-900 dark:text-white text-xs">{item.name}</span>
+                    <span className="px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 font-bold text-[10px] shrink-0">
                       {item.strategy4R}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">{item.rationale}</p>
-                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-100">
-                    <span className="text-slate-500">Domain: <strong>{item.domain}</strong></span>
-                    <span className="text-sky-700 font-bold flex items-center space-x-1">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">{item.rationale}</p>
+                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-100 dark:border-slate-700/80">
+                    <span className="text-slate-500 dark:text-slate-400">Domain: <strong>{item.domain}</strong></span>
+                    <span className="text-sky-700 dark:text-sky-400 font-bold flex items-center space-x-1">
                       <span>Status BRI: {item.briStatus}</span>
                       <ArrowUpRight className="w-3 h-3" />
                     </span>
@@ -435,8 +435,8 @@ export const StrategicDecisionMatrixView: React.FC = () => {
           {/* Bottom-Right: TECH DEBT / PHASE-OUT */}
           <div className={`p-5 rounded-2xl border transition ${
             selectedQuadrant === 'all' || selectedQuadrant === 'tech-debt'
-              ? 'bg-gradient-to-br from-rose-50/70 to-red-50/40 border-rose-300 shadow-sm'
-              : 'opacity-40 border-slate-200 bg-slate-50'
+              ? 'bg-gradient-to-br from-rose-50/70 dark:from-rose-950/40 to-red-50/40 dark:to-red-950/20 border-rose-300 dark:border-rose-800 shadow-sm'
+              : 'opacity-40 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850'
           }`}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2">
@@ -444,11 +444,11 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                   <AlertOctagon className="w-4 h-4" />
                 </span>
                 <div>
-                  <h4 className="font-extrabold text-rose-950 text-sm">KUADRAN IV: DECOMMISSION / TECH DEBT</h4>
-                  <p className="text-[11px] text-rose-800">Nilai Rendah & Beban OPEX Tinggi · Prioritas Pengalihan Lisensi</p>
+                  <h4 className="font-extrabold text-rose-950 dark:text-rose-200 text-sm">KUADRAN IV: DECOMMISSION / TECH DEBT</h4>
+                  <p className="text-[11px] text-rose-800 dark:text-rose-400">Nilai Rendah & Beban OPEX Tinggi · Prioritas Pengalihan Lisensi</p>
                 </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-extrabold text-xs">
+              <span className="px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 font-extrabold text-xs">
                 Eliminasi Beban
               </span>
             </div>
@@ -458,18 +458,18 @@ export const StrategicDecisionMatrixView: React.FC = () => {
                 <div 
                   key={item.id}
                   onClick={() => item.findingId && setSelectedFindingModalId(item.findingId)}
-                  className="p-3.5 bg-white rounded-xl border border-rose-200/80 shadow-2xs hover:border-rose-400 hover:shadow-xs transition cursor-pointer space-y-1.5"
+                  className="p-3.5 bg-white dark:bg-slate-800 rounded-xl border border-rose-200/80 dark:border-rose-900/60 shadow-2xs hover:border-rose-400 dark:hover:border-rose-600 hover:shadow-xs transition cursor-pointer space-y-1.5"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-extrabold text-slate-900 text-xs">{item.name}</span>
-                    <span className="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[10px] shrink-0">
+                    <span className="font-extrabold text-slate-900 dark:text-white text-xs">{item.name}</span>
+                    <span className="px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 font-bold text-[10px] shrink-0">
                       {item.strategy4R}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">{item.rationale}</p>
-                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-100">
-                    <span className="text-slate-500">Benchmark Peer: <strong>{item.competitorStatus}</strong></span>
-                    <span className="text-rose-700 font-bold flex items-center space-x-1">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">{item.rationale}</p>
+                  <div className="flex items-center justify-between text-[10px] pt-1 border-t border-slate-100 dark:border-slate-700/80">
+                    <span className="text-slate-500 dark:text-slate-400">Benchmark Peer: <strong>{item.competitorStatus}</strong></span>
+                    <span className="text-rose-700 dark:text-rose-400 font-bold flex items-center space-x-1">
                       <span>Rekomendasi: {item.strategy4R}</span>
                       <ArrowUpRight className="w-3 h-3" />
                     </span>

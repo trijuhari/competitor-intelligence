@@ -220,5 +220,55 @@ export const api = {
       method: 'POST'
     });
     if (!res.ok) throw new Error('Failed to reset data');
+  },
+
+  // Google Sheets Sync
+  async getSyncStatus(): Promise<any> {
+    const res = await fetch(`${API_BASE}/sync/status`);
+    if (!res.ok) throw new Error('Failed to fetch sync status');
+    return res.json();
+  },
+
+  async pullFromGoogleSheet(url?: string, userName?: string): Promise<any> {
+    const res = await fetch(`${API_BASE}/sync/pull`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, userName })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to pull from Google Sheet');
+    }
+    return res.json();
+  },
+
+  async pushToGoogleSheet(webhookUrl?: string, userName?: string): Promise<any> {
+    const res = await fetch(`${API_BASE}/sync/push`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ webhookUrl, userName })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to push to Google Sheet');
+    }
+    return res.json();
+  },
+
+  async updateSyncConfig(config: any): Promise<any> {
+    const res = await fetch(`${API_BASE}/sync/config`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config)
+    });
+    if (!res.ok) throw new Error('Failed to update sync config');
+    return res.json();
+  },
+
+  async getSyncHistory(): Promise<any[]> {
+    const res = await fetch(`${API_BASE}/sync/history`);
+    if (!res.ok) throw new Error('Failed to fetch sync history');
+    return res.json();
   }
 };
+

@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-800 antialiased font-sans selection:bg-blue-600 selection:text-white min-h-screen;
+    @apply bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased font-sans selection:bg-blue-600 selection:text-white min-h-screen transition-colors duration-200;
     background-image: 
       radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.03) 0px, transparent 50%),
       radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.03) 0px, transparent 50%),
@@ -12,8 +12,15 @@
     background-attachment: fixed;
   }
 
+  .dark body {
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.06) 0px, transparent 50%);
+  }
+
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight font-bold text-slate-900;
+    @apply tracking-tight font-bold text-slate-900 dark:text-white;
   }
 }
 
@@ -33,6 +40,13 @@
   background: #94a3b8;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
 @keyframes pulse-subtle {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
@@ -44,11 +58,11 @@
 
 /* Modern Card Utilities */
 .glass-panel {
-  @apply bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-card transition-all duration-200;
+  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 shadow-card transition-all duration-200;
 }
 
 .glass-panel-hover {
-  @apply bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-card hover:shadow-card-hover hover:border-blue-200 hover:-translate-y-0.5 transition-all duration-200;
+  @apply bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 shadow-card hover:shadow-card-hover hover:border-blue-200 dark:hover:border-blue-500/30 hover:-translate-y-0.5 transition-all duration-200;
 }
 
 .pill-badge {

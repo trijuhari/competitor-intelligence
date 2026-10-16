@@ -157,14 +157,14 @@ export const GenAiReadinessView: React.FC = () => {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               GenAI & Modern Data Architecture Readiness Benchmark (2026/2027)
             </h2>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
               Future-Ready Banking Index
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Evaluasi kesiapan arsitektur data, komputasi inference, dan tata kelola UU PDP Bank BRI vs Himbara untuk era *Autonomous Agentic Banking*.
           </p>
         </div>
@@ -179,48 +179,48 @@ export const GenAiReadinessView: React.FC = () => {
               key={score.bankId}
               className={`p-5 rounded-2xl border transition flex flex-col justify-between ${
                 isBRI 
-                  ? 'bg-gradient-to-br from-blue-900 to-indigo-900 text-white shadow-md border-blue-500' 
-                  : 'bg-white border-slate-200 shadow-xs'
+                  ? 'bg-gradient-to-br from-blue-900 to-indigo-900 text-white shadow-md border-blue-500 dark:border-blue-400' 
+                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-xs'
               }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-2xl">{score.logo}</span>
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${
-                    isBRI ? 'bg-orange-500 text-white' : 'bg-slate-100 text-slate-600'
+                    isBRI ? 'bg-orange-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                   }`}>
                     Rank #{idx + 1}
                   </span>
                 </div>
-                <h4 className={`font-extrabold text-base ${isBRI ? 'text-white' : 'text-slate-900'}`}>
+                <h4 className={`font-extrabold text-base ${isBRI ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                   {score.name}
                 </h4>
                 <div className="mt-2 flex items-baseline space-x-1">
-                  <span className={`text-3xl font-black ${isBRI ? 'text-orange-400' : 'text-blue-600'}`}>
+                  <span className={`text-3xl font-black ${isBRI ? 'text-orange-400' : 'text-blue-600 dark:text-blue-400'}`}>
                     {score.overallScore}
                   </span>
-                  <span className={`text-xs ${isBRI ? 'text-blue-200' : 'text-slate-400'}`}>/ 10</span>
+                  <span className={`text-xs ${isBRI ? 'text-blue-200' : 'text-slate-400 dark:text-slate-500'}`}>/ 10</span>
                 </div>
               </div>
 
               <div className={`mt-4 pt-3 border-t text-[11px] space-y-1.5 ${
-                isBRI ? 'border-blue-700/80 text-blue-100' : 'border-slate-100 text-slate-600'
+                isBRI ? 'border-blue-700/80 text-blue-100' : 'border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400'
               }`}>
                 <div className="flex justify-between">
                   <span>Streaming Mesh:</span>
-                  <strong className={isBRI ? 'text-emerald-300' : 'text-slate-800'}>{score.streamingScore}</strong>
+                  <strong className={isBRI ? 'text-emerald-300' : 'text-slate-800 dark:text-slate-200'}>{score.streamingScore}</strong>
                 </div>
                 <div className="flex justify-between">
                   <span>Lakehouse/Feature:</span>
-                  <strong className={isBRI ? 'text-emerald-300' : 'text-slate-800'}>{score.lakehouseScore}</strong>
+                  <strong className={isBRI ? 'text-emerald-300' : 'text-slate-800 dark:text-slate-200'}>{score.lakehouseScore}</strong>
                 </div>
                 <div className="flex justify-between">
                   <span>AI Compute Infra:</span>
-                  <strong className={isBRI ? 'text-emerald-300' : 'text-slate-800'}>{score.infraScore}</strong>
+                  <strong className={isBRI ? 'text-emerald-300' : 'text-slate-800 dark:text-slate-200'}>{score.infraScore}</strong>
                 </div>
                 <div className="flex justify-between">
                   <span>UU PDP Governance:</span>
-                  <strong className={isBRI ? 'text-emerald-300' : 'text-slate-800'}>{score.governanceScore}</strong>
+                  <strong className={isBRI ? 'text-emerald-300' : 'text-slate-800 dark:text-slate-200'}>{score.governanceScore}</strong>
                 </div>
               </div>
             </div>
@@ -229,23 +229,23 @@ export const GenAiReadinessView: React.FC = () => {
       </div>
 
       {/* 4 Pillars Deep-Dive Comparison */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
-        <div className="flex items-center justify-between flex-wrap gap-4 border-b border-slate-100 pb-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="flex items-center justify-between flex-wrap gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
           <div>
-            <h3 className="font-extrabold text-slate-900 text-base flex items-center space-x-2">
-              <Bot className="w-5 h-5 text-purple-600" />
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-base flex items-center space-x-2">
+              <Bot className="w-5 h-5 text-purple-600 dark:text-purple-400" />
               <span>4 Pilar Kesiapan Arsitektur AI & Data Modern</span>
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Perbandingan arsitektural antara Bank BRI (Pemimpin Streaming) vs Bank Mandiri (Pemimpin Platform Kolaboratif).
             </p>
           </div>
 
-          <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl text-xs">
+          <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs">
             <button
               onClick={() => setSelectedPillar('all')}
               className={`px-3 py-1 rounded-lg font-bold transition ${
-                selectedPillar === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
+                selectedPillar === 'all' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs' : 'text-slate-600 dark:text-slate-400'
               }`}
             >
               Semua Pilar
@@ -255,7 +255,7 @@ export const GenAiReadinessView: React.FC = () => {
                 key={p.id}
                 onClick={() => setSelectedPillar(p.id)}
                 className={`px-3 py-1 rounded-lg font-bold transition ${
-                  selectedPillar === p.id ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
+                  selectedPillar === p.id ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs' : 'text-slate-600 dark:text-slate-400'
                 }`}
               >
                 {p.title.split('.')[1]}
@@ -268,40 +268,40 @@ export const GenAiReadinessView: React.FC = () => {
           {filteredPillars.map(pillar => {
             const Icon = pillar.icon;
             return (
-              <div key={pillar.id} className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3">
+              <div key={pillar.id} className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-3">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div className="flex items-center space-x-2">
-                    <span className="p-2 rounded-xl bg-purple-100 text-purple-800">
+                    <span className="p-2 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300">
                       <Icon className="w-4 h-4" />
                     </span>
-                    <h4 className="font-extrabold text-slate-900 text-sm">{pillar.title}</h4>
+                    <h4 className="font-extrabold text-slate-900 dark:text-white text-sm">{pillar.title}</h4>
                   </div>
                   <div className="flex items-center space-x-2 text-xs">
-                    <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 font-extrabold">
+                    <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 font-extrabold">
                       BRI: {pillar.briWeight}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800 font-semibold">
+                    <span className="px-2.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold">
                       Mandiri: {pillar.mandiriWeight}
                     </span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   {pillar.description}
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs">
-                  <div className="p-3 bg-white rounded-xl border border-blue-200 space-y-1">
-                    <span className="font-bold text-blue-900 text-[11px] uppercase tracking-wider">
+                  <div className="p-3 bg-white dark:bg-slate-850 rounded-xl border border-blue-200 dark:border-blue-900/60 space-y-1">
+                    <span className="font-bold text-blue-900 dark:text-blue-300 text-[11px] uppercase tracking-wider">
                       🟦 Postur Teknis Bank BRI
                     </span>
-                    <p className="text-slate-700 leading-relaxed">{pillar.briDetails}</p>
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{pillar.briDetails}</p>
                   </div>
-                  <div className="p-3 bg-white rounded-xl border border-purple-200 space-y-1">
-                    <span className="font-bold text-purple-900 text-[11px] uppercase tracking-wider">
+                  <div className="p-3 bg-white dark:bg-slate-850 rounded-xl border border-purple-200 dark:border-purple-900/60 space-y-1">
+                    <span className="font-bold text-purple-900 dark:text-purple-300 text-[11px] uppercase tracking-wider">
                       💡 Implikasi Strategis MBB
                     </span>
-                    <p className="text-slate-700 leading-relaxed">{pillar.implication}</p>
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{pillar.implication}</p>
                   </div>
                 </div>
               </div>
@@ -311,7 +311,7 @@ export const GenAiReadinessView: React.FC = () => {
       </div>
 
       {/* 3-Wave Strategic Roadmap for BRI */}
-      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+      <div className="bg-slate-900 dark:bg-slate-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
         <div>
           <div className="flex items-center space-x-2 text-orange-400 text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-4 h-4" />
@@ -323,7 +323,7 @@ export const GenAiReadinessView: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2">
+          <div className="p-5 rounded-2xl bg-slate-800/80 dark:bg-slate-900/80 border border-slate-700 dark:border-slate-800 space-y-2">
             <div className="flex justify-between items-center">
               <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-bold text-[10px]">
                 WAVE 1 (0-6 Bulan)
@@ -336,7 +336,7 @@ export const GenAiReadinessView: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2">
+          <div className="p-5 rounded-2xl bg-slate-800/80 dark:bg-slate-900/80 border border-slate-700 dark:border-slate-800 space-y-2">
             <div className="flex justify-between items-center">
               <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold text-[10px]">
                 WAVE 2 (6-18 Bulan)
@@ -349,7 +349,7 @@ export const GenAiReadinessView: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2">
+          <div className="p-5 rounded-2xl bg-slate-800/80 dark:bg-slate-900/80 border border-slate-700 dark:border-slate-800 space-y-2">
             <div className="flex justify-between items-center">
               <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[10px]">
                 WAVE 3 (18-36 Bulan)

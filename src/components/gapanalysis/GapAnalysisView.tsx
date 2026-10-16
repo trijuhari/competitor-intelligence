@@ -131,14 +131,14 @@ export const GapAnalysisView: React.FC = () => {
       {/* Header */}
       <div>
         <div className="flex items-center space-x-2">
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Analisis Kesenjangan & Peluang Strategis (Gap Analysis)
           </h2>
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800">
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300">
             408 Kapabilitas Riset
           </span>
         </div>
-        <p className="text-xs text-slate-500 mt-1 max-w-3xl">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-3xl">
           Pemetaan sistematis celah teknologi di mana kompetitor (Mandiri, BCA, BNI, BTN, BSI) telah terverifikasi mengadopsi solusi modern, dibandingkan dengan keunggulan eksklusif dan standar konsensus industri Bank BRI.
         </p>
       </div>
@@ -150,24 +150,24 @@ export const GapAnalysisView: React.FC = () => {
           onClick={() => setActiveTabState('gaps')}
           className={`p-6 rounded-3xl border text-left transition-all duration-200 flex flex-col justify-between hover:-translate-y-0.5 active:scale-[0.99] ${
             activeTab === 'gaps'
-              ? 'bg-gradient-to-br from-amber-50/90 via-orange-50/70 to-rose-50/50 border-orange-300 ring-2 ring-orange-500/25 shadow-card'
-              : 'bg-white/80 backdrop-blur-sm border-slate-200/80 hover:border-slate-300 shadow-card'
+              ? 'bg-gradient-to-br from-amber-50/90 dark:from-amber-950/60 via-orange-50/70 dark:via-orange-950/40 to-rose-50/50 dark:to-rose-950/20 border-orange-300 dark:border-orange-800 ring-2 ring-orange-500/25 shadow-card'
+              : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-card'
           }`}
         >
           <div className="flex items-center justify-between">
-            <span className="font-extrabold text-xs text-orange-800 uppercase tracking-wider flex items-center space-x-1.5">
+            <span className="font-extrabold text-xs text-orange-800 dark:text-orange-300 uppercase tracking-wider flex items-center space-x-1.5">
               <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-              <AlertTriangle className="w-4 h-4 text-orange-600" />
+              <AlertTriangle className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               <span>Celah untuk BRI (Gaps)</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-orange-200/80 text-orange-950 border border-orange-300/80 shadow-2xs">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-orange-200/80 dark:bg-orange-900/60 text-orange-950 dark:text-orange-200 border border-orange-300/80 dark:border-orange-800 shadow-2xs">
               Prioritas Tindakan
             </span>
           </div>
-          <div className="text-4xl font-black text-orange-950 mt-4 tracking-tight">
-            {gapsList.length} <span className="text-base font-bold text-orange-700 font-sans">Kapabilitas</span>
+          <div className="text-4xl font-black text-orange-950 dark:text-orange-100 mt-4 tracking-tight">
+            {gapsList.length} <span className="text-base font-bold text-orange-700 dark:text-orange-400 font-sans">Kapabilitas</span>
           </div>
-          <p className="text-[11px] text-orange-900/80 mt-2 leading-relaxed">
+          <p className="text-[11px] text-orange-900/80 dark:text-orange-300/80 mt-2 leading-relaxed">
             Kompetitor telah terverifikasi resmi, BRI masih inferensi/belum terdata
           </p>
         </button>
@@ -177,24 +177,24 @@ export const GapAnalysisView: React.FC = () => {
           onClick={() => setActiveTabState('advantages')}
           className={`p-6 rounded-3xl border text-left transition-all duration-200 flex flex-col justify-between hover:-translate-y-0.5 active:scale-[0.99] ${
             activeTab === 'advantages'
-              ? 'bg-gradient-to-br from-blue-50/90 via-indigo-50/70 to-sky-50/50 border-blue-300 ring-2 ring-blue-500/25 shadow-card'
-              : 'bg-white/80 backdrop-blur-sm border-slate-200/80 hover:border-slate-300 shadow-card'
+              ? 'bg-gradient-to-br from-blue-50/90 dark:from-blue-950/60 via-indigo-50/70 dark:via-indigo-950/40 to-sky-50/50 dark:to-sky-950/20 border-blue-300 dark:border-blue-800 ring-2 ring-blue-500/25 shadow-card'
+              : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-card'
           }`}
         >
           <div className="flex items-center justify-between">
-            <span className="font-extrabold text-xs text-blue-800 uppercase tracking-wider flex items-center space-x-1.5">
+            <span className="font-extrabold text-xs text-blue-800 dark:text-blue-300 uppercase tracking-wider flex items-center space-x-1.5">
               <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-              <ShieldCheck className="w-4 h-4 text-blue-600" />
+              <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>Keunggulan Terbukti BRI</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-200/80 text-blue-950 border border-blue-300/80 shadow-2xs">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-200/80 dark:bg-blue-900/60 text-blue-950 dark:text-blue-200 border border-blue-300/80 dark:border-blue-800 shadow-2xs">
               Differentiator
             </span>
           </div>
-          <div className="text-4xl font-black text-blue-950 mt-4 tracking-tight">
-            {advantagesList.length} <span className="text-base font-bold text-blue-700 font-sans">Kapabilitas</span>
+          <div className="text-4xl font-black text-blue-950 dark:text-blue-100 mt-4 tracking-tight">
+            {advantagesList.length} <span className="text-base font-bold text-blue-700 dark:text-blue-400 font-sans">Kapabilitas</span>
           </div>
-          <p className="text-[11px] text-blue-900/80 mt-2 leading-relaxed">
+          <p className="text-[11px] text-blue-900/80 dark:text-blue-300/80 mt-2 leading-relaxed">
             Implementasi BRI terverifikasi resmi, belum ditemukan jejak publik di bank lain
           </p>
         </button>
@@ -204,40 +204,40 @@ export const GapAnalysisView: React.FC = () => {
           onClick={() => setActiveTabState('consensus')}
           className={`p-6 rounded-3xl border text-left transition-all duration-200 flex flex-col justify-between hover:-translate-y-0.5 active:scale-[0.99] ${
             activeTab === 'consensus'
-              ? 'bg-gradient-to-br from-emerald-50/90 via-teal-50/70 to-cyan-50/50 border-emerald-300 ring-2 ring-emerald-500/25 shadow-card'
-              : 'bg-white/80 backdrop-blur-sm border-slate-200/80 hover:border-slate-300 shadow-card'
+              ? 'bg-gradient-to-br from-emerald-50/90 dark:from-emerald-950/60 via-teal-50/70 dark:via-teal-950/40 to-cyan-50/50 dark:to-cyan-950/20 border-emerald-300 dark:border-emerald-800 ring-2 ring-emerald-500/25 shadow-card'
+              : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-card'
           }`}
         >
           <div className="flex items-center justify-between">
-            <span className="font-extrabold text-xs text-emerald-800 uppercase tracking-wider flex items-center space-x-1.5">
+            <span className="font-extrabold text-xs text-emerald-800 dark:text-emerald-300 uppercase tracking-wider flex items-center space-x-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>Standar Paritas Industri</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-200/80 text-emerald-950 border border-emerald-300/80 shadow-2xs">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-200/80 dark:bg-emerald-900/60 text-emerald-950 dark:text-emerald-200 border border-emerald-300/80 dark:border-emerald-800 shadow-2xs">
               Konsensus
             </span>
           </div>
-          <div className="text-4xl font-black text-emerald-950 mt-4 tracking-tight">
-            {consensusList.length} <span className="text-base font-bold text-emerald-700 font-sans">Kapabilitas</span>
+          <div className="text-4xl font-black text-emerald-950 dark:text-emerald-100 mt-4 tracking-tight">
+            {consensusList.length} <span className="text-base font-bold text-emerald-700 dark:text-emerald-400 font-sans">Kapabilitas</span>
           </div>
-          <p className="text-[11px] text-emerald-900/80 mt-2 leading-relaxed">
+          <p className="text-[11px] text-emerald-900/80 dark:text-emerald-300/80 mt-2 leading-relaxed">
             Diadopsi dan terverifikasi di BRI dan ≥ 2 bank kompetitor
           </p>
         </button>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           <div className="md:col-span-4 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Cari kapabilitas, domain, atau merk solusi..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 focus:bg-white"
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-750"
             />
           </div>
 
@@ -245,7 +245,7 @@ export const GapAnalysisView: React.FC = () => {
             <select
               value={workshopFilter}
               onChange={e => setWorkshopFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
               <option value="all">Semua Workshop (WS1 - WS4)</option>
               <option value="WS1">WS1: Core & Digital Banking</option>
@@ -259,7 +259,7 @@ export const GapAnalysisView: React.FC = () => {
             <select
               value={domainFilter}
               onChange={e => setDomainFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
               <option value="all">Semua Domain ({allDomains.length})</option>
               {allDomains.map(d => (
@@ -273,7 +273,7 @@ export const GapAnalysisView: React.FC = () => {
               <select
                 value={competitorFilter}
                 onChange={e => setCompetitorFilter(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-slate-50 font-medium"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
               >
                 <option value="all">Semua Bank Kompetitor</option>
                 {COMPETITORS.map(c => (
@@ -284,9 +284,9 @@ export const GapAnalysisView: React.FC = () => {
           )}
         </div>
 
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
           <div>
-            Menampilkan <strong className="text-slate-800">{filteredList.length}</strong> kapabilitas riset
+            Menampilkan <strong className="text-slate-800 dark:text-slate-200">{filteredList.length}</strong> kapabilitas riset
           </div>
           {(searchQuery || workshopFilter !== 'all' || domainFilter !== 'all' || competitorFilter !== 'all') && (
             <button
@@ -296,7 +296,7 @@ export const GapAnalysisView: React.FC = () => {
                 setDomainFilter('all');
                 setCompetitorFilter('all');
               }}
-              className="text-blue-600 hover:underline font-semibold flex items-center space-x-1"
+              className="text-blue-600 dark:text-blue-400 hover:underline font-semibold flex items-center space-x-1"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Filter</span>
@@ -306,26 +306,26 @@ export const GapAnalysisView: React.FC = () => {
       </div>
 
       {/* Main Results Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-100/90 border-b border-slate-200 text-slate-700 font-bold">
-                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200">No</th>
-                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200">Workshop</th>
-                <th className="py-3.5 px-3 w-48 border-r border-slate-200">Domain & Kategori</th>
-                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200">Kapabilitas / Sistem</th>
-                <th className="py-3.5 px-3 w-64 border-r border-slate-200 bg-blue-50/70 text-blue-950">Status Bank BRI</th>
+              <tr className="bg-slate-100/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold">
+                <th className="py-3.5 px-3 w-12 text-center border-r border-slate-200 dark:border-slate-700">No</th>
+                <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200 dark:border-slate-700">Workshop</th>
+                <th className="py-3.5 px-3 w-48 border-r border-slate-200 dark:border-slate-700">Domain & Kategori</th>
+                <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200 dark:border-slate-700">Kapabilitas / Sistem</th>
+                <th className="py-3.5 px-3 w-64 border-r border-slate-200 dark:border-slate-700 bg-blue-50/70 dark:bg-blue-950/50 text-blue-950 dark:text-blue-200">Status Bank BRI</th>
                 <th className="py-3.5 px-3 min-w-[240px]">
                   {activeTab === 'gaps' ? 'Kompetitor yang Mengadopsi' : activeTab === 'advantages' ? 'Analisis Keunggulan' : 'Standar Konsensus Kompetitor'}
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {filteredList.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-slate-400">
+                  <td colSpan={6} className="py-12 text-center text-slate-400 dark:text-slate-500">
                     Tidak ada kapabilitas yang cocok dengan filter aktif.
                   </td>
                 </tr>
@@ -333,38 +333,38 @@ export const GapAnalysisView: React.FC = () => {
                 filteredList.map((entry, idx) => {
                   const { item, bri } = entry;
                   return (
-                    <tr key={item.id} className="hover:bg-slate-50/80 transition">
-                      <td className="py-3 px-3 text-center font-mono text-slate-400 border-r border-slate-100 align-top">
+                    <tr key={item.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                      <td className="py-3 px-3 text-center font-mono text-slate-400 dark:text-slate-500 border-r border-slate-100 dark:border-slate-800/60 align-top">
                         {item.no}
                       </td>
 
-                      <td className="py-3 px-2 text-center border-r border-slate-100 align-top">
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-700 border border-slate-200">
+                      <td className="py-3 px-2 text-center border-r border-slate-100 dark:border-slate-800/60 align-top">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                           {item.workshop}
                         </span>
                       </td>
 
-                      <td className="py-3 px-3 border-r border-slate-100 align-top">
-                        <div className="font-semibold text-slate-800 leading-tight">{item.domain}</div>
-                        <div className="text-[10px] text-slate-400 mt-1">{item.kategori}</div>
+                      <td className="py-3 px-3 border-r border-slate-100 dark:border-slate-800/60 align-top">
+                        <div className="font-semibold text-slate-800 dark:text-slate-200 leading-tight">{item.domain}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{item.kategori}</div>
                       </td>
 
-                      <td className="py-3 px-4 font-bold text-slate-900 border-r border-slate-100 align-top">
+                      <td className="py-3 px-4 font-bold text-slate-900 dark:text-white border-r border-slate-100 dark:border-slate-800/60 align-top">
                         <div className="leading-snug">{item.kapabilitas}</div>
-                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">ID: {item.id}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-normal mt-0.5">ID: {item.id}</div>
                       </td>
 
                       {/* BRI Status */}
-                      <td className="py-2.5 px-3 border-r border-slate-100 align-top bg-blue-50/10">
+                      <td className="py-2.5 px-3 border-r border-slate-100 dark:border-slate-800/60 align-top bg-blue-50/10 dark:bg-blue-950/10">
                         <button
                           type="button"
                           onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: 'bri' })}
                           className={`w-full text-left p-2 rounded-xl border text-xs transition hover:scale-101 ${
                             bri?.status === 'Terverifikasi'
-                              ? 'bg-emerald-50 border-emerald-200 text-emerald-950 font-bold'
+                              ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/80 text-emerald-950 dark:text-emerald-200 font-bold'
                               : bri?.status === 'Inferensi'
-                              ? 'bg-amber-50 border-amber-200 text-amber-950 font-semibold'
-                              : 'bg-slate-50 border-slate-200 text-slate-400'
+                              ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/80 text-amber-950 dark:text-amber-200 font-semibold'
+                              : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'
                           }`}
                         >
                           <div className="leading-tight">{bri?.merk || '– Belum Terkonfirmasi'}</div>
@@ -372,7 +372,7 @@ export const GapAnalysisView: React.FC = () => {
                             <span className="font-bold">
                               {bri?.status === 'Terverifikasi' ? '✓ Verified' : bri?.status === 'Inferensi' ? '⚠ Inferensi' : '– Belum'}
                             </span>
-                            {bri?.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400" />}
+                            {bri?.link && <ExternalLink className="w-2.5 h-2.5 text-slate-400 dark:text-slate-500" />}
                           </div>
                         </button>
                       </td>
@@ -386,13 +386,13 @@ export const GapAnalysisView: React.FC = () => {
                                 key={vIdx}
                                 type="button"
                                 onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: vc.bank.slug })}
-                                className="w-full text-left p-1.5 rounded-lg bg-orange-50/70 hover:bg-orange-100/70 border border-orange-200 text-slate-900 flex items-center justify-between text-xs transition"
+                                className="w-full text-left p-1.5 rounded-lg bg-orange-50/70 dark:bg-orange-950/40 hover:bg-orange-100/70 dark:hover:bg-orange-900/50 border border-orange-200 dark:border-orange-800/80 text-slate-900 dark:text-slate-100 flex items-center justify-between text-xs transition"
                               >
                                 <div>
                                   <span className="font-bold mr-1.5">{vc.bank.logo} {vc.bank.label}:</span>
-                                  <span className="font-medium text-orange-950">{vc.detail.merk}</span>
+                                  <span className="font-medium text-orange-950 dark:text-orange-200">{vc.detail.merk}</span>
                                 </div>
-                                <span className="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 text-[9px] font-bold rounded">
+                                <span className="px-1.5 py-0.2 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-[9px] font-bold rounded">
                                   ✓ Verified
                                 </span>
                               </button>
@@ -401,12 +401,12 @@ export const GapAnalysisView: React.FC = () => {
                         )}
 
                         {activeTab === 'advantages' && (
-                          <div className="p-2 rounded-xl bg-blue-50/60 border border-blue-200 text-blue-900 text-xs">
+                          <div className="p-2 rounded-xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200 text-xs">
                             <div className="font-bold flex items-center space-x-1">
-                              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                               <span>Keunggulan Kompetitif BRI</span>
                             </div>
-                            <p className="text-[11px] text-blue-700/80 mt-0.5">
+                            <p className="text-[11px] text-blue-700/80 dark:text-blue-300/80 mt-0.5">
                               Implementasi telah terverifikasi resmi sementara kompetitor belum memiliki jejak pembuktian publik yang sepadan.
                             </p>
                           </div>
@@ -414,10 +414,10 @@ export const GapAnalysisView: React.FC = () => {
 
                         {activeTab === 'consensus' && (
                           <div className="space-y-1">
-                            <span className="text-[10px] text-slate-400 font-medium">Bank kompetitor yang juga terverifikasi:</span>
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Bank kompetitor yang juga terverifikasi:</span>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {entry.verifiedCompetitors?.map((vc: any, vIdx: number) => (
-                                <span key={vIdx} className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-[10px]">
+                                <span key={vIdx} className="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-bold text-[10px]">
                                   {vc.bank.logo} {vc.bank.label}: {vc.detail.merk}
                                 </span>
                               ))}

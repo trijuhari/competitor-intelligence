@@ -4,6 +4,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { initDatabase, query, run, getOne } from './db.js';
 import { seedDatabaseIfEmpty } from './seed.js';
+import { 
+  initSyncTables, 
+  getSyncSettings, 
+  updateSyncSettings, 
+  pullFromGoogleSheet, 
+  pushToGoogleSheet,
+  capabilitiesToGoogleSheetRows,
+  rowsToCSV
+} from './googleSync.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -550,6 +559,102 @@ app.post('/api/reset-data', async (req, res) => {
   }
 });
 
+// 10. Google Sheets Sync Endpoints
+app.get('/api/sync/status', async (req, res) => {
+  try {
+    const settings = await getSyncSettings();
+    const countRow = await getOne('SELECT COUNT(DISTINCT no) as totalCaps, COUNT(*) as totalEntries FROM research_records');
+    res.json({
+      ...settings,
+      totalCapabilities: countRow?.totalCaps || 0,
+      totalEntries: countRow?.totalEntries || 0
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/sync/pull', async (req, res) => {
+  try {
+    const { url, userName } = req.body || {};
+    const result = await pullFromGoogleSheet(url, userName || 'Admin');
+    await recordAudit('usr-1', userName || 'Admin', 'SYNC', 'GoogleSheets', result.summary);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/sync/push', async (req, res) => {
+  try {
+    const { webhookUrl, userName } = req.body || {};
+    const result = await pushToGoogleSheet(webhookUrl, userName || 'Admin');
+    if (result.success) {
+      await recordAudit('usr-1', userName || 'Admin', 'SYNC', 'GoogleSheets', result.summary);
+    }
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/sync/config', async (req, res) => {
+  try {
+    const settings = await updateSyncSettings(req.body || {});
+    await recordAudit('usr-1', req.body?.userName || 'Admin', 'UPDATE', 'GoogleSheets', 'Memperbarui konfigurasi Google Sheets Sync');
+    res.json(settings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/sync/history', async (req, res) => {
+  try {
+    const history = await query('SELECT * FROM sync_history ORDER BY timestamp DESC LIMIT 50');
+    res.json(history);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/sync/export-csv', async (req, res) => {
+  try {
+    const records = await query('SELECT * FROM research_records ORDER BY no ASC');
+    const capMap = new Map();
+    records.forEach(r => {
+      const capId = `cap-${r.no}`;
+      if (!capMap.has(capId)) {
+        capMap.set(capId, {
+          id: capId,
+          no: r.no,
+          workshop: r.workshop,
+          domain: r.domain,
+          kategori: r.kategori,
+          kapabilitas: r.kapabilitas,
+          banks: {}
+        });
+      }
+      capMap.get(capId).banks[r.bankCode.toLowerCase()] = {
+        bankCode: r.bankCode,
+        merk: r.merk || '-',
+        link: r.link || '',
+        url: r.url || '',
+        pic: r.pic || 'Mrs Utami',
+        status: r.status || 'Belum'
+      };
+    });
+    const capabilities = Array.from(capMap.values());
+    const rows = capabilitiesToGoogleSheetRows(capabilities);
+    const csvContent = rowsToCSV(rows);
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="google_sheets_tech_research_${new Date().toISOString().slice(0, 10)}.csv"`);
+    res.send(csvContent);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Serve frontend static build if dist exists
 const distPath = path.join(__dirname, '../dist');
 app.use(express.static(distPath));
@@ -565,6 +670,7 @@ app.use((req, res) => {
 const startServer = async () => {
   try {
     await initDatabase();
+    await initSyncTables();
     await seedDatabaseIfEmpty();
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Competitor Intelligence Backend API & Server running on http://localhost:${PORT}`);

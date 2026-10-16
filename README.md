@@ -59,6 +59,14 @@ Dibangun sesuai spesifikasi **Product Requirement Document (PRD v0.1)** untuk ke
 - **Pencadangan & Pemulihan:** Ekspor cadangan JSON, impor file JSON, ekspor CSV, dan reset data.
 - **Audit Trail Log:** Catatan kronologis setiap aksi perubahan data dengan nama pengguna dan stempel waktu.
 
+### 9. Google Sheets Live Sync Center (Baru)
+- **Terhubung Langsung ke Spreadsheet Riset:** `https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0`
+- **Tarik Data (Pull Sync):** Mengambil data riset 408 kapabilitas × 6 bank terbaru langsung dari Google Sheet publik ke database SQLite aplikasi secara instan.
+- **Kirim Data (Push Sync):** Mengalirkan perubahan dari aplikasi ke Google Sheet menggunakan Webhook Google Apps Script, atau tombol 1-klik "Salin Format Sheet" untuk paste langsung ke sel A1.
+- **Pusat Sinkronisasi (Modal UI):** Dapat diakses dari Navbar (tombol *Google Sheet*), Matriks Riset, dan Admin Portal.
+- **Skrip Webhook Siap Pakai:** File template Apps Script tersedia di `scripts/google_apps_script.js`.
+- **Ekspor CSV Terstruktur:** Endpoint `GET /api/sync/export-csv` untuk mengunduh format data yang presisi dengan header Google Sheet.
+
 ---
 
 ## 🛠️ Stack Teknologi Aplikasi
