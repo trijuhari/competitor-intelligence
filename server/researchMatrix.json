@@ -423,10 +423,10 @@
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "OPICS",
+        "link": "https://www.bankmandiri.co.id/documents/38265486/0/%5BFINAL%2B-%2B3103%5D%2BLAPORAN%2BTAHUNAN%2BBMRI%2B2025%2B-%2BSINGLE.pdf/5494448f-7b5d-7e1b-4f86-10fbd8479f2e?t=1774972746147&utm_source=chatgpt.com",
+        "url": "https://www.bankmandiri.co.id/documents/38265486/0/%5BFINAL%2B-%2B3103%5D%2BLAPORAN%2BTAHUNAN%2BBMRI%2B2025%2B-%2BSINGLE.pdf/5494448f-7b5d-7e1b-4f86-10fbd8479f2e?t=1774972746147&utm_source=chatgpt.com",
+        "pic": "Bintoro",
         "status": "Belum"
       },
       "bca": {
@@ -439,10 +439,10 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "TMS",
+        "link": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/BNI-AR-2025-Inggris.pdf",
+        "url": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/BNI-AR-2025-Inggris.pdf",
+        "pic": "Bintoro",
         "status": "Belum"
       },
       "btn": {
@@ -1285,10 +1285,10 @@
     "banks": {
       "bri": {
         "bankCode": "BRI",
-        "merk": "-",
-        "link": "",
+        "merk": "DB2",
+        "link": "Ulasan Praktisi",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Tri Juhari",
         "status": "Belum"
       },
       "mandiri": {
@@ -1309,18 +1309,18 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "Oracle",
+        "link": "https://www.bni.co.id/Portals/1/xNews/uploads/2025/8/5/Tender-Pengadaan-Database-Recovery.pdf",
+        "url": "https://www.bni.co.id/Portals/1/xNews/uploads/2025/8/5/Tender-Pengadaan-Database-Recovery.pdf",
+        "pic": "Tri Juhari",
         "status": "Belum"
       },
       "btn": {
         "bankCode": "BTN",
-        "merk": "-",
-        "link": "",
+        "merk": "DB2",
+        "link": "Ulasan Praktisi",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Tri Juhari",
         "status": "Belum"
       },
       "bsi": {
@@ -1599,10 +1599,10 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "ISO 20022",
+        "link": "https://www.bni.co.id/Portals/1/xNews/uploads/2026/5/6/PengumumanTenderPengadaanGlobalPaymentSystemISO20022.pdf",
+        "url": "https://www.bni.co.id/Portals/1/xNews/uploads/2026/5/6/PengumumanTenderPengadaanGlobalPaymentSystemISO20022.pdf",
+        "pic": "I Made",
         "status": "Belum"
       },
       "btn": {
@@ -1641,10 +1641,10 @@
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "ISO 27001, NIST Cybersecurity Framework,CIS Benchmark, dan PCI Security Standard.",
+        "link": "https://www.bankmandiri.co.id/documents/38265486/0/SR%252BMandiri%252B2025%252BIndo%252B-%252BLowres%252Bfinal.pdf/ab9aabfb-6d41-1cc6-5233-543e059a4078?t=1774972115230",
+        "url": "https://www.bankmandiri.co.id/documents/38265486/0/SR%252BMandiri%252B2025%252BIndo%252B-%252BLowres%252Bfinal.pdf/ab9aabfb-6d41-1cc6-5233-543e059a4078?t=1774972115230",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bca": {
@@ -1657,11 +1657,11 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
-        "status": "Belum"
+        "merk": "ISO 27001, Service and Organization Control (SOC) 2, Uptime Institute’s Tier Certification of \r\nOperational Sustainability (TCOS)",
+        "link": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/SR-BNI-2025-ID.pdf",
+        "url": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/SR-BNI-2025-ID.pdf",
+        "pic": "Waryono",
+        "status": "Terverifikasi"
       },
       "btn": {
         "bankCode": "BTN",
@@ -1997,18 +1997,18 @@
       },
       "bca": {
         "bankCode": "BCA",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "Arsitektur container & microservices di Red Hat OpenShift (autoscaling, CI/CD, DevSecOps) yang menopang lonjakan trafik mobile banking; gateway API internal & eksternal terpisah (2021)",
+        "link": "https://redhat.com/rhdc/managed-files/rh-bca-case-study-f29864pr-202109-en.pdf\nhttps://www.redhat.com/en/success-stories/bca\n[Red Hat case study / success story BCA, Sep 2021]",
+        "url": "https://redhat.com/rhdc/managed-files/rh-bca-case-study-f29864pr-202109-en.pdf",
+        "pic": "Nungga",
         "status": "Belum"
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "Red Hat OpenShift Container Platform + Red Hat Enterprise Linux — platform kontainer untuk arsitektur aplikasi mobile banking baru BNI (wondr), didukung Red Hat Consulting (2024)",
+        "link": "https://redhat.com/en/about/press-releases/bank-negara-indonesia-and-gudang-garam-group-were-announced-winners-red-hat-apac-innovation-awards-2024-indonesia\n[Red Hat press release: Bank Negara Indonesia and Gudang Garam Group were announced winners Red Hat APAC Innovation Awards 2024 Indonesia, 29 Agustus 2024]",
+        "url": "https://redhat.com/en/about/press-releases/bank-negara-indonesia-and-gudang-garam-group-were-announced-winners-red-hat-apac-innovation-awards-2024-indonesia",
+        "pic": "Nungga",
         "status": "Belum"
       },
       "btn": {
@@ -2221,10 +2221,10 @@
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
+        "merk": "Microsoft Authenticator",
+        "link": "Ulasan Praktisi / Wawancara",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bca": {
@@ -3497,10 +3497,10 @@
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "Pengujian Aplikasi melalui Dynamic Application Security Testing (DAST) dan Static Application Security Testing (SAST), serta Penetration Testing",
+        "link": "https://www.bankmandiri.co.id/documents/38265486/0/SR%252BMandiri%252B2025%252BIndo%252B-%252BLowres%252Bfinal.pdf/ab9aabfb-6d41-1cc6-5233-543e059a4078?t=1774972115230",
+        "url": "https://www.bankmandiri.co.id/documents/38265486/0/SR%252BMandiri%252B2025%252BIndo%252B-%252BLowres%252Bfinal.pdf/ab9aabfb-6d41-1cc6-5233-543e059a4078?t=1774972115230",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bca": {
@@ -4847,10 +4847,10 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "ISO 20022",
+        "link": "https://www.bni.co.id/Portals/1/xNews/uploads/2026/5/6/PengumumanTenderPengadaanGlobalPaymentSystemISO20022.pdf",
+        "url": "https://www.bni.co.id/Portals/1/xNews/uploads/2026/5/6/PengumumanTenderPengadaanGlobalPaymentSystemISO20022.pdf",
+        "pic": "I Made",
         "status": "Belum"
       },
       "btn": {
@@ -19579,11 +19579,11 @@
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
-        "status": "Belum"
+        "merk": "Layanan & Jaringan IT (ITIL V4 Foundation dan MTCNA)",
+        "link": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/SR-BNI-2025-ID.pdf",
+        "url": "https://www.bni.co.id/Portals/1/BNI/Perusahaan/HubunganInvestor/Docs/SR-BNI-2025-ID.pdf",
+        "pic": "Waryono",
+        "status": "Terverifikasi"
       },
       "btn": {
         "bankCode": "BTN",
@@ -20117,10 +20117,10 @@
       },
       "bsi": {
         "bankCode": "BSI",
-        "merk": "-",
+        "merk": "Cloudera (platform on-premises)",
         "link": "",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Annisa",
         "status": "Belum"
       }
     }
@@ -20251,10 +20251,10 @@
     "banks": {
       "bri": {
         "bankCode": "BRI",
-        "merk": "-",
+        "merk": "Apache Kafka",
         "link": "",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Annisa",
         "status": "Belum"
       },
       "mandiri": {
@@ -20283,10 +20283,10 @@
       },
       "btn": {
         "bankCode": "BTN",
-        "merk": "-",
+        "merk": "Apache Kafka (indikasi)",
         "link": "",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Annisa",
         "status": "Belum"
       },
       "bsi": {
@@ -22993,10 +22993,10 @@
       },
       "bca": {
         "bankCode": "BCA",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "SYNRGY accelerator (Face Recognition dan Liveness Detection dari Verihubs)",
+        "link": "https://verihubs.com/e-kyc-verification",
+        "url": "https://verihubs.com/e-kyc-verification",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bni": {
@@ -23457,10 +23457,10 @@
       },
       "bca": {
         "bankCode": "BCA",
-        "merk": "-",
-        "link": "",
-        "url": "",
-        "pic": "Mrs Utami",
+        "merk": "ISO 42001:2023 untuk Artificial Intelligence Management System (AIMS)",
+        "link": "https://www.bca.co.id/id/tentang-bca/sustainability/governance/keamanan-siber/program-ai-yang-bertanggung-jawab?utm_source=chatgpt.com",
+        "url": "https://www.bca.co.id/id/tentang-bca/sustainability/governance/keamanan-siber/program-ai-yang-bertanggung-jawab?utm_source=chatgpt.com",
+        "pic": "I Made",
         "status": "Belum"
       },
       "bni": {
@@ -23557,50 +23557,50 @@
     "banks": {
       "bri": {
         "bankCode": "BRI",
-        "merk": "-",
-        "link": "",
+        "merk": "Cloudera Data Platform, Cloudera AI",
+        "link": "Cloudera Customer Story | Transformasi AI BRI",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Ivan",
         "status": "Belum"
       },
       "mandiri": {
         "bankCode": "Mandiri",
-        "merk": "-",
-        "link": "",
+        "merk": "Cloudera Data Platform, Lintasarta GPU Merdeka (NVIDIA AI), IBM Watson",
+        "link": "Lintasarta GPU Merdeka | Mandiri Press Release",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Ivan",
         "status": "Belum"
       },
       "bca": {
         "bankCode": "BCA",
-        "merk": "-",
-        "link": "",
+        "merk": "Cloudera Data Platform, Cloudera AI",
+        "link": "ITBeat - BCA Cloudera AI",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Ivan",
         "status": "Belum"
       },
       "bni": {
         "bankCode": "BNI",
-        "merk": "-",
-        "link": "",
+        "merk": "Cloudera AI Inference Service, NVIDIA NIM Microservices",
+        "link": "Cloudera Customer Story BNI | Infobank BNI AI",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Ivan",
         "status": "Belum"
       },
       "btn": {
         "bankCode": "BTN",
-        "merk": "-",
-        "link": "",
+        "merk": "Google Cloud Platform (GCP), In-house ML Framework",
+        "link": "Cloud Computing BTN | Detik Finance BTN AI",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Ivan",
         "status": "Belum"
       },
       "bsi": {
         "bankCode": "BSI",
-        "merk": "-",
-        "link": "",
+        "merk": "Microsoft 365 Copilot, Azure Cloud, Cloudera Data Platform",
+        "link": "Microsoft News BSI | Cloudera Customer Story BSI",
         "url": "",
-        "pic": "Mrs Utami",
+        "pic": "Ivan",
         "status": "Belum"
       }
     }

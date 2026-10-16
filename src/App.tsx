@@ -1,6 +1,7 @@
 import React from 'react';
 import { useApp } from './context/AppContext';
 import { Navbar } from './components/layout/Navbar';
+import { AppSidebar } from './components/layout/AppSidebar';
 import { LoginPage } from './components/auth/LoginPage';
 import { ForbiddenView } from './components/auth/ForbiddenView';
 import { DashboardOverview } from './components/dashboard/DashboardOverview';
@@ -16,7 +17,7 @@ import { GenAiReadinessView } from './components/strategy/GenAiReadinessView';
 import { FindingDetailModal } from './components/matrix/FindingDetailModal';
 import { ResearchDetailModal } from './components/matrix/ResearchDetailModal';
 import { GoogleSheetsSyncModal } from './components/sync/GoogleSheetsSyncModal';
-import { ShieldCheck, Lock, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Lock, ExternalLink, PanelLeftOpen } from 'lucide-react';
 
 export const AppContent: React.FC = () => {
   const { 
@@ -25,7 +26,9 @@ export const AppContent: React.FC = () => {
     currentPath, 
     activeTab, 
     isSyncModalOpen,
-    setIsSyncModalOpen
+    setIsSyncModalOpen,
+    isSidebarOpen,
+    setIsSidebarOpen
   } = useApp();
 
   // 1. Unauthenticated or Login Route
@@ -95,9 +98,28 @@ export const AppContent: React.FC = () => {
       <div>
         <Navbar />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          {renderMainContent()}
-        </main>
+        {/* Floating Reopen Sidebar Tab when collapsed */}
+        {!isSidebarOpen && (
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3.5 px-2 rounded-r-2xl shadow-xl shadow-blue-600/30 flex flex-col items-center gap-1.5 transition-all hover:pr-3 group animate-in fade-in slide-in-from-left duration-200"
+            title="Klik untuk membuka Sidebar Navigasi"
+          >
+            <PanelLeftOpen className="w-4 h-4 group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-extrabold uppercase tracking-widest [writing-mode:vertical-lr] rotate-180">
+              Buka Sidebar
+            </span>
+          </button>
+        )}
+
+        <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 transition-all duration-300">
+          <div className="flex flex-col lg:flex-row gap-6 items-start">
+            {isSidebarOpen && <AppSidebar />}
+            <main className="flex-1 min-w-0 w-full transition-all duration-300">
+              {renderMainContent()}
+            </main>
+          </div>
+        </div>
       </div>
 
       {/* Global Finding Details Drawer/Modal */}

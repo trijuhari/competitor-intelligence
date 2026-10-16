@@ -7,6 +7,7 @@ import {
   FileSpreadsheet
 } from 'lucide-react';
 import { VerificationStatus } from '../../types';
+import { formatDashLineBreaks } from '../../utils/helpers';
 
 const WORKSHOP_META: Record<string, { label: string; desc: string; color: string; bg: string; border: string }> = {
   WS1: { 
@@ -455,7 +456,7 @@ export const MatrixView: React.FC = () => {
                 {BANK_SLUGS.map(b => (
                   <th
                     key={b.key}
-                    className={`py-3.5 px-3 text-center min-w-[190px] ${
+                    className={`py-3.5 px-3 text-center w-48 min-w-[170px] max-w-[210px] ${
                       b.isFocus 
                         ? 'bg-blue-100/70 dark:bg-blue-950/60 border-x-2 border-blue-400 dark:border-blue-600 text-blue-950 dark:text-blue-100' 
                         : 'border-r border-slate-200 dark:border-slate-700/80'
@@ -527,7 +528,7 @@ export const MatrixView: React.FC = () => {
                         </div>
                       </td>
 
-                      <td className="py-3 px-4 font-bold sticky left-0 bg-white dark:bg-slate-900 group-hover:bg-slate-50/90 dark:group-hover:bg-slate-850 z-10 border-r border-slate-200 dark:border-slate-800 shadow-xs align-top">
+                      <td className="py-3 px-4 font-bold sticky left-0 bg-white dark:bg-slate-900 group-hover:bg-slate-100/90 dark:group-hover:bg-slate-800 transition-colors z-10 border-r border-slate-200 dark:border-slate-800 shadow-xs align-top">
                         <div className="text-xs text-slate-900 dark:text-slate-100 leading-snug">
                           {item.kapabilitas}
                         </div>
@@ -553,7 +554,7 @@ export const MatrixView: React.FC = () => {
                         const hasLink = !!(detail.url || (detail.link && detail.link.startsWith('http')));
 
                         let cellBg = isBelum 
-                          ? 'bg-slate-50/70 dark:bg-slate-800/40 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 border-slate-200/80 dark:border-slate-800 text-slate-500 dark:text-slate-400'
+                          ? 'bg-gradient-to-b from-rose-50/80 to-rose-50/30 dark:from-rose-950/35 dark:to-rose-950/15 hover:bg-rose-50 dark:hover:bg-rose-950/50 border-rose-200/80 dark:border-rose-900/50 text-rose-950 dark:text-rose-200 shadow-2xs'
                           : isVerified
                           ? 'bg-gradient-to-b from-emerald-50/70 to-emerald-50/30 dark:from-emerald-950/40 dark:to-emerald-950/20 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 border-emerald-200/90 dark:border-emerald-800/70 text-emerald-950 dark:text-emerald-100 shadow-2xs'
                           : 'bg-gradient-to-b from-amber-50/70 to-amber-50/30 dark:from-amber-950/40 dark:to-amber-950/20 hover:bg-amber-50 dark:hover:bg-amber-950/60 border-amber-200/90 dark:border-amber-800/70 text-amber-950 dark:text-amber-100 shadow-2xs';
@@ -561,7 +562,7 @@ export const MatrixView: React.FC = () => {
                         return (
                           <td
                             key={b.key}
-                            className={`py-2 px-2.5 align-top ${
+                            className={`py-2 px-2.5 align-top w-48 min-w-[170px] max-w-[210px] ${
                               b.isFocus 
                                 ? 'bg-blue-50/20 dark:bg-blue-950/20 border-x-2 border-blue-400/80 dark:border-blue-600/60 group-hover:bg-blue-50/30 dark:group-hover:bg-blue-950/30' 
                                 : 'border-r border-slate-100 dark:border-slate-800'
@@ -575,10 +576,10 @@ export const MatrixView: React.FC = () => {
                             >
                               <div className="space-y-1">
                                 <div className="flex items-start justify-between gap-1.5">
-                                  <div className={`font-bold text-[11px] leading-snug line-clamp-2 ${
-                                    isBelum ? 'text-slate-400 dark:text-slate-500 italic font-normal' : 'text-slate-900 dark:text-slate-100 tracking-tight'
+                                  <div className={`font-bold text-[11px] leading-snug break-words whitespace-pre-line ${
+                                    isBelum ? 'text-rose-900 dark:text-rose-200 font-semibold' : 'text-slate-900 dark:text-slate-100 tracking-tight'
                                   }`}>
-                                    {detail.merk || '–'}
+                                    {formatDashLineBreaks(detail.merk)}
                                   </div>
                                   {hasLink && (
                                     <ExternalLink className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0 group-hover/card:text-blue-600 dark:group-hover/card:text-blue-400 transition" />
@@ -601,8 +602,9 @@ export const MatrixView: React.FC = () => {
                                     </span>
                                   )}
                                   {isBelum && (
-                                    <span className="text-slate-400 dark:text-slate-500 font-medium">
-                                      – Belum
+                                    <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 flex items-center space-x-1">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                      <span>Belum</span>
                                     </span>
                                   )}
                                 </div>

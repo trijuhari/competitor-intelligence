@@ -20,6 +20,9 @@ export default {
         'glow-emerald': '0 0 20px -3px rgba(16, 185, 129, 0.2)',
       },
       colors: {
+        slate: {
+          850: '#172033',
+        },
         bri: {
           blue: '#00529C',
           navy: '#002B49',

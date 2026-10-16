@@ -5,6 +5,7 @@ import {
   Building2, Cpu, Globe, UserCheck, Save, Copy, Check, ArrowRight
 } from 'lucide-react';
 import { VerificationStatus, BankCapabilityDetail } from '../../types';
+import { formatDashLineBreaks } from '../../utils/helpers';
 
 export const ResearchDetailModal: React.FC = () => {
   const { 
@@ -94,9 +95,9 @@ export const ResearchDetailModal: React.FC = () => {
         };
       default:
         return {
-          bg: 'bg-slate-700/40 text-slate-400 border-slate-700',
-          dot: 'bg-slate-500',
-          label: 'Belum Diketahui / TBD'
+          bg: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+          dot: 'bg-rose-400',
+          label: 'Belum Terdata / Evaluasi (–)'
         };
     }
   };
@@ -206,8 +207,8 @@ export const ResearchDetailModal: React.FC = () => {
                   <span className="text-slate-400 font-mono text-[11px] block uppercase tracking-wider mb-1">
                     Merk / Stack Name yang Digunakan:
                   </span>
-                  <div className="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm font-black text-blue-300">
-                    {currentBankDetail.merk || 'Belum Diketahui / TBD'}
+                  <div className="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm font-black text-blue-300 whitespace-pre-line leading-relaxed">
+                    {formatDashLineBreaks(currentBankDetail.merk) || 'Belum Diketahui / TBD'}
                   </div>
                 </div>
 

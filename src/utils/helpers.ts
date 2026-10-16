@@ -56,3 +56,26 @@ export const getReviewStatusBadge = (status: ReviewStatus) => {
       };
   }
 };
+
+/**
+ * Breaks sentences containing separator dashes/hyphens (' - ', ' – ', ' — ')
+ * into multiple lines (\n) so each segment renders vertically on a new line.
+ * Preserves compound words like 'in-house', 'real-time', 'off-load'.
+ */
+export const formatDashLineBreaks = (text?: string): string => {
+  if (!text) return '–';
+  const trimmed = text.trim();
+  if (trimmed === '-' || trimmed === '–' || trimmed === '—' || trimmed === '') return '–';
+
+  const lines = trimmed.split('\n');
+  const formattedLines = lines.map(line => {
+    const tLine = line.trim();
+    if (!tLine) return '';
+    return tLine.replace(/\s*([—–]|\s-\s)\s*/g, (_match, _p1, offset) => {
+      if (offset === 0) return '- ';
+      return '\n- ';
+    });
+  });
+
+  return formattedLines.filter(Boolean).join('\n');
+};

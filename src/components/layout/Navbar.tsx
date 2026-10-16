@@ -4,7 +4,7 @@ import {
   BarChart3, Grid3X3, ArrowLeftRight, Building2, Cpu, 
   TrendingUp, Shield, Download, CheckCircle2, ChevronDown, 
   LogOut, Lock, User as UserIcon, FileText, Compass, DollarSign, Bot, Database,
-  FileSpreadsheet, Sun, Moon
+  FileSpreadsheet, Sun, Moon, PanelLeftClose, PanelLeftOpen
 } from 'lucide-react';
 export const Navbar: React.FC = () => {
   const { 
@@ -21,7 +21,9 @@ export const Navbar: React.FC = () => {
     setIsSyncModalOpen,
     isSyncing,
     theme,
-    toggleTheme
+    toggleTheme,
+    isSidebarOpen,
+    toggleSidebar
   } = useApp();
 
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
@@ -42,32 +44,6 @@ export const Navbar: React.FC = () => {
   const isRoleAnalyst = currentUser.role === 'Analyst';
   const isRoleExecutive = currentUser.role === 'Viewer';
 
-  const navItems = isRoleAdmin
-    ? [
-        { path: '/admin', label: 'Kelola Temuan (408)', icon: Database },
-        { path: '/analyst/matrix', label: 'Matriks Riset (408)', icon: Grid3X3 },
-        { path: '/admin/checklist', label: 'Checklist Kesiapan', icon: Shield },
-        { path: '/admin/interviews', label: 'Narasumber Anonim', icon: Building2 },
-        { path: '/admin/audit-logs', label: 'Log Audit', icon: TrendingUp },
-        { path: '/executive/dashboard', label: 'Executive Portal ↗', icon: BarChart3, isSecondary: true },
-      ]
-    : isRoleAnalyst
-    ? [
-        { path: '/executive/dashboard', label: 'Overview', icon: BarChart3 },
-        { path: '/analyst/matrix', label: 'Matriks Riset (408)', icon: Grid3X3 },
-        { path: '/analyst/head-to-head', label: 'Head-to-Head Battlecard', icon: ArrowLeftRight },
-        { path: '/analyst/gap-analysis', label: 'Gap Analysis', icon: TrendingUp },
-        { path: '/analyst/tech-catalog', label: 'Katalog Kapabilitas', icon: Cpu },
-        { path: '/analyst/banks', label: 'Profil 6 Bank', icon: Building2 },
-      ]
-    : [
-        { path: '/executive/dashboard', label: 'Executive Overview', icon: BarChart3 },
-        { path: '/executive/matrix', label: 'Matriks Riset (408)', icon: Grid3X3 },
-        { path: '/executive/head-to-head', label: 'Head-to-Head Battlecard', icon: ArrowLeftRight },
-        { path: '/executive/gap-analysis', label: 'Gap Analysis', icon: TrendingUp },
-        { path: '/executive/banks', label: 'Profil 6 Bank', icon: Building2 },
-      ];
-
   const roleBadgeInfo = isRoleAdmin
     ? { label: 'Portal Administrator', color: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800' }
     : isRoleAnalyst
@@ -77,26 +53,42 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 shadow-xs transition-colors duration-200">
       {/* Top Bar with Branding & Role Context */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Brand */}
-          <div className="flex items-center space-x-3.5 cursor-pointer" onClick={() => navigate(isRoleAdmin ? '/admin' : isRoleAnalyst ? '/analyst/matrix' : '/executive/dashboard')}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#002B49] via-[#00529C] to-blue-500 flex items-center justify-center text-white shadow-md shadow-blue-900/25 ring-1 ring-white/20 shrink-0 transform transition-transform hover:scale-105">
-              <span className="text-xl">🏦</span>
-            </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-slate-900 via-blue-950 to-blue-800 dark:from-white dark:via-blue-100 dark:to-blue-300 bg-clip-text text-transparent">
-                  BRI Competitor Intelligence
-                </span>
-                <span className={`px-2 py-0.5 text-[10px] font-extrabold tracking-wide uppercase rounded-full border shadow-2xs ${roleBadgeInfo.color}`}>
-                  {roleBadgeInfo.label}
-                </span>
+          {/* Brand & Sidebar Toggle */}
+          <div className="flex items-center space-x-3">
+            {/* Sidebar Toggle Button */}
+            <button
+              onClick={toggleSidebar}
+              className="p-2 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/70 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-2xs transition-all active:scale-95 flex items-center justify-center shrink-0"
+              title={isSidebarOpen ? "Sembunyikan Sidebar Navigasi" : "Buka Sidebar Navigasi"}
+              aria-label="Toggle sidebar"
+            >
+              {isSidebarOpen ? (
+                <PanelLeftClose className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+              ) : (
+                <PanelLeftOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              )}
+            </button>
+
+            <div className="flex items-center space-x-3.5 cursor-pointer" onClick={() => navigate(isRoleAdmin ? '/admin' : isRoleAnalyst ? '/analyst/matrix' : '/executive/dashboard')}>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#002B49] via-[#00529C] to-blue-500 flex items-center justify-center text-white shadow-md shadow-blue-900/25 ring-1 ring-white/20 shrink-0 transform transition-transform hover:scale-105">
+                <span className="text-xl">🏦</span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block"></span>
-                Benchmark Arsitektur Teknologi BRI vs Mandiri, BCA, BNI, BTN & BSI
-              </p>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-slate-900 via-blue-950 to-blue-800 dark:from-white dark:via-blue-100 dark:to-blue-300 bg-clip-text text-transparent">
+                    BRI Competitor Intelligence
+                  </span>
+                  <span className={`px-2 py-0.5 text-[10px] font-extrabold tracking-wide uppercase rounded-full border shadow-2xs ${roleBadgeInfo.color}`}>
+                    {roleBadgeInfo.label}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block"></span>
+                  Benchmark Arsitektur Teknologi BRI vs Mandiri, BCA, BNI, BTN & BSI
+                </p>
+              </div>
             </div>
           </div>
 
@@ -199,33 +191,6 @@ export const Navbar: React.FC = () => {
               <span className="hidden sm:inline">Keluar</span>
             </button>
           </div>
-        </div>
-
-        {/* Navigation Tabs based on Role with Modern Segmented Bar */}
-        <div className="py-2 overflow-x-auto scrollbar-none">
-          <nav className="inline-flex p-1 bg-slate-100/80 dark:bg-slate-900/90 backdrop-blur rounded-2xl border border-slate-200/60 dark:border-slate-800 space-x-1 min-w-full sm:min-w-0">
-            {navItems.map(item => {
-              const Icon = item.icon;
-              const isActive = currentPath === item.path || (item.path === '/admin' && currentPath === '/admin/overview');
-
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => navigate(item.path)}
-                  className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-150 ${
-                    isActive
-                      ? 'bg-white dark:bg-slate-800 text-blue-700 dark:text-blue-400 font-bold shadow-xs shadow-slate-900/5 ring-1 ring-slate-200/70 dark:ring-slate-700'
-                      : item.isSecondary
-                      ? 'text-slate-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-white/60 dark:hover:bg-slate-800/60 font-medium'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60 font-medium'
-                  }`}
-                >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600 dark:text-blue-400' : item.isSecondary ? 'text-slate-400 dark:text-slate-500' : 'text-slate-500 dark:text-slate-400'}`} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </nav>
         </div>
       </div>
     </header>

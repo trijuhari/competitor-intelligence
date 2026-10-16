@@ -59,6 +59,11 @@ interface AppContextType {
   toggleTheme: () => void;
   setTheme: (theme: ThemeMode) => void;
 
+  // Sidebar State (Global across all pages)
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
+
   // Auth & Roles
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
@@ -171,6 +176,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const setTheme = (newTheme: ThemeMode) => {
     setThemeState(newTheme);
+  };
+
+  // Global Sidebar State (Persisted in localStorage)
+  const SIDEBAR_STORAGE_KEY = 'competitor_intel_bri_sidebar_open';
+  const [isSidebarOpen, setIsSidebarOpenState] = useState<boolean>(() => {
+    const saved = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+    return saved !== null ? saved === 'true' : true;
+  });
+
+  const setIsSidebarOpen = (open: boolean) => {
+    setIsSidebarOpenState(open);
+    localStorage.setItem(SIDEBAR_STORAGE_KEY, String(open));
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpenState(prev => {
+      const next = !prev;
+      localStorage.setItem(SIDEBAR_STORAGE_KEY, String(next));
+      return next;
+    });
   };
 
   // Initialize state from localStorage or seedData
@@ -964,6 +989,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         theme,
         toggleTheme,
         setTheme,
+
+        // Global Sidebar State
+        isSidebarOpen,
+        setIsSidebarOpen,
+        toggleSidebar,
 
         // Auth & Routing
         isAuthenticated,

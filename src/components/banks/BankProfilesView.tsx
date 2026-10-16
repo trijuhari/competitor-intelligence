@@ -361,7 +361,9 @@ export const BankProfilesView: React.FC = () => {
                           </span>
                         )}
                         {isBelum && (
-                          <span className="text-slate-400 dark:text-slate-500 text-[10px]">– Belum</span>
+                          <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                            – Belum
+                          </span>
                         )}
                       </td>
 
