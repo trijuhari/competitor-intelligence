@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { 
   ArrowLeftRight, Check, X, Shield, Sparkles, Building2, 
   ChevronRight, ArrowRight, TrendingUp, AlertTriangle, CheckCircle2, 
-  HelpCircle, ExternalLink, Filter, Search, RotateCcw, Database
+  HelpCircle, ExternalLink, Filter, Search, RotateCcw, Database, Layers
 } from 'lucide-react';
 import { BankLogo } from '../common/BankLogo';
 
@@ -19,7 +19,8 @@ const BANK_OPTIONS = [
 export const HeadToHeadView: React.FC = () => {
   const { 
     researchItems,
-    setSelectedResearchCell 
+    setSelectedResearchCell,
+    navigate
   } = useApp();
 
   const [bankASlug, setBankASlug] = useState<string>('bri');
@@ -261,6 +262,23 @@ export const HeadToHeadView: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Shortcut to Interactive Architecture Blueprint */}
+        <div className="mt-4 pt-3 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+          <div className="flex items-center space-x-2 text-slate-300 text-[11px]">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <span>Ingin melihat komparasi visual topologi per layer arsitektur enterprise?</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/analyst/blueprint')}
+            className="px-3.5 py-1.5 rounded-xl bg-blue-600/30 hover:bg-blue-600/50 text-white font-bold text-xs flex items-center space-x-1.5 transition border border-blue-400/30 hover:border-blue-400/60 cursor-pointer shadow-xs active:scale-95 shrink-0"
+          >
+            <Layers className="w-3.5 h-3.5 text-blue-300" />
+            <span>Buka Blueprint Arsitektur (5 Layer)</span>
+            <ArrowRight className="w-3 h-3 text-blue-200" />
+          </button>
         </div>
       </div>
 

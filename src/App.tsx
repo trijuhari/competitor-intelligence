@@ -10,6 +10,7 @@ import { TechCatalogView } from './components/tech/TechCatalogView';
 import { GapAnalysisView } from './components/gapanalysis/GapAnalysisView';
 import { AdminCMSView } from './components/admin/AdminCMSView';
 import { StrategicDecisionMatrixView } from './components/strategy/StrategicDecisionMatrixView';
+import { ArchitectureBlueprintView } from './components/blueprint/ArchitectureBlueprintView';
 import { FindingDetailModal } from './components/matrix/FindingDetailModal';
 import { ResearchDetailModal } from './components/matrix/ResearchDetailModal';
 import { GoogleSheetsSyncModal } from './components/sync/GoogleSheetsSyncModal';
@@ -34,6 +35,10 @@ export const AppContent: React.FC = () => {
     // Role-routed views (All users are Admin with full access)
     if (currentPath.startsWith('/admin') || activeTab === 'admin') {
       return <AdminCMSView />;
+    }
+
+    if (currentPath.includes('blueprint') || activeTab === 'blueprint') {
+      return <ArchitectureBlueprintView />;
     }
 
     if (currentPath.includes('matrix') || activeTab === 'matrix') {

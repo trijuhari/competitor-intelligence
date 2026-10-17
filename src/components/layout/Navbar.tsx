@@ -4,7 +4,7 @@ import {
   BarChart3, Grid3X3, ArrowLeftRight, Building2, Cpu, 
   TrendingUp, Download, ChevronDown, 
   LogOut, Sun, Moon, Database, RefreshCw, History, ShieldCheck,
-  FileSpreadsheet
+  FileSpreadsheet, Layers
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -13,7 +13,7 @@ export const Navbar: React.FC = () => {
     currentPath, 
     navigate, 
     logout, 
-    exportDataJSON,
+    exportDataJSON, 
     exportResearchMatrixCSV,
     researchItems,
     auditLogs,
@@ -46,6 +46,13 @@ export const Navbar: React.FC = () => {
       icon: Grid3X3, 
       badge: `${researchItems.length}`,
       isActive: currentPath.includes('matrix')
+    },
+    { 
+      path: '/analyst/blueprint', 
+      label: 'Blueprint Arsitektur', 
+      icon: Layers,
+      badge: 'Visual',
+      isActive: currentPath.includes('blueprint')
     },
     { 
       path: '/analyst/head-to-head', 
