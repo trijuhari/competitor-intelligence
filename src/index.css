@@ -2,49 +2,107 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------------------------------------------
+   Design tokens
+   One neutral ramp, one accent (BRI blue), three semantic statuses.
+   Colour is reserved for meaning: status (ok / warn / none) & bank identity.
+------------------------------------------------------------------- */
 @layer base {
-  body {
-    @apply bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased font-sans selection:bg-blue-600 selection:text-white min-h-screen transition-colors duration-200;
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.03) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.03) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.02) 0px, transparent 50%);
-    background-attachment: fixed;
+  :root {
+    --canvas: 220 14% 97.5%;
+    --surface: 0 0% 100%;
+    --sunken: 220 14% 95.5%;
+    --line: 220 13% 91%;
+    --line-strong: 220 11% 83%;
+    --ink: 222 25% 12%;
+    --muted: 220 9% 38%;
+    --subtle: 220 8% 56%;
+
+    --accent: 208 100% 31%;
+    --accent-fg: 0 0% 100%;
+    --accent-soft: 208 80% 96%;
+
+    --ok: 152 62% 32%;
+    --ok-soft: 150 50% 95%;
+    --warn: 30 92% 40%;
+    --warn-soft: 40 90% 95%;
+    --danger: 0 65% 48%;
+    --danger-soft: 0 80% 97%;
   }
 
-  .dark body {
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.1) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.06) 0px, transparent 50%);
+  .dark {
+    --canvas: 222 18% 7%;
+    --surface: 222 16% 10%;
+    --sunken: 222 16% 8.5%;
+    --line: 222 12% 17%;
+    --line-strong: 222 10% 25%;
+    --ink: 220 15% 93%;
+    --muted: 220 9% 66%;
+    --subtle: 220 7% 48%;
+
+    --accent: 208 90% 64%;
+    --accent-fg: 222 30% 8%;
+    --accent-soft: 208 55% 15%;
+
+    --ok: 152 50% 52%;
+    --ok-soft: 152 40% 12%;
+    --warn: 36 85% 60%;
+    --warn-soft: 36 50% 12%;
+    --danger: 0 70% 64%;
+    --danger-soft: 0 40% 13%;
+  }
+
+  html {
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  body {
+    @apply bg-canvas text-ink antialiased font-sans min-h-screen text-sm;
+  }
+
+  ::selection {
+    background: hsl(var(--accent) / 0.18);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight font-bold text-slate-900 dark:text-white;
+    @apply tracking-tight text-ink;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 2px;
   }
 }
 
-/* Custom scrollbars */
+@layer utilities {
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: hsl(var(--line-strong));
   border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: hsl(var(--subtle));
+  background-clip: content-box;
 }
 
 @keyframes pulse-subtle {
@@ -56,15 +114,24 @@
   animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Modern Card Utilities */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: none; }
+}
+
+.animate-fade-in {
+  animation: fade-in 140ms ease-out;
+}
+
+/* Legacy card utilities, kept for un-migrated views but rendered flat. */
 .glass-panel {
-  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 shadow-card transition-all duration-200;
+  @apply bg-surface border border-line rounded-lg;
 }
 
 .glass-panel-hover {
-  @apply bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 shadow-card hover:shadow-card-hover hover:border-blue-200 dark:hover:border-blue-500/30 hover:-translate-y-0.5 transition-all duration-200;
+  @apply bg-surface border border-line rounded-lg transition-colors hover:border-line-strong;
 }
 
 .pill-badge {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-tight transition-all;
+  @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium;
 }

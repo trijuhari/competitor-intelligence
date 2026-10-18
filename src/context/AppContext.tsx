@@ -132,10 +132,10 @@ export const getRoleHomeUrl = (_role?: UserRole): string => {
 
 const pathToTab = (path: string): string => {
   if (path.startsWith('/admin')) return 'admin';
+  if (path.includes('blueprint')) return 'blueprint';
   if (path.includes('matrix')) return 'matrix';
   if (path.includes('head-to-head')) return 'head-to-head';
   if (path.includes('gap-analysis')) return 'gap-analysis';
-  if (path.includes('decision-matrix')) return 'decision-matrix';
   if (path.includes('tech-catalog')) return 'tech-catalog';
   if (path.includes('banks')) return 'banks';
   if (path.includes('dashboard') || path === '/executive' || path === '/analyst') return 'dashboard';
@@ -210,10 +210,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (saved) {
       try {
         const u = JSON.parse(saved);
+        if (u.nama && (u.nama.includes('Rinaldi') || u.nama.includes('Firmansyah') || u.id === 'usr-1')) {
+          u.nama = 'Admin';
+          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(u));
+        }
         return { ...u, role: 'Admin' as UserRole };
       } catch (e) {}
     }
-    return { ...INITIAL_USERS[0], role: 'Admin' as UserRole };
+    return { ...INITIAL_USERS[0], nama: 'Admin', role: 'Admin' as UserRole };
   });
 
   // Routing State
@@ -337,7 +341,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setActiveTabState(tab);
     let newPath = '/executive/dashboard';
     if (tab === 'admin') newPath = '/admin';
-    else if (['matrix', 'head-to-head', 'gap-analysis', 'tech-catalog', 'banks'].includes(tab)) newPath = `/analyst/${tab}`;
+    else if (['sync', 'audit', 'checklist', 'findings'].includes(tab)) newPath = `/admin/${tab}`;
+    else if (['matrix', 'head-to-head', 'gap-analysis', 'tech-catalog', 'banks', 'blueprint'].includes(tab)) newPath = `/analyst/${tab}`;
     else newPath = `/executive/${tab}`;
     window.history.pushState({}, '', newPath);
     setCurrentPath(newPath);
@@ -378,9 +383,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch (err: any) {
       // Local fallback in case server offline
       const localMatch = [
-        { id: 'usr-1', nama: 'Rinaldi Firmansyah (Lead Admin)', email: 'admin@bri.co.id', role: 'Admin' as UserRole, password: 'admin123', avatar: '👨‍💼' },
-        { id: 'usr-2', nama: 'Siti Rahmawati (Tech Analyst)', email: 'analyst@bri.co.id', role: 'Admin' as UserRole, password: 'analyst123', avatar: '👩‍💻' },
-        { id: 'usr-3', nama: 'Budi Hartono (Executive Director BRI)', email: 'executive@bri.co.id', role: 'Admin' as UserRole, password: 'bri123', avatar: '👔' },
+        { id: 'usr-1', nama: 'Admin', email: 'admin@bri.co.id', role: 'Admin' as UserRole, password: 'admin123' },
+        { id: 'usr-2', nama: 'Siti Rahmawati (Tech Analyst)', email: 'analyst@bri.co.id', role: 'Admin' as UserRole, password: 'analyst123' },
+        { id: 'usr-3', nama: 'Budi Hartono (Executive Director BRI)', email: 'executive@bri.co.id', role: 'Admin' as UserRole, password: 'bri123' },
       ].find(u => u.email.toLowerCase() === trimmedEmail.toLowerCase() && u.password === pass);
 
       if (localMatch) {

@@ -1,25 +1,21 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
-  Search, Filter, Cpu, ExternalLink, Building2, CheckCircle2, 
-  Layers, AlertTriangle, HelpCircle, RotateCcw, ChevronLeft, ChevronRight, Database 
+  Search, ExternalLink, ChevronLeft, ChevronRight, RotateCcw
 } from 'lucide-react';
-import { ResearchItem } from '../../types';
-
-const WORKSHOP_META: Record<string, { label: string; color: string; bg: string; border: string }> = {
-  WS1: { label: 'WS1: Core & Digital', color: 'text-blue-700 dark:text-blue-300', bg: 'bg-blue-50 dark:bg-blue-950/50', border: 'border-blue-200 dark:border-blue-800' },
-  WS2: { label: 'WS2: EDW & BI', color: 'text-indigo-700 dark:text-indigo-300', bg: 'bg-indigo-50 dark:bg-indigo-950/50', border: 'border-indigo-200 dark:border-indigo-800' },
-  WS3: { label: 'WS3: Cloud & Infra', color: 'text-cyan-700 dark:text-cyan-300', bg: 'bg-cyan-50 dark:bg-cyan-950/50', border: 'border-cyan-200 dark:border-cyan-800' },
-  WS4: { label: 'WS4: Big Data & AI', color: 'text-purple-700 dark:text-purple-300', bg: 'bg-purple-50 dark:bg-purple-950/50', border: 'border-purple-200 dark:border-purple-800' }
-};
+import { BankLogo } from '../common/BankLogo';
+import { 
+  PageHeader, Card, Button, Badge, 
+  Input, Select, StatusDot, cn 
+} from '../ui';
 
 const BANK_BADGES = [
-  { slug: 'bri', label: 'BRI', logo: '🟦', isFocus: true },
-  { slug: 'mandiri', label: 'Mandiri', logo: '🟨', isFocus: false },
-  { slug: 'bca', label: 'BCA', logo: '🔵', isFocus: false },
-  { slug: 'bni', label: 'BNI', logo: '🟧', isFocus: false },
-  { slug: 'btn', label: 'BTN', logo: '🔷', isFocus: false },
-  { slug: 'bsi', label: 'BSI', logo: '🟩', isFocus: false }
+  { slug: 'bri', label: 'BRI', isFocus: true },
+  { slug: 'mandiri', label: 'Mandiri', isFocus: false },
+  { slug: 'bca', label: 'BCA', isFocus: false },
+  { slug: 'bni', label: 'BNI', isFocus: false },
+  { slug: 'btn', label: 'BTN', isFocus: false },
+  { slug: 'bsi', label: 'BSI', isFocus: false }
 ];
 
 export const TechCatalogView: React.FC = () => {
@@ -58,12 +54,12 @@ export const TechCatalogView: React.FC = () => {
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchCap = item.kapabilitas.toLowerCase().includes(q);
-        const matchDom = item.domain.toLowerCase().includes(q);
+        const matchDomain = item.domain.toLowerCase().includes(q);
         const matchKat = item.kategori.toLowerCase().includes(q);
         const matchMerk = Object.values(item.banks).some(b => 
-          b.merk?.toLowerCase().includes(q) || b.link?.toLowerCase().includes(q)
+          b.merk?.toLowerCase().includes(q)
         );
-        if (!matchCap && !matchDom && !matchKat && !matchMerk) return false;
+        if (!matchCap && !matchDomain && !matchKat && !matchMerk) return false;
       }
 
       return true;
@@ -88,200 +84,194 @@ export const TechCatalogView: React.FC = () => {
     setCurrentPage(1);
   };
 
-  const isFilterActive = searchQuery.trim() !== '' || selectedWorkshop !== 'all' || 
+  const isFilterActive = searchQuery !== '' || selectedWorkshop !== 'all' || 
     selectedDomain !== 'all' || selectedCategory !== 'all' || selectedBankFilter !== 'all';
 
   return (
-    <div className="space-y-6 pb-16">
+    <div className="space-y-6">
       {/* Header */}
-      <div>
-        <div className="flex items-center space-x-2">
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-            Katalog Direktori Kapabilitas & Sistem Teknologi
-          </h2>
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
-            {researchItems.length} Kapabilitas Riset
-          </span>
-        </div>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-3xl">
-          Direktori lengkap 408 kapabilitas teknologi perbankan Himbara & BCA, mencakup 13 domain arsitektur, 9 kategori sistem, dan pemetaan implementasi di 6 bank.
-        </p>
-      </div>
+      <PageHeader
+        title="Katalog Kapabilitas Teknologi"
+        description="Daftar 408 kapabilitas perbankan yang dievaluasi dengan status adopsi pada masing-masing dari 6 bank."
+      />
 
-      {/* Filter Bar */}
-      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-          <div className="md:col-span-4 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Cari nama kapabilitas, domain, sistem, atau merk..."
+      {/* Filter and Search Bar */}
+      <Card className="p-3.5 space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
+          <div className="md:col-span-4">
+            <Input
+              placeholder="Cari kapabilitas, domain, atau merk…"
               value={searchQuery}
               onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-blue-500 bg-slate-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+              icon={<Search />}
+              className="w-full"
             />
           </div>
 
           <div className="md:col-span-2">
-            <select
+            <Select
               value={selectedWorkshop}
               onChange={e => { setSelectedWorkshop(e.target.value); setCurrentPage(1); }}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
+              className="w-full"
             >
-              <option value="all">Semua Workshop</option>
+              <option value="all">Semua Pilar</option>
               <option value="WS1">WS1: Core & Digital</option>
               <option value="WS2">WS2: EDW & BI</option>
               <option value="WS3">WS3: Cloud & Infra</option>
               <option value="WS4">WS4: Big Data & AI</option>
-            </select>
+            </Select>
           </div>
 
-          <div className="md:col-span-3">
-            <select
+          <div className="md:col-span-2">
+            <Select
               value={selectedDomain}
               onChange={e => { setSelectedDomain(e.target.value); setCurrentPage(1); }}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
+              className="w-full"
             >
               <option value="all">Semua Domain ({allDomains.length})</option>
               {allDomains.map(d => (
                 <option key={d} value={d}>{d}</option>
               ))}
-            </select>
+            </Select>
           </div>
 
           <div className="md:col-span-2">
-            <select
+            <Select
+              value={selectedCategory}
+              onChange={e => { setSelectedCategory(e.target.value); setCurrentPage(1); }}
+              className="w-full"
+            >
+              <option value="all">Semua Kategori ({allCategories.length})</option>
+              {allCategories.map(k => (
+                <option key={k} value={k}>{k}</option>
+              ))}
+            </Select>
+          </div>
+
+          <div className="md:col-span-2">
+            <Select
               value={selectedBankFilter}
               onChange={e => { setSelectedBankFilter(e.target.value); setCurrentPage(1); }}
-              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
+              className="w-full"
             >
               <option value="all">Semua Bank</option>
               {BANK_BADGES.map(b => (
-                <option key={b.slug} value={b.slug}>Diadopsi {b.label}</option>
+                <option key={b.slug} value={b.slug}>{b.label}</option>
               ))}
-            </select>
+            </Select>
           </div>
+        </div>
 
-          <div className="md:col-span-1 flex justify-end">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-line text-2xs text-subtle">
+          <div className="flex items-center gap-2">
+            <span>
+              Menampilkan <strong className="text-ink num">{totalFiltered === 0 ? 0 : (effectivePage - 1) * pageSize + 1}</strong> – <strong className="text-ink num">{Math.min(effectivePage * pageSize, totalFiltered)}</strong> dari <strong className="text-ink num">{totalFiltered}</strong> kapabilitas
+            </span>
             {isFilterActive && (
               <button
                 onClick={resetFilters}
-                className="p-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition"
-                title="Reset filter"
+                className="text-accent hover:underline font-medium inline-flex items-center gap-1 ml-2"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset filter</span>
               </button>
             )}
           </div>
-        </div>
-
-        {/* Pagination Sub-bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
-          <div>
-            Menampilkan <strong className="text-slate-800 dark:text-white">{totalFiltered === 0 ? 0 : (effectivePage - 1) * pageSize + 1}</strong> – <strong className="text-slate-800 dark:text-white">{Math.min(effectivePage * pageSize, totalFiltered)}</strong> dari <strong className="text-slate-800 dark:text-white">{totalFiltered}</strong> kapabilitas
-          </div>
 
           {totalPages > 1 && (
-            <div className="flex items-center space-x-1">
-              <button
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={effectivePage <= 1}
-                className="p-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none text-slate-600 dark:text-slate-300"
+                aria-label="Halaman sebelumnya"
               >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <span className="px-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Hal {effectivePage} / {totalPages}
+                <ChevronLeft />
+              </Button>
+              <span className="px-1 text-2xs font-medium text-ink num">
+                {effectivePage} / {totalPages}
               </span>
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={effectivePage >= totalPages}
-                className="p-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none text-slate-600 dark:text-slate-300"
+                aria-label="Halaman berikutnya"
               >
-                <ChevronRight className="w-4 h-4" />
-              </button>
+                <ChevronRight />
+              </Button>
             </div>
           )}
         </div>
-      </div>
+      </Card>
 
       {/* Capabilities Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {paginatedItems.map(item => {
-          const ws = WORKSHOP_META[item.workshop] || {
-            label: item.workshop,
-            color: 'text-slate-700 dark:text-slate-300',
-            bg: 'bg-slate-100 dark:bg-slate-800',
-            border: 'border-slate-200 dark:border-slate-700'
-          };
-
-          return (
-            <div
-              key={item.id}
-              className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-card hover:shadow-card-hover hover:border-blue-200 dark:hover:border-blue-700/60 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between space-y-4 group"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${ws.bg} ${ws.color} ${ws.border}`}>
-                    {item.workshop}
-                  </span>
-                  <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 font-medium">
-                    ID: {item.id}
-                  </span>
-                </div>
-
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-sm leading-snug line-clamp-2 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {item.kapabilitas}
-                </h3>
-
-                <div className="flex items-center space-x-2 mt-2 text-[11px] text-slate-500 dark:text-slate-400">
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">{item.domain}</span>
-                  <span>•</span>
-                  <span className="text-slate-400 dark:text-slate-500 font-medium">{item.kategori}</span>
-                </div>
+        {paginatedItems.map(item => (
+          <Card key={item.id} className="p-4 flex flex-col justify-between space-y-3.5 hover:border-line-strong transition-colors">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <Badge tone="neutral">{item.workshop}</Badge>
+                <span className="text-2xs font-mono text-subtle num">ID: {item.id}</span>
               </div>
 
-              {/* 6 Banks implementation grid */}
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                  Implementasi di 6 Bank:
-                </span>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-                  {BANK_BADGES.map(b => {
-                    const detail = item.banks[b.slug] || { merk: '-', status: 'Belum' };
-                    const isVerified = detail.status === 'Terverifikasi';
-                    const isInference = detail.status === 'Inferensi';
+              <h3 className="font-semibold text-ink text-[13px] leading-snug line-clamp-2">
+                {item.kapabilitas}
+              </h3>
 
-                    return (
-                      <button
-                        key={b.slug}
-                        type="button"
-                        onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: b.slug })}
-                        className={`p-2 rounded-xl border text-left text-[10px] transition-all hover:scale-[1.02] ${
-                          isVerified 
-                            ? 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/80 text-emerald-950 dark:text-emerald-200 font-bold shadow-2xs'
-                            : isInference
-                            ? 'bg-amber-50/70 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/80 text-amber-950 dark:text-amber-200 font-medium shadow-2xs'
-                            : 'bg-slate-50/80 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700/60 text-slate-400 dark:text-slate-500'
-                        }`}
-                        title={`${b.label}: ${detail.merk || 'Belum'} (${detail.status})`}
-                      >
-                        <div className="flex items-center justify-between text-[9px] text-slate-500 dark:text-slate-400 font-bold">
-                          <span>{b.label}</span>
-                          {isVerified && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>}
-                          {isInference && <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>}
-                        </div>
-                        <div className="truncate mt-1 leading-tight font-medium">
-                          {detail.merk || '–'}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+              <div className="flex items-center gap-1.5 mt-1.5 text-2xs text-subtle">
+                <span className="font-medium text-muted">{item.domain}</span>
+                <span>·</span>
+                <span className="truncate">{item.kategori}</span>
               </div>
             </div>
-          );
-        })}
+
+            {/* 6 Banks implementation grid */}
+            <div className="pt-2.5 border-t border-line space-y-1.5">
+              <span className="text-2xs font-medium text-subtle block">
+                Implementasi di 6 bank:
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                {BANK_BADGES.map(b => {
+                  const detail = item.banks[b.slug] || { merk: '-', status: 'Belum' };
+                  const isVerified = detail.status === 'Terverifikasi';
+                  const isInference = detail.status === 'Inferensi';
+
+                  return (
+                    <button
+                      key={b.slug}
+                      type="button"
+                      onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: b.slug })}
+                      className={cn(
+                        'p-1.5 rounded-md border text-left text-2xs transition-colors',
+                        isVerified
+                          ? 'bg-ok-soft/30 border-ok/30 text-ink'
+                          : isInference
+                          ? 'bg-warn-soft/30 border-warn/30 text-ink'
+                          : 'bg-surface border-line text-subtle hover:bg-sunken/40'
+                      )}
+                      title={`${b.label}: ${detail.merk || 'Belum'} (${detail.status})`}
+                    >
+                      <div className="flex items-center justify-between text-2xs text-muted font-medium">
+                        <span className="flex items-center gap-1">
+                          <BankLogo bankCode={b.slug} size={12} />
+                          <span>{b.label}</span>
+                        </span>
+                        <StatusDot status={detail.status} />
+                      </div>
+                      <div className="truncate mt-0.5 font-medium leading-tight text-ink">
+                        {detail.merk || '–'}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </Card>
+        ))}
       </div>
     </div>
   );

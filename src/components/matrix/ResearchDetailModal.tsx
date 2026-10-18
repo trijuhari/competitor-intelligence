@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { VerificationStatus, BankCapabilityDetail } from '../../types';
 import { formatDashLineBreaks } from '../../utils/helpers';
+import { BankLogo } from '../common/BankLogo';
 
 export const ResearchDetailModal: React.FC = () => {
   const { 
@@ -176,7 +177,7 @@ export const ResearchDetailModal: React.FC = () => {
           <div className="p-5 rounded-2xl bg-slate-800/40 border border-slate-700/80 space-y-4">
             <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-slate-700/60">
               <div className="flex items-center space-x-3">
-                <span className="text-3xl">{currentBankObj?.logo || '🏦'}</span>
+                <BankLogo bankCode={activeBankSlug} size={36} />
                 <div>
                   <div className="font-extrabold text-base text-white flex items-center space-x-2">
                     <span>{currentBankObj?.nama || currentBankDetail.bankCode}</span>

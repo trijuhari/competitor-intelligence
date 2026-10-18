@@ -1,253 +1,167 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { 
-  BarChart3, Grid3X3, ArrowLeftRight, TrendingUp, Building2, Cpu,
-  Database, FileSpreadsheet, History, ShieldCheck, PanelLeftClose
-} from 'lucide-react';
+import { LogOut, Moon, Sun, RefreshCw, ChevronsUpDown, X, PanelLeftClose } from 'lucide-react';
+import { NAV_GROUPS } from './nav';
+import { BankLogo } from '../common/BankLogo';
+import { Menu, MenuItem, MenuSeparator, cn } from '../ui';
 
-export const AppSidebar: React.FC = () => {
-  const { 
-    currentPath, 
-    navigate, 
-    currentUser, 
-    researchItems, 
-    auditLogs, 
-    isSyncing, 
-    isDbConnected, 
+interface AppSidebarProps {
+  /** Mobile drawer: called after navigation / on close button. */
+  onClose?: () => void;
+  className?: string;
+}
+
+export const AppSidebar: React.FC<AppSidebarProps> = ({ onClose, className }) => {
+  const {
+    currentPath,
+    navigate,
+    currentUser,
+    logout,
+    researchItems,
+    auditLogs,
+    isSyncing,
+    isDbConnected,
     setIsSyncModalOpen,
-    setIsSidebarOpen
+    setIsSidebarOpen,
+    theme,
+    toggleTheme,
   } = useApp();
 
-  const isRoleAdmin = currentUser.role === 'Admin';
+  const counts: Record<string, number | undefined> = {
+    matrix: researchItems.length,
+    findings: researchItems.length,
+    audit: auditLogs.length,
+  };
 
-  // Primary Analytics Navigation Items
-  const primaryNavItems = [
-    {
-      id: 'exec',
-      label: 'Executive Overview',
-      path: '/executive/dashboard',
-      icon: BarChart3
-    },
-    {
-      id: 'matrix',
-      label: 'Matriks Riset (408)',
-      path: '/analyst/matrix',
-      icon: Grid3X3,
-      badge: `${researchItems.length}`,
-      badgeColor: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300'
-    },
-    {
-      id: 'h2h',
-      label: 'Head-to-Head Battlecard',
-      path: '/analyst/head-to-head',
-      icon: ArrowLeftRight
-    },
-    {
-      id: 'gap',
-      label: 'Gap Analysis',
-      path: '/analyst/gap-analysis',
-      icon: TrendingUp
-    },
-    {
-      id: 'banks',
-      label: 'Profil 6 Bank',
-      path: '/analyst/banks',
-      icon: Building2
-    },
-    {
-      id: 'tech',
-      label: 'Katalog Kapabilitas',
-      path: '/analyst/tech-catalog',
-      icon: Cpu
-    }
-  ];
+  const initials = (currentUser.nama || 'A')
+    .split(' ')
+    .map(s => s[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
 
-  // Admin Governance Modules
-  const adminNavItems = [
-    {
-      id: 'findings',
-      label: 'Temuan Riset (408)',
-      path: '/admin/findings',
-      icon: Database,
-      badge: `${researchItems.length}`,
-      badgeColor: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300'
-    },
-    {
-      id: 'sync',
-      label: 'Sinkronisasi & Backup',
-      path: '/admin/sync',
-      icon: FileSpreadsheet,
-      badge: isSyncing ? 'Syncing...' : 'Live',
-      badgeColor: 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300'
-    },
-    {
-      id: 'audit',
-      label: 'Log Audit Trail',
-      path: '/admin/audit-logs',
-      icon: History,
-      badge: `${auditLogs.length}`,
-      badgeColor: 'bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300'
-    },
-    {
-      id: 'checklist',
-      label: 'Checklist Kesiapan',
-      path: '/admin/checklist',
-      icon: ShieldCheck,
-      badge: '100%',
-      badgeColor: 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300'
-    }
-  ];
-
-  const isItemActive = (itemPath: string) => {
-    if (itemPath === '/admin/findings') {
-      return currentPath === '/admin' || currentPath.startsWith('/admin/findings');
-    }
-    return currentPath === itemPath || (itemPath !== '/' && currentPath.startsWith(itemPath));
+  const go = (path: string) => {
+    navigate(path);
+    onClose?.();
   };
 
   return (
-    <aside className="w-full lg:w-64 xl:w-72 shrink-0 transition-all duration-300 ease-in-out">
-      {/* Sidebar Card without any scrollbar */}
-      <div className="sticky top-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-slate-800 p-3.5 shadow-card space-y-3 select-none">
-        {/* Compact Sidebar Header & Collapse Toggle */}
-        <div className="p-2.5 rounded-2xl bg-gradient-to-br from-slate-900 via-blue-950 to-blue-900 dark:from-slate-800 dark:via-blue-950 dark:to-slate-900 text-white shadow-md shadow-blue-950/20">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 min-w-0">
-              <span className="text-base">🏦</span>
-              <div className="min-w-0">
-                <h3 className="font-extrabold text-xs tracking-tight text-white leading-tight truncate">Navigasi Sistem</h3>
-                <p className="text-[10px] text-blue-200/80 font-medium truncate">BRI Competitor Intel</p>
-              </div>
-            </div>
-
-            {/* Collapse Sidebar Button */}
-            <button
-              onClick={() => setIsSidebarOpen(false)}
-              className="flex items-center space-x-1 px-2 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-blue-100 hover:text-white text-[11px] font-bold transition-all active:scale-95 shrink-0"
-              title="Sembunyikan Sidebar Navigasi"
-              aria-label="Collapse sidebar"
-            >
-              <PanelLeftClose className="w-3.5 h-3.5" />
-              <span>Tutup</span>
-            </button>
+    <aside className={cn('flex flex-col h-full w-60 bg-surface border-r border-line select-none', className)}>
+      {/* Brand & Collapse Header */}
+      <div className="h-12 flex items-center justify-between gap-2 px-3.5 border-b border-line shrink-0">
+        <button onClick={() => go('/executive/dashboard')} className="flex items-center gap-2.5 min-w-0 flex-1 text-left">
+          <BankLogo bankCode="bri" size={22} />
+          <div className="min-w-0 leading-tight">
+            <div className="text-[13px] font-semibold text-ink truncate">Competitor Intel</div>
+            <div className="text-2xs text-subtle truncate">BRI vs Himbara &amp; BCA</div>
           </div>
-        </div>
+        </button>
+        <button
+          onClick={() => {
+            if (onClose) onClose();
+            else setIsSidebarOpen(false);
+          }}
+          className="p-1 rounded text-subtle hover:text-ink hover:bg-sunken transition-colors shrink-0"
+          title={onClose ? 'Tutup menu' : 'Sembunyikan sidebar (Ctrl+B)'}
+          aria-label={onClose ? 'Tutup menu' : 'Sembunyikan sidebar'}
+        >
+          {onClose ? <X className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+        </button>
+      </div>
 
-        {/* --------------------------------------------------- */}
-        {/* SECTION 1: PORTAL & ANALITIK UTAMA                  */}
-        {/* --------------------------------------------------- */}
-        <div className="space-y-0.5">
-          <div className="px-2 py-1 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center justify-between">
-            <span>PORTAL & ANALITIK</span>
-          </div>
-          <div className="space-y-0.5">
-            {primaryNavItems.map(item => {
-              const Icon = item.icon;
-              const active = isItemActive(item.path);
-
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-left transition-all duration-150 group ${
-                    active
-                      ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30 font-bold'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100/90 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white font-medium'
-                  }`}
-                >
-                  <div className="flex items-center space-x-2.5 min-w-0">
-                    <div className={`p-1 rounded-lg transition ${
-                      active
-                        ? 'bg-white/20 text-white'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400'
-                    }`}>
-                      <Icon className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-xs truncate font-bold">{item.label}</span>
-                  </div>
-
-                  {item.badge && (
-                    <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black shrink-0 ml-1.5 ${
-                      active ? 'bg-white/20 text-white' : item.badgeColor
-                    }`}>
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* --------------------------------------------------- */}
-        {/* SECTION 2: MODUL TATA KELOLA (Khusus Administrator) */}
-        {/* --------------------------------------------------- */}
-        {isRoleAdmin && (
-          <div className="space-y-0.5 pt-2 border-t border-slate-200/80 dark:border-slate-800/80">
-            <div className="px-2 py-1 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center justify-between">
-              <span>TATA KELOLA & AUDIT</span>
-              <span className="text-[9px] text-amber-600 dark:text-amber-400 font-extrabold">Admin</span>
-            </div>
-            <div className="space-y-0.5">
-              {adminNavItems.map(tab => {
-                const Icon = tab.icon;
-                const active = isItemActive(tab.path);
-
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto scrollbar-none px-2 py-3 space-y-5">
+        {NAV_GROUPS.map(group => (
+          <div key={group.id}>
+            <div className="px-2 pb-1.5 text-2xs font-medium text-subtle">{group.label}</div>
+            <ul className="space-y-px">
+              {group.items.map(item => {
+                const Icon = item.icon;
+                const active = item.match(currentPath);
+                const count = counts[item.id];
                 return (
-                  <button
-                    key={tab.id}
-                    onClick={() => navigate(tab.path)}
-                    className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-left transition-all duration-150 group ${
-                      active
-                        ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30 font-bold'
-                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white font-medium'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-2.5 min-w-0">
-                      <div className={`p-1 rounded-lg transition ${
-                        active 
-                          ? 'bg-white/20 text-white' 
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400'
-                      }`}>
-                        <Icon className="w-3.5 h-3.5" />
-                      </div>
-                      <span className="text-xs truncate font-bold">{tab.label}</span>
-                    </div>
-
-                    <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black shrink-0 ml-1.5 ${
-                      active 
-                        ? 'bg-white/20 text-white' 
-                        : tab.badgeColor
-                    }`}>
-                      {tab.badge}
-                    </span>
-                  </button>
+                  <li key={item.id}>
+                    <button
+                      onClick={() => go(item.path)}
+                      aria-current={active ? 'page' : undefined}
+                      className={cn(
+                        'relative w-full flex items-center gap-2.5 h-8 px-2 rounded-md text-[13px] transition-colors',
+                        active
+                          ? 'bg-sunken text-ink font-medium'
+                          : 'text-muted hover:text-ink hover:bg-sunken/70'
+                      )}
+                    >
+                      {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-accent" />}
+                      <Icon className={cn('w-4 h-4 shrink-0', active ? 'text-accent' : 'text-subtle')} />
+                      <span className="flex-1 text-left truncate">{item.label}</span>
+                      {count !== undefined && (
+                        <span className="text-2xs text-subtle num">{count}</span>
+                      )}
+                    </button>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </div>
-        )}
+        ))}
+      </nav>
 
-        {/* --------------------------------------------------- */}
-        {/* SECTION 3: SYSTEM STATUS (Clean & Compact)          */}
-        {/* --------------------------------------------------- */}
-        <div className="pt-2 border-t border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between px-1 text-[11px] text-slate-500 dark:text-slate-400">
-          <div className="flex items-center space-x-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="font-medium text-[10px]">
-              SQLite: <strong className="text-slate-700 dark:text-slate-200 font-bold">{isDbConnected ? '408 Live' : 'Offline'}</strong>
-            </span>
-          </div>
+      {/* Data status */}
+      <div className="px-3 py-2.5 border-t border-line flex items-center justify-between gap-2 text-xs">
+        <span className="flex items-center gap-2 text-muted min-w-0">
+          <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', isDbConnected ? 'bg-ok' : 'bg-warn')} />
+          <span className="truncate">{isDbConnected ? 'Database tersambung' : 'Mode lokal'}</span>
+        </span>
+        <button
+          onClick={() => setIsSyncModalOpen(true)}
+          className="inline-flex items-center gap-1 text-muted hover:text-ink transition-colors"
+          title="Sinkronisasi Google Sheets"
+        >
+          <RefreshCw className={cn('w-3.5 h-3.5', isSyncing && 'animate-spin')} />
+          <span>Sync</span>
+        </button>
+      </div>
 
-          <button
-            onClick={() => setIsSyncModalOpen(true)}
-            className="inline-flex items-center space-x-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition"
-            title="Buka panel sinkronisasi Google Sheet"
-          >
-            <FileSpreadsheet className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
-            <span>Sync Sheet</span>
-          </button>
-        </div>
+      {/* User */}
+      <div className="p-2 border-t border-line">
+        <Menu
+          align="left"
+          side="top"
+          className="w-[224px]"
+          trigger={(open, toggle) => (
+            <button
+              onClick={toggle}
+              className={cn(
+                'w-full flex items-center gap-2.5 p-1.5 rounded-md text-left transition-colors',
+                open ? 'bg-sunken' : 'hover:bg-sunken'
+              )}
+            >
+              <span className="w-7 h-7 rounded-md bg-accent-soft text-accent text-xs font-semibold flex items-center justify-center shrink-0">
+                {initials}
+              </span>
+              <span className="min-w-0 flex-1 leading-tight">
+                <span className="block text-[13px] font-medium text-ink truncate">{currentUser.nama}</span>
+                <span className="block text-2xs text-subtle truncate">{currentUser.email}</span>
+              </span>
+              <ChevronsUpDown className="w-3.5 h-3.5 text-subtle shrink-0" />
+            </button>
+          )}
+        >
+          {close => (
+            <>
+              <MenuItem
+                icon={theme === 'dark' ? <Sun /> : <Moon />}
+                onClick={() => { toggleTheme(); close(); }}
+              >
+                {theme === 'dark' ? 'Mode terang' : 'Mode gelap'}
+              </MenuItem>
+              <MenuSeparator />
+              <MenuItem icon={<LogOut />} danger onClick={() => { close(); logout(); }}>
+                Keluar
+              </MenuItem>
+            </>
+          )}
+        </Menu>
       </div>
     </aside>
   );

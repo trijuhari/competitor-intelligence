@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { 
-  Lock, Mail, ArrowRight, ShieldCheck, Eye, EyeOff, AlertCircle, KeyRound
-} from 'lucide-react';
+import { Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react';
+import { BankLogo } from '../common/BankLogo';
+import { Button, Input } from '../ui';
+
+const PEERS = ['mandiri', 'bca', 'bni', 'btn', 'bsi'];
 
 export const LoginPage: React.FC = () => {
   const { login } = useApp();
@@ -27,125 +29,110 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex flex-col justify-center items-center p-4 selection:bg-blue-500 selection:text-white">
-      {/* Background Decor */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl" />
-      </div>
-
-      <div className="w-full max-w-4xl relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        {/* Left Side: Brand & Context */}
-        <div className="lg:col-span-5 text-white space-y-6 text-center lg:text-left">
-          <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-xs font-semibold">
-            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-            <span>Sistem Benchmark Himbara v1.0</span>
-          </div>
-
-          <div className="space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-3xl font-bold shadow-xl shadow-blue-500/20 mx-auto lg:mx-0">
-              🏦
-            </div>
-            <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight text-white">
-              BRI Competitor <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-orange-400">
-                Intelligence Platform
-              </span>
-            </h1>
-            <p className="text-sm text-slate-300 leading-relaxed">
-              Platform benchmarking arsitektur dan kapabilitas teknologi Bank BRI terhadap Mandiri, BNI, BTN, dan BSI di 11 domain perbankan.
-            </p>
-          </div>
-
-          <div className="space-y-3 pt-2 text-xs text-slate-400">
-            <div className="flex items-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Akses Penuh Administrator & Sistem Terpusat</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Lock className="w-4 h-4 text-blue-400 shrink-0" />
-              <span>Akses lengkap ke Dashboard, Matriks 408, CMS & Audit</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <KeyRound className="w-4 h-4 text-orange-400 shrink-0" />
-              <span>Penyimpanan relasional SQLite & sinkronisasi Google Sheets</span>
-            </div>
-          </div>
+    <div className="min-h-screen grid lg:grid-cols-[1fr_480px] bg-canvas">
+      {/* Context panel */}
+      <section className="hidden lg:flex flex-col justify-between p-12 border-r border-line bg-surface">
+        <div className="flex items-center gap-2.5">
+          <BankLogo bankCode="bri" size={26} />
+          <span className="text-[13px] font-semibold text-ink">Competitor Intel</span>
         </div>
 
-        {/* Right Side: Login Card */}
-        <div className="lg:col-span-7 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-8 space-y-6">
-          <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Masuk ke Akun Administrator
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Silakan masuk dengan akun Administrator untuk mengelola seluruh sistem dan matriks kompetitor.
-            </p>
+        <div className="max-w-md">
+          <h1 className="text-3xl font-semibold leading-tight text-ink">
+            Benchmark tech stack BRI terhadap Himbara &amp; BCA.
+          </h1>
+          <p className="text-[15px] text-muted mt-4 leading-relaxed">
+            408 kapabilitas, 13 domain arsitektur, 6 bank. Setiap temuan ditandai
+            terverifikasi, inferensi, atau belum, lengkap dengan sumbernya.
+          </p>
+
+          <dl className="grid grid-cols-3 gap-px mt-10 bg-line border border-line rounded-lg overflow-hidden">
+            {[
+              ['408', 'Kapabilitas'],
+              ['13', 'Domain'],
+              ['6', 'Bank'],
+            ].map(([v, l]) => (
+              <div key={l} className="bg-surface px-4 py-3">
+                <dt className="text-xs text-muted">{l}</dt>
+                <dd className="text-xl font-semibold num text-ink mt-0.5">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-subtle">Dibandingkan dengan</span>
+          <div className="flex items-center gap-1.5">
+            {PEERS.map(p => (
+              <BankLogo key={p} bankCode={p} size={22} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Form */}
+      <section className="flex flex-col justify-center px-6 sm:px-12 py-12">
+        <div className="w-full max-w-sm mx-auto">
+          <div className="lg:hidden flex items-center gap-2.5 mb-10">
+            <BankLogo bankCode="bri" size={26} />
+            <span className="text-[13px] font-semibold text-ink">Competitor Intel</span>
           </div>
 
-          {/* Error Message */}
+          <h2 className="text-xl font-semibold text-ink">Masuk</h2>
+          <p className="text-[13px] text-muted mt-1">Gunakan akun BRI atau konsultan yang terdaftar.</p>
+
           {errorMessage && (
-            <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs flex items-start space-x-2.5 animate-shake">
-              <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+            <div role="alert" className="mt-6 p-3 rounded-md bg-danger-soft border border-danger/20 text-danger text-[13px] flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>{errorMessage}</span>
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-            <div>
-              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">
-                Alamat Email BRI / Konsultan
-              </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="admin@bri.co.id"
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400 dark:placeholder-slate-500 transition"
-                  required
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            <div className="space-y-1.5">
+              <label htmlFor="login-email" className="block text-[13px] font-medium text-ink">Email</label>
+              <Input
+                id="login-email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="nama@bri.co.id"
+                autoComplete="email"
+                required
+                className="[&_input]:h-9"
+              />
             </div>
 
-            <div>
-              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">
-                Kata Sandi (Password)
-              </label>
+            <div className="space-y-1.5">
+              <label htmlFor="login-password" className="block text-[13px] font-medium text-ink">Password</label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
+                <Input
+                  id="login-password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400 dark:placeholder-slate-500 transition"
+                  autoComplete="current-password"
                   required
+                  className="[&_input]:h-9 [&_input]:pr-9"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded text-subtle hover:text-ink"
+                  aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-lg shadow-blue-600/25 transition active:scale-[0.99] disabled:opacity-50"
-            >
-              <span>{loading ? 'Memverifikasi...' : 'Masuk ke Sistem'}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <Button id="login-submit" type="submit" variant="primary" disabled={loading} className="w-full h-9 justify-center">
+              {loading ? 'Memverifikasi…' : 'Masuk'}
+              {!loading && <ArrowRight />}
+            </Button>
           </form>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
