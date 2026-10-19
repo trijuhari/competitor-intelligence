@@ -1,0 +1,6 @@
+run = "npm run build && npm start"
+entrypoint = "server/index.js"
+
+[[ports]]
+localPort = 3000
+externalPort = 80
