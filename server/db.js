@@ -151,9 +151,12 @@ export const initDatabase = async () => {
   await run(`
     INSERT OR REPLACE INTO users (id, nama, email, role, avatar, password)
     VALUES 
-      ('usr-1', 'Admin', 'admin@bri.co.id', 'Admin', '', 'admin123'),
-      ('usr-2', 'Siti Rahmawati (Tech Analyst)', 'analyst@bri.co.id', 'Admin', '', 'analyst123'),
-      ('usr-3', 'Budi Hartono (Executive Director BRI)', 'executive@bri.co.id', 'Admin', '', 'bri123');
+      ('usr-1', 'Admin', 'admin@intel.com', 'Admin', '', 'admin123'),
+      ('usr-2', 'Siti Rahmawati (Tech Analyst)', 'analyst@intel.com', 'Admin', '', 'analyst123'),
+      ('usr-3', 'Budi Hartono (Executive Director)', 'executive@intel.com', 'Admin', '', 'exec123');
+    UPDATE users SET email = 'admin@intel.com' WHERE email = 'admin@bri.co.id';
+    UPDATE users SET email = 'analyst@intel.com' WHERE email = 'analyst@bri.co.id';
+    UPDATE users SET email = 'executive@intel.com', nama = 'Budi Hartono (Executive Director)', password = 'exec123' WHERE email = 'executive@bri.co.id';
     UPDATE users SET role = 'Admin';
   `);
 

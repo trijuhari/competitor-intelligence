@@ -4823,7 +4823,7 @@ export const INITIAL_USERS = [
   {
     "id": "usr-1",
     "nama": "Admin",
-    "email": "admin@bri.co.id",
+    "email": "admin@intel.com",
     "role": "Admin",
     "avatar": "👨‍💼",
     "password": "admin123"
@@ -4831,18 +4831,18 @@ export const INITIAL_USERS = [
   {
     "id": "usr-2",
     "nama": "Siti Rahmawati (Tech Analyst)",
-    "email": "analyst@bri.co.id",
+    "email": "analyst@intel.com",
     "role": "Admin",
     "avatar": "👩‍💻",
     "password": "analyst123"
   },
   {
     "id": "usr-3",
-    "nama": "Budi Hartono (Executive Director BRI)",
-    "email": "executive@bri.co.id",
+    "nama": "Budi Hartono (Executive Director)",
+    "email": "executive@intel.com",
     "role": "Admin",
     "avatar": "👔",
-    "password": "bri123"
+    "password": "exec123"
   }
 ];
 

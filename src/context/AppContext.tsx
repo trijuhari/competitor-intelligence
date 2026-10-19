@@ -383,9 +383,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch (err: any) {
       // Local fallback in case server offline
       const localMatch = [
-        { id: 'usr-1', nama: 'Admin', email: 'admin@bri.co.id', role: 'Admin' as UserRole, password: 'admin123' },
-        { id: 'usr-2', nama: 'Siti Rahmawati (Tech Analyst)', email: 'analyst@bri.co.id', role: 'Admin' as UserRole, password: 'analyst123' },
-        { id: 'usr-3', nama: 'Budi Hartono (Executive Director BRI)', email: 'executive@bri.co.id', role: 'Admin' as UserRole, password: 'bri123' },
+        { id: 'usr-1', nama: 'Admin', email: 'admin@intel.com', role: 'Admin' as UserRole, password: 'admin123' },
+        { id: 'usr-2', nama: 'Siti Rahmawati (Tech Analyst)', email: 'analyst@intel.com', role: 'Admin' as UserRole, password: 'analyst123' },
+        { id: 'usr-3', nama: 'Budi Hartono (Executive Director)', email: 'executive@intel.com', role: 'Admin' as UserRole, password: 'exec123' },
+        { id: 'usr-1', nama: 'Admin', email: 'admin@admin.com', role: 'Admin' as UserRole, password: 'admin123' }
       ].find(u => u.email.toLowerCase() === trimmedEmail.toLowerCase() && u.password === pass);
 
       if (localMatch) {
@@ -514,8 +515,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const switchUserRole = (_role: UserRole) => {
     const adminUser = users.find(u => u.role === 'Admin') || {
       id: 'usr-admin',
-      nama: 'Administrator BRI',
-      email: 'admin@bri.co.id',
+      nama: 'Administrator',
+      email: 'admin@intel.com',
       role: 'Admin' as UserRole,
       avatar: '👨‍💼'
     };

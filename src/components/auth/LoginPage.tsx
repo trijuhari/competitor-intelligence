@@ -79,7 +79,7 @@ export const LoginPage: React.FC = () => {
           </div>
 
           <h2 className="text-xl font-semibold text-ink">Masuk</h2>
-          <p className="text-[13px] text-muted mt-1">Gunakan akun BRI atau konsultan yang terdaftar.</p>
+          <p className="text-[13px] text-muted mt-1">Gunakan akun analis atau konsultan yang terdaftar.</p>
 
           {errorMessage && (
             <div role="alert" className="mt-6 p-3 rounded-md bg-danger-soft border border-danger/20 text-danger text-[13px] flex items-start gap-2">
@@ -96,7 +96,7 @@ export const LoginPage: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="nama@bri.co.id"
+                placeholder="admin@intel.com"
                 autoComplete="email"
                 required
                 className="[&_input]:h-9"
