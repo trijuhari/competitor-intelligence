@@ -2,13 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   Search, ExternalLink, ChevronLeft, ChevronRight, 
-  RotateCcw, ArrowRight, Download
+  RotateCcw, ArrowRight, Download, CheckCircle2,
+  AlertTriangle, HelpCircle, Filter, Sparkles, Layers
 } from 'lucide-react';
 import { formatDashLineBreaks } from '../../utils/helpers';
 import { BankLogo } from '../common/BankLogo';
 import { 
   PageHeader, Card, Stat, Button, Badge, 
-  Input, Select, SegmentedControl, StatusDot, cn 
+  Input, Select, SegmentedControl, StatusDot, StatusBadge, cn 
 } from '../ui';
 
 const WORKSHOP_META: Record<string, { label: string; desc: string }> = {
@@ -130,59 +131,73 @@ export const MatrixView: React.FC = () => {
     categoryFilter !== 'all' || statusFilter !== 'all' || searchQuery.trim() !== '';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <PageHeader
         title="Matriks Riset Kapabilitas Teknologi"
-        description="Basis data riset komparasi teknologi perbankan Himbara & BCA di 408 kapabilitas, 13 domain, dan 6 bank."
+        description="Basis data riset komparatif teknologi perbankan 6 bank nasional di 408 kapabilitas, 13 domain arsitektur, dan 4 pilar workshop."
+        badge={
+          <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent/15 text-accent border border-accent/25">
+            408 Baris Valid
+          </span>
+        }
         actions={
-          <>
-            <Button variant="secondary" onClick={exportResearchMatrixCSV}>
-              <Download />
+          <div className="flex items-center gap-2.5">
+            <Button variant="secondary" onClick={exportResearchMatrixCSV} className="shadow-xs font-semibold">
+              <Download className="w-4 h-4 text-emerald-500" />
               <span>Export CSV</span>
             </Button>
-            <Button variant="secondary" onClick={() => navigate('/analyst/head-to-head')}>
-              Head-to-head
-              <ArrowRight />
+            <Button variant="primary" onClick={() => navigate('/analyst/head-to-head')} className="shadow-md font-semibold">
+              <span>Bandingkan Head-to-Head</span>
+              <ArrowRight className="w-4 h-4" />
             </Button>
-          </>
+          </div>
         }
       />
 
-      {/* KPI Statistics Ribbon */}
-      <Card className="divide-y md:divide-y-0 md:divide-x divide-line grid grid-cols-2 md:grid-cols-4">
-        <Stat
-          label="Total Kapabilitas"
-          value={stats.total}
-          hint={`${stats.totalCells.toLocaleString()} titik evaluasi total`}
-        />
-        <Stat
-          label="Titik Terverifikasi"
-          value={stats.verifiedCount}
-          hint={`${stats.verifiedPct}% dari seluruh sel matriks`}
-          valueClassName="text-ok"
-        />
-        <Stat
-          label="Titik Inferensi"
-          value={stats.inferenceCount}
-          hint={`${stats.inferencePct}% sinyal publik / arsitektur`}
-          valueClassName="text-warn"
-        />
-        <Stat
-          label="Belum Terkonfirmasi"
-          value={stats.belumCount}
-          hint={`${stats.belumPct}% belum ada data publik`}
-          valueClassName="text-subtle"
-        />
-      </Card>
+      {/* KPI Statistics Ribbon (4 Dynamic Metric Cards) */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <div className="p-4 rounded-xl bg-surface/90 border border-line shadow-card top-hairline">
+          <div className="text-2xs font-bold tracking-wider uppercase text-subtle mb-1">Total Kapabilitas</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-ink">{stats.total}</div>
+          <div className="text-xs text-subtle mt-1">{stats.totalCells.toLocaleString()} titik evaluasi total</div>
+        </div>
 
-      {/* Workshop Segmented Control */}
+        <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/25 shadow-card top-hairline">
+          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 mb-1 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
+            Terverifikasi
+          </div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-emerald-600 dark:text-emerald-400">{stats.verifiedCount}</div>
+          <div className="text-xs text-muted mt-1">{stats.verifiedPct}% seluruh titik sel</div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/25 shadow-card top-hairline">
+          <div className="text-2xs font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400 mb-1 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
+            Inferensi Industri
+          </div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-amber-600 dark:text-amber-400">{stats.inferenceCount}</div>
+          <div className="text-xs text-muted mt-1">{stats.inferencePct}% sinyal publik terindikasi</div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-surface/90 border border-line shadow-card top-hairline">
+          <div className="text-2xs font-bold tracking-wider uppercase text-subtle mb-1 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-slate-400" />
+            Belum Terdata
+          </div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-ink">{stats.belumCount}</div>
+          <div className="text-xs text-subtle mt-1">{stats.belumPct}% belum ada data publik</div>
+        </div>
+      </div>
+
+      {/* Workshop Quick Switcher */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <SegmentedControl
           value={workshopFilter}
           onChange={(v) => { setWorkshopFilter(v); setCurrentPage(1); }}
           options={[
-            { value: 'all', label: `Semua Workshop (${stats.total})` },
+            { value: 'all', label: 'Semua Workshop', count: stats.total },
             { value: 'WS1', label: 'WS1: Core & Digital' },
             { value: 'WS2', label: 'WS2: EDW & BI' },
             { value: 'WS3', label: 'WS3: Cloud & Infra' },
@@ -191,14 +206,15 @@ export const MatrixView: React.FC = () => {
         />
       </div>
 
-      {/* Filter and Search Bar */}
-      <Card className="p-3.5 space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
+      {/* Filter and Search Panel */}
+      <Card className="p-4 space-y-3.5">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           <div className="md:col-span-4">
             <Input
-              placeholder="Cari kapabilitas, domain, atau merk stack…"
+              placeholder="Cari kapabilitas, domain, teknologi, merk…"
               value={searchQuery}
               onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+              onClear={() => setSearchQuery('')}
               icon={<Search />}
               className="w-full"
             />
@@ -247,32 +263,34 @@ export const MatrixView: React.FC = () => {
         </div>
 
         {/* Filter Summary & Pagination Controls */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-line text-2xs text-subtle">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-line/80 text-xs text-muted">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <span>
-              Menampilkan <strong className="text-ink num">{totalFiltered === 0 ? 0 : (effectivePage - 1) * (pageSize === -1 ? totalFiltered : pageSize) + 1}</strong> – <strong className="text-ink num">{pageSize === -1 ? totalFiltered : Math.min(effectivePage * pageSize, totalFiltered)}</strong> dari <strong className="text-ink num">{totalFiltered}</strong> kapabilitas
+              Menampilkan <strong className="text-ink num font-semibold">{totalFiltered === 0 ? 0 : (effectivePage - 1) * (pageSize === -1 ? totalFiltered : pageSize) + 1}</strong> – <strong className="text-ink num font-semibold">{pageSize === -1 ? totalFiltered : Math.min(effectivePage * pageSize, totalFiltered)}</strong> dari <strong className="text-ink num font-semibold">{totalFiltered}</strong> kapabilitas
             </span>
             {isFilterActive && (
-              <Badge tone="warn">Filter Aktif</Badge>
+              <span className="px-2 py-0.5 rounded-full text-2xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25">
+                Filter Aktif
+              </span>
             )}
             {isFilterActive && (
               <button
                 onClick={resetFilters}
-                className="text-accent hover:underline font-medium inline-flex items-center gap-1 ml-2"
+                className="text-accent hover:underline font-semibold inline-flex items-center gap-1 ml-1"
               >
-                <RotateCcw className="w-3 h-3" />
-                <span>Reset filter</span>
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset</span>
               </button>
             )}
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <span>Baris:</span>
+            <div className="flex items-center gap-2">
+              <span className="text-subtle font-medium">Baris:</span>
               <Select
                 value={pageSize}
                 onChange={e => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
-                className="h-7 text-2xs px-2 py-0"
+                className="h-8 text-xs px-2.5"
               >
                 <option value={25}>25</option>
                 <option value={50}>50</option>
@@ -282,29 +300,29 @@ export const MatrixView: React.FC = () => {
             </div>
 
             {pageSize !== -1 && totalPages > 1 && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 bg-sunken/60 p-0.5 rounded-lg border border-line">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-7 w-7 text-muted hover:text-ink"
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={effectivePage <= 1}
                   aria-label="Halaman sebelumnya"
                 >
-                  <ChevronLeft />
+                  <ChevronLeft className="w-4 h-4" />
                 </Button>
-                <span className="px-1 text-2xs font-medium text-ink num">
+                <span className="px-2 text-xs font-semibold text-ink num font-mono">
                   {effectivePage} / {totalPages}
                 </span>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-7 w-7 text-muted hover:text-ink"
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                   disabled={effectivePage >= totalPages}
                   aria-label="Halaman berikutnya"
                 >
-                  <ChevronRight />
+                  <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
             )}
@@ -313,64 +331,71 @@ export const MatrixView: React.FC = () => {
       </Card>
 
       {/* Research Matrix Table */}
-      <Card>
+      <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[13px] border-collapse">
             <thead>
-              <tr className="border-b border-line bg-sunken text-xs text-muted">
-                <th className="py-2.5 px-3 w-12 text-center font-medium">No</th>
-                <th className="py-2.5 px-2 w-14 text-center font-medium">Pilar</th>
-                <th className="py-2.5 px-3 w-48 font-medium">Domain & Kategori</th>
-                <th className="py-2.5 px-4 min-w-[220px] font-medium sticky left-0 bg-sunken z-20">
+              <tr className="border-b border-line bg-sunken/80 text-xs text-muted">
+                <th className="py-3 px-3 w-12 text-center font-bold">No</th>
+                <th className="py-3 px-2 w-14 text-center font-bold">Pilar</th>
+                <th className="py-3 px-4 w-48 font-bold">Domain &amp; Kategori</th>
+                <th className="py-3 px-4 min-w-[220px] font-bold sticky left-0 bg-sunken/95 backdrop-blur-md z-20 shadow-xs">
                   Kapabilitas / Sistem
                 </th>
                 {BANK_SLUGS.map(b => (
                   <th
                     key={b.key}
                     className={cn(
-                      'py-2.5 px-3 text-center min-w-[170px] max-w-[210px] font-medium',
-                      b.isFocus && 'bg-accent-soft/30 text-accent font-semibold'
+                      'py-3 px-3 text-center min-w-[180px] max-w-[220px] font-bold',
+                      b.isFocus && 'bg-accent/15 text-accent border-x border-accent/25 shadow-xs'
                     )}
                   >
-                    <div className="inline-flex items-center justify-center gap-1.5">
-                      <BankLogo bankCode={b.key} size={16} />
-                      <span>{b.label}</span>
-                      {b.isFocus && <Badge tone="accent">Fokus</Badge>}
+                    <div className="inline-flex items-center justify-center gap-2">
+                      <BankLogo bankCode={b.key} size={20} />
+                      <span className="tracking-tight">{b.label}</span>
+                      {b.isFocus && (
+                        <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-accent text-white shadow-xs">
+                          Fokus
+                        </span>
+                      )}
                     </div>
                   </th>
                 ))}
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-line">
+            <tbody className="divide-y divide-line/60">
               {paginatedResearchItems.length === 0 ? (
                 <tr>
                   <td colSpan={4 + BANK_SLUGS.length} className="py-16 text-center text-subtle text-xs">
-                    <div>Tidak ada kapabilitas yang cocok dengan kriteria filter.</div>
-                    <Button variant="secondary" size="sm" onClick={resetFilters} className="mt-3">
-                      Reset filter
+                    <div className="text-base font-semibold text-ink mb-1">Tidak ada hasil yang cocok</div>
+                    <div>Coba sesuaikan kata kunci atau reset filter pencarian Anda.</div>
+                    <Button variant="secondary" size="sm" onClick={resetFilters} className="mt-4 font-semibold">
+                      Reset Filter
                     </Button>
                   </td>
                 </tr>
               ) : (
                 paginatedResearchItems.map(item => (
-                  <tr key={item.id} className="hover:bg-sunken/40 transition-colors group">
-                    <td className="py-2.5 px-3 text-center num text-subtle text-xs align-top">
+                  <tr key={item.id} className="hover:bg-sunken/30 transition-colors group">
+                    <td className="py-3 px-3 text-center num text-subtle text-xs align-top font-mono">
                       {item.no}
                     </td>
 
-                    <td className="py-2.5 px-2 text-center align-top">
-                      <Badge tone="neutral">{item.workshop}</Badge>
+                    <td className="py-3 px-2 text-center align-top">
+                      <span className="px-2 py-0.5 rounded-md text-2xs font-mono font-semibold bg-sunken border border-line text-muted">
+                        {item.workshop}
+                      </span>
                     </td>
 
-                    <td className="py-2.5 px-3 align-top">
-                      <div className="font-medium text-ink leading-tight">{item.domain}</div>
-                      <div className="text-2xs text-subtle mt-0.5">{item.kategori}</div>
+                    <td className="py-3 px-4 align-top">
+                      <div className="font-semibold text-ink leading-snug">{item.domain}</div>
+                      <div className="text-2xs text-subtle mt-0.5 leading-snug">{item.kategori}</div>
                     </td>
 
-                    <td className="py-2.5 px-4 font-medium text-ink align-top sticky left-0 bg-surface group-hover:bg-sunken/40 transition-colors z-10">
+                    <td className="py-3 px-4 font-semibold text-ink align-top sticky left-0 bg-surface/95 backdrop-blur-md group-hover:bg-sunken/40 transition-colors z-10 border-r border-line/40">
                       <div className="leading-snug">{item.kapabilitas}</div>
-                      <div className="text-2xs text-subtle mt-0.5 num">ID: {item.id}</div>
+                      <div className="text-[11px] text-subtle mt-0.5 num font-mono">ID: {item.id}</div>
                     </td>
 
                     {/* 6 Bank Cells */}
@@ -393,46 +418,40 @@ export const MatrixView: React.FC = () => {
                         <td
                           key={b.key}
                           className={cn(
-                            'py-1.5 px-2 align-top min-w-[170px] max-w-[210px]',
-                            b.isFocus && 'bg-accent-soft/10'
+                            'py-1.5 px-2 align-top min-w-[180px] max-w-[220px]',
+                            b.isFocus && 'bg-accent/5 border-x border-accent/15'
                           )}
                         >
                           <button
                             type="button"
                             onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: b.key })}
                             className={cn(
-                              'w-full text-left p-2 rounded-md border text-xs transition-colors flex flex-col justify-between min-h-[68px]',
+                              'group/cell w-full text-left p-2.5 rounded-xl border text-xs transition-all duration-150 flex flex-col justify-between min-h-[72px]',
                               isVerified 
-                                ? 'bg-surface hover:bg-sunken/60 border-line' 
+                                ? 'bg-surface/95 hover:border-emerald-500/50 hover:shadow-glow-emerald border-line/80' 
                                 : isInference
-                                ? 'bg-surface hover:bg-sunken/60 border-line'
-                                : 'bg-surface/50 hover:bg-sunken/40 border-line/60 text-subtle'
+                                ? 'bg-surface/95 hover:border-amber-500/50 hover:shadow-glow-amber border-line/80'
+                                : 'bg-surface/50 hover:bg-surface border-line/50 text-subtle hover:border-line'
                             )}
                             title={`Klik untuk melihat detail & bukti sumber (${b.label} - ${detail.status})`}
                           >
-                            <div className="flex items-start justify-between gap-1">
+                            <div className="flex items-start justify-between gap-1.5 w-full">
                               <span className={cn(
-                                'font-medium leading-snug line-clamp-2',
+                                'font-semibold leading-snug line-clamp-2',
                                 isBelum ? 'text-subtle' : 'text-ink'
                               )}>
                                 {formatDashLineBreaks(detail.merk)}
                               </span>
                               {hasLink && (
-                                <ExternalLink className="w-3 h-3 text-subtle shrink-0 mt-0.5" />
+                                <ExternalLink className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5 opacity-80 group-hover/cell:opacity-100 transition-opacity" />
                               )}
                             </div>
 
-                            <div className="flex items-center justify-between mt-2 pt-1 border-t border-line/60 text-2xs">
-                              <span className={cn(
-                                'font-medium inline-flex items-center gap-1',
-                                isVerified ? 'text-ok' : isInference ? 'text-warn' : 'text-subtle'
-                              )}>
-                                <StatusDot status={detail.status} />
-                                {isVerified ? 'Verified' : isInference ? 'Inferensi' : 'Belum'}
-                              </span>
+                            <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-line/60 text-2xs w-full">
+                              <StatusBadge status={detail.status} size="xs" />
 
                               {detail.pic && detail.pic !== '-' && (
-                                <span className="text-subtle truncate max-w-[60px]" title={`PIC: ${detail.pic}`}>
+                                <span className="text-subtle truncate max-w-[65px] font-mono text-[10.5px]" title={`PIC: ${detail.pic}`}>
                                   {detail.pic}
                                 </span>
                               )}
@@ -449,25 +468,25 @@ export const MatrixView: React.FC = () => {
         </div>
 
         {/* Matrix Legend Footer */}
-        <div className="p-3.5 border-t border-line bg-sunken/40 flex items-center justify-between flex-wrap gap-4 text-xs text-muted">
-          <div className="flex items-center gap-5 flex-wrap">
-            <span className="font-semibold text-ink">Status verifikasi:</span>
-            <span className="inline-flex items-center gap-1.5 text-ok font-medium">
-              <StatusDot status="Terverifikasi" />
-              <span>Terverifikasi (sumber resmi/studi kasus)</span>
+        <div className="p-4 border-t border-line/80 bg-sunken/40 flex items-center justify-between flex-wrap gap-4 text-xs text-muted">
+          <div className="flex items-center gap-6 flex-wrap">
+            <span className="font-bold text-ink">Status Pembuktian:</span>
+            <span className="inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold">
+              <StatusDot status="Terverifikasi" pulse />
+              <span>Terverifikasi (Dokumen resmi/Studi kasus publik/Wawancara)</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 text-warn font-medium">
+            <span className="inline-flex items-center gap-2 text-amber-600 dark:text-amber-400 font-semibold">
               <StatusDot status="Inferensi" />
-              <span>Inferensi (sinyal publik/artikel)</span>
+              <span>Inferensi (Job posting/Artikel/Sinyal teknis)</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 text-subtle">
+            <span className="inline-flex items-center gap-2 text-muted">
               <StatusDot status="Belum" />
-              <span>Belum terkonfirmasi</span>
+              <span>Belum Terdata</span>
             </span>
           </div>
 
-          <span className="text-2xs text-subtle">
-            Klik sel kartu untuk melihat rincian bukti sumber dan memperbarui data.
+          <span className="text-2xs text-subtle font-medium">
+            💡 Klik kartu sel untuk melihat rincian bukti sumber atau memperbarui data.
           </span>
         </div>
       </Card>

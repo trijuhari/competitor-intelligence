@@ -2,12 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   ArrowLeftRight, CheckCircle2, AlertTriangle, 
-  Search, RotateCcw, ExternalLink, Layers, ArrowRight
+  Search, RotateCcw, ExternalLink, Layers, ArrowRight,
+  Swords, ShieldCheck, Zap
 } from 'lucide-react';
 import { BankLogo } from '../common/BankLogo';
 import { 
   PageHeader, Card, CardHeader, Stat, Button, Badge, 
-  Input, Select, StatusDot, cn 
+  Input, Select, StatusDot, StatusBadge, cn 
 } from '../ui';
 
 const BANK_OPTIONS = [
@@ -139,32 +140,37 @@ export const HeadToHeadView: React.FC = () => {
   }, [comparisons, workshopFilter, domainFilter, comparisonFilter, searchQuery]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <PageHeader
         title={`Head-to-Head: ${bankA.label} vs ${bankB.label}`}
         description={`Komparasi langsung implementasi teknologi antara ${bankA.fullName} dan ${bankB.fullName} pada 408 kapabilitas riset.`}
+        badge={
+          <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent/15 text-accent border border-accent/25">
+            Battlecard Komparasi
+          </span>
+        }
         actions={
-          <Button variant="secondary" onClick={() => navigate('/analyst/blueprint')}>
-            <Layers />
+          <Button variant="secondary" onClick={() => navigate('/analyst/blueprint')} className="shadow-xs font-semibold">
+            <Layers className="w-4 h-4 text-accent" />
             <span>Blueprint Arsitektur</span>
           </Button>
         }
       />
 
-      {/* Comparison Matchup Card */}
-      <Card className="p-4 sm:p-5">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+      {/* Comparison Matchup Battlecard */}
+      <div className="relative overflow-hidden rounded-2xl bg-surface/90 backdrop-blur-xl border border-line p-5 sm:p-6 shadow-card top-hairline">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Bank 1 Panel */}
-          <div className="flex-1 flex items-center justify-between p-3 rounded-lg border border-line bg-surface">
-            <div className="flex items-center gap-3 min-w-0">
-              <BankLogo bankCode={bankA.slug} size={36} />
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
+          <div className="w-full md:flex-1 p-4 rounded-xl border border-blue-500/30 bg-gradient-to-r from-blue-500/10 via-surface/90 to-surface shadow-xs">
+            <div className="flex items-center gap-3.5">
+              <BankLogo bankCode={bankA.slug} size={42} />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
                   <Select
                     value={bankASlug}
                     onChange={e => setBankASlug(e.target.value)}
-                    className="font-semibold text-ink text-sm border-0 bg-transparent p-0 pr-6 h-auto"
+                    className="font-bold text-ink text-base border-0 bg-transparent p-0 pr-6 h-auto cursor-pointer focus:ring-0"
                   >
                     {BANK_OPTIONS.map(b => (
                       <option key={b.slug} value={b.slug} disabled={b.slug === bankBSlug}>
@@ -172,41 +178,51 @@ export const HeadToHeadView: React.FC = () => {
                       </option>
                     ))}
                   </Select>
-                  {bankA.isFocus && <Badge tone="accent">Fokus</Badge>}
+                  {bankA.isFocus && (
+                    <span className="px-2 py-0.2 rounded-full text-[10px] font-bold bg-accent text-white">
+                      Fokus
+                    </span>
+                  )}
                 </div>
-                <div className="text-2xs text-muted mt-0.5 num">
-                  {totalVerifiedA} terverifikasi · {onlyAVerifiedCount} keunggulan eksklusif
+                <div className="text-xs text-muted mt-1 flex items-center gap-2 font-mono">
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">{totalVerifiedA} Verified</span>
+                  <span className="text-subtle">·</span>
+                  <span className="text-accent font-semibold">{onlyAVerifiedCount} Moats</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Swap Button */}
-          <Button
-            variant="secondary"
-            size="icon"
-            onClick={() => {
-              const temp = bankASlug;
-              setBankASlug(bankBSlug);
-              setBankBSlug(temp);
-            }}
-            title="Tukar posisi bank"
-            aria-label="Tukar posisi bank"
-            className="self-center shrink-0"
-          >
-            <ArrowLeftRight />
-          </Button>
+          {/* Center VS Swap Badge */}
+          <div className="flex flex-col items-center justify-center gap-1 shrink-0">
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={() => {
+                const temp = bankASlug;
+                setBankASlug(bankBSlug);
+                setBankBSlug(temp);
+              }}
+              title="Tukar posisi perbandingan bank"
+              className="w-10 h-10 rounded-full border border-line hover:border-accent shadow-md hover:rotate-180 transition-all duration-300"
+            >
+              <ArrowLeftRight className="w-4 h-4 text-accent" />
+            </Button>
+            <span className="text-[10px] font-extrabold font-mono uppercase tracking-widest text-subtle">
+              VS
+            </span>
+          </div>
 
           {/* Bank 2 Panel */}
-          <div className="flex-1 flex items-center justify-between p-3 rounded-lg border border-line bg-surface">
-            <div className="flex items-center gap-3 min-w-0">
-              <BankLogo bankCode={bankB.slug} size={36} />
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
+          <div className="w-full md:flex-1 p-4 rounded-xl border border-line bg-surface/90 shadow-xs">
+            <div className="flex items-center gap-3.5">
+              <BankLogo bankCode={bankB.slug} size={42} />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
                   <Select
                     value={bankBSlug}
                     onChange={e => setBankBSlug(e.target.value)}
-                    className="font-semibold text-ink text-sm border-0 bg-transparent p-0 pr-6 h-auto"
+                    className="font-bold text-ink text-base border-0 bg-transparent p-0 pr-6 h-auto cursor-pointer focus:ring-0"
                   >
                     {BANK_OPTIONS.map(b => (
                       <option key={b.slug} value={b.slug} disabled={b.slug === bankASlug}>
@@ -214,55 +230,68 @@ export const HeadToHeadView: React.FC = () => {
                       </option>
                     ))}
                   </Select>
-                  {bankB.isFocus && <Badge tone="accent">Fokus</Badge>}
+                  {bankB.isFocus && (
+                    <span className="px-2 py-0.2 rounded-full text-[10px] font-bold bg-accent text-white">
+                      Fokus
+                    </span>
+                  )}
                 </div>
-                <div className="text-2xs text-muted mt-0.5 num">
-                  {totalVerifiedB} terverifikasi · {onlyBVerifiedCount} keunggulan eksklusif
+                <div className="text-xs text-muted mt-1 flex items-center gap-2 font-mono">
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">{totalVerifiedB} Verified</span>
+                  <span className="text-subtle">·</span>
+                  <span className="text-amber-600 dark:text-amber-400 font-semibold">{onlyBVerifiedCount} Moats</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </Card>
+      </div>
 
-      {/* Summary Ribbon */}
-      <Card className="divide-y md:divide-y-0 md:divide-x divide-line grid grid-cols-2 md:grid-cols-4">
-        <Stat
-          label="Total Kapabilitas"
-          value={researchItems.length}
-          hint="13 domain arsitektur"
-        />
-        <Stat
-          label={`Keunggulan ${bankA.label}`}
-          value={onlyAVerifiedCount}
-          hint={`Terverifikasi di ${bankA.label} saja`}
-          valueClassName="text-accent"
+      {/* Summary Stat Cards (4 Dynamic Cards) */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <div className="p-4 rounded-xl bg-surface/90 border border-line shadow-card top-hairline">
+          <div className="text-2xs font-bold tracking-wider uppercase text-subtle mb-1">Total Kapabilitas</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-ink">{researchItems.length}</div>
+          <div className="text-xs text-subtle mt-1">13 domain arsitektur</div>
+        </div>
+
+        <div 
           onClick={() => setComparisonFilter('only-a')}
-        />
-        <Stat
-          label={`Keunggulan ${bankB.label}`}
-          value={onlyBVerifiedCount}
-          hint={`Celah arsitektur bagi ${bankA.label}`}
-          valueClassName="text-warn"
+          className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25 shadow-card top-hairline cursor-pointer hover:border-blue-500/40 transition-colors"
+        >
+          <div className="text-2xs font-bold tracking-wider uppercase text-accent mb-1">Keunggulan {bankA.label}</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-accent">{onlyAVerifiedCount}</div>
+          <div className="text-xs text-muted mt-1">Terverifikasi di {bankA.label} saja</div>
+        </div>
+
+        <div 
           onClick={() => setComparisonFilter('only-b')}
-        />
-        <Stat
-          label="Keduanya Terverifikasi"
-          value={bothVerifiedCount}
-          hint="Standar paritas bersama"
-          valueClassName="text-ok"
+          className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 shadow-card top-hairline cursor-pointer hover:border-amber-500/40 transition-colors"
+        >
+          <div className="text-2xs font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400 mb-1">Keunggulan {bankB.label}</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-amber-600 dark:text-amber-400">{onlyBVerifiedCount}</div>
+          <div className="text-xs text-muted mt-1">Celah arsitektur bagi {bankA.label}</div>
+        </div>
+
+        <div 
           onClick={() => setComparisonFilter('both-verified')}
-        />
-      </Card>
+          className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/25 shadow-card top-hairline cursor-pointer hover:border-emerald-500/40 transition-colors"
+        >
+          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 mb-1">Keduanya Terverifikasi</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-emerald-600 dark:text-emerald-400">{bothVerifiedCount}</div>
+          <div className="text-xs text-muted mt-1">Standar paritas bersama</div>
+        </div>
+      </div>
 
       {/* Filter and Control Bar */}
-      <Card className="p-3.5 space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
+      <Card className="p-4 space-y-3.5">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           <div className="md:col-span-4">
             <Input
-              placeholder="Cari kapabilitas, domain, atau merk stack…"
+              placeholder="Cari kapabilitas, domain, merk stack…"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
+              onClear={() => setSearchQuery('')}
               icon={<Search />}
               className="w-full"
             />
@@ -275,10 +304,10 @@ export const HeadToHeadView: React.FC = () => {
               className="w-full"
             >
               <option value="all">Semua Pilar</option>
-              <option value="WS1">WS1: Core & Digital</option>
-              <option value="WS2">WS2: EDW & BI</option>
-              <option value="WS3">WS3: Cloud & Infra</option>
-              <option value="WS4">WS4: Big Data & AI</option>
+              <option value="WS1">WS1: Core &amp; Digital</option>
+              <option value="WS2">WS2: EDW &amp; BI</option>
+              <option value="WS3">WS3: Cloud &amp; Infra</option>
+              <option value="WS4">WS4: Big Data &amp; AI</option>
             </Select>
           </div>
 
@@ -310,9 +339,9 @@ export const HeadToHeadView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-2xs text-subtle pt-2 border-t border-line">
+        <div className="flex items-center justify-between text-xs text-muted pt-3 border-t border-line/80">
           <div>
-            Menampilkan <strong className="text-ink num">{filteredComparisons.length}</strong> dari <strong className="text-ink num">{researchItems.length}</strong> kapabilitas riset
+            Menampilkan <strong className="text-ink num font-semibold">{filteredComparisons.length}</strong> dari <strong className="text-ink num font-semibold">{researchItems.length}</strong> kapabilitas riset
           </div>
           {(searchQuery || workshopFilter !== 'all' || domainFilter !== 'all' || comparisonFilter !== 'all') && (
             <button
@@ -322,9 +351,9 @@ export const HeadToHeadView: React.FC = () => {
                 setDomainFilter('all');
                 setComparisonFilter('all');
               }}
-              className="text-accent hover:underline font-medium inline-flex items-center gap-1"
+              className="text-accent hover:underline font-semibold inline-flex items-center gap-1"
             >
-              <RotateCcw className="w-3 h-3" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset filter</span>
             </button>
           )}
@@ -332,79 +361,75 @@ export const HeadToHeadView: React.FC = () => {
       </Card>
 
       {/* Head-to-Head Comparison Table */}
-      <Card>
+      <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[13px] border-collapse">
             <thead>
-              <tr className="border-b border-line bg-sunken text-xs text-muted">
-                <th className="py-2.5 px-3 w-12 text-center font-medium">No</th>
-                <th className="py-2.5 px-2 w-14 text-center font-medium">Pilar</th>
-                <th className="py-2.5 px-3 w-44 font-medium">Domain & Kategori</th>
-                <th className="py-2.5 px-4 min-w-[220px] font-medium">Kapabilitas</th>
-                <th className="py-2.5 px-3 min-w-[200px] font-medium bg-accent-soft/30 text-accent">
-                  <div className="flex items-center gap-1.5">
-                    <BankLogo bankCode={bankA.slug} size={16} />
+              <tr className="border-b border-line bg-sunken/80 text-xs text-muted">
+                <th className="py-3 px-3 w-12 text-center font-bold">No</th>
+                <th className="py-3 px-2 w-14 text-center font-bold">Pilar</th>
+                <th className="py-3 px-4 w-44 font-bold">Domain &amp; Kategori</th>
+                <th className="py-3 px-4 min-w-[220px] font-bold">Kapabilitas</th>
+                <th className="py-3 px-4 min-w-[210px] font-bold bg-accent/10 text-accent border-x border-accent/20">
+                  <div className="flex items-center gap-2">
+                    <BankLogo bankCode={bankA.slug} size={18} />
                     <span>{bankA.label}</span>
                   </div>
                 </th>
-                <th className="py-2.5 px-3 min-w-[200px] font-medium">
-                  <div className="flex items-center gap-1.5">
-                    <BankLogo bankCode={bankB.slug} size={16} />
+                <th className="py-3 px-4 min-w-[210px] font-bold">
+                  <div className="flex items-center gap-2">
+                    <BankLogo bankCode={bankB.slug} size={18} />
                     <span>{bankB.label}</span>
                   </div>
                 </th>
-                <th className="py-2.5 px-3 w-36 text-center font-medium">Status Paritas</th>
+                <th className="py-3 px-3 w-40 text-center font-bold">Status Paritas</th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-line">
+            <tbody className="divide-y divide-line/60">
               {filteredComparisons.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-subtle text-xs">
+                  <td colSpan={7} className="py-14 text-center text-subtle text-xs">
                     Tidak ada kapabilitas yang cocok dengan filter yang dipilih.
                   </td>
                 </tr>
               ) : (
                 filteredComparisons.map(({ item, detailA, detailB, diffType, hasDiffMerk }) => {
                   return (
-                    <tr key={item.id} className="hover:bg-sunken/40 transition-colors">
-                      <td className="py-2.5 px-3 text-center num text-subtle text-xs align-top">
+                    <tr key={item.id} className="hover:bg-sunken/30 transition-colors">
+                      <td className="py-3 px-3 text-center num text-subtle text-xs align-top font-mono">
                         {item.no}
                       </td>
 
-                      <td className="py-2.5 px-2 text-center align-top">
-                        <Badge tone="neutral">{item.workshop}</Badge>
+                      <td className="py-3 px-2 text-center align-top">
+                        <span className="px-2 py-0.5 rounded-md text-2xs font-mono font-semibold bg-sunken border border-line text-muted">
+                          {item.workshop}
+                        </span>
                       </td>
 
-                      <td className="py-2.5 px-3 align-top">
-                        <div className="font-medium text-ink leading-tight">{item.domain}</div>
+                      <td className="py-3 px-4 align-top">
+                        <div className="font-semibold text-ink leading-snug">{item.domain}</div>
                         <div className="text-2xs text-subtle mt-0.5">{item.kategori}</div>
                       </td>
 
-                      <td className="py-2.5 px-4 font-medium text-ink align-top">
+                      <td className="py-3 px-4 font-semibold text-ink align-top">
                         <div className="leading-snug">{item.kapabilitas}</div>
-                        <div className="text-2xs text-subtle mt-0.5 num">ID: {item.id}</div>
+                        <div className="text-2xs text-subtle mt-0.5 num font-mono">ID: {item.id}</div>
                       </td>
 
                       {/* Bank A Cell */}
-                      <td className="py-2 px-3 align-top bg-accent-soft/10">
+                      <td className="py-2 px-3 align-top bg-accent/5 border-x border-accent/15">
                         <button
                           type="button"
                           onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankASlug })}
-                          className="w-full text-left p-2 rounded-md border border-line bg-surface hover:bg-sunken/60 transition-colors text-xs"
+                          className="w-full text-left p-2.5 rounded-xl border border-line/80 bg-surface hover:border-accent/50 hover:shadow-glow-blue transition-all duration-150 text-xs"
                         >
-                          <div className="font-semibold text-ink line-clamp-2">
+                          <div className="font-bold text-ink line-clamp-2 leading-snug">
                             {detailA.merk || '–'}
                           </div>
-                          <div className="flex items-center justify-between mt-1 text-2xs">
-                            <span className={cn(
-                              'font-medium inline-flex items-center gap-1',
-                              detailA.status === 'Terverifikasi' ? 'text-ok' : detailA.status === 'Inferensi' ? 'text-warn' : 'text-subtle'
-                            )}>
-                              <StatusDot status={detailA.status} />
-                              {detailA.status === 'Terverifikasi' ? 'Verified' : detailA.status}
-                            </span>
-                            {detailA.link && <ExternalLink className="w-2.5 h-2.5 text-subtle" />}
+                          <div className="flex items-center justify-between mt-2 pt-1 border-t border-line/60 text-2xs">
+                            <StatusBadge status={detailA.status} size="xs" />
+                            {detailA.link && <ExternalLink className="w-3 h-3 text-accent" />}
                           </div>
                         </button>
                       </td>
@@ -414,36 +439,38 @@ export const HeadToHeadView: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankBSlug })}
-                          className="w-full text-left p-2 rounded-md border border-line bg-surface hover:bg-sunken/60 transition-colors text-xs"
+                          className="w-full text-left p-2.5 rounded-xl border border-line/80 bg-surface hover:border-line-strong hover:shadow-card-hover transition-all duration-150 text-xs"
                         >
-                          <div className="font-semibold text-ink line-clamp-2">
+                          <div className="font-bold text-ink line-clamp-2 leading-snug">
                             {detailB.merk || '–'}
                           </div>
-                          <div className="flex items-center justify-between mt-1 text-2xs">
-                            <span className={cn(
-                              'font-medium inline-flex items-center gap-1',
-                              detailB.status === 'Terverifikasi' ? 'text-ok' : detailB.status === 'Inferensi' ? 'text-warn' : 'text-subtle'
-                            )}>
-                              <StatusDot status={detailB.status} />
-                              {detailB.status === 'Terverifikasi' ? 'Verified' : detailB.status}
-                            </span>
-                            {detailB.link && <ExternalLink className="w-2.5 h-2.5 text-subtle" />}
+                          <div className="flex items-center justify-between mt-2 pt-1 border-t border-line/60 text-2xs">
+                            <StatusBadge status={detailB.status} size="xs" />
+                            {detailB.link && <ExternalLink className="w-3 h-3 text-subtle" />}
                           </div>
                         </button>
                       </td>
 
                       {/* Parity Status Badge */}
-                      <td className="py-2.5 px-3 text-center align-top">
+                      <td className="py-3 px-3 text-center align-top">
                         {diffType === 'both-verified' ? (
-                          <Badge tone="ok">Paritas Bersama</Badge>
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-2xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
+                            Paritas Bersama
+                          </span>
                         ) : diffType === 'only-a' ? (
-                          <Badge tone="accent">Unggul {bankA.label}</Badge>
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-2xs font-bold bg-blue-500/10 text-accent border border-blue-500/25">
+                            Unggul {bankA.label}
+                          </span>
                         ) : diffType === 'only-b' ? (
-                          <Badge tone="warn">Unggul {bankB.label}</Badge>
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-2xs font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25">
+                            Unggul {bankB.label}
+                          </span>
                         ) : hasDiffMerk ? (
-                          <Badge tone="neutral">Beda Solusi</Badge>
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-2xs font-medium bg-sunken text-muted border border-line">
+                            Beda Solusi
+                          </span>
                         ) : (
-                          <span className="text-subtle text-xs">–</span>
+                          <span className="text-subtle text-xs font-mono">–</span>
                         )}
                       </td>
                     </tr>

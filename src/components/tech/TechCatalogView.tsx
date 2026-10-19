@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
-  Search, ExternalLink, ChevronLeft, ChevronRight, RotateCcw
+  Search, ExternalLink, ChevronLeft, ChevronRight, RotateCcw,
+  Cpu, Layers, Sparkles
 } from 'lucide-react';
 import { BankLogo } from '../common/BankLogo';
 import { 
   PageHeader, Card, Button, Badge, 
-  Input, Select, StatusDot, cn 
+  Input, Select, StatusDot, StatusBadge, cn 
 } from '../ui';
 
 const BANK_BADGES = [
@@ -88,21 +89,27 @@ export const TechCatalogView: React.FC = () => {
     selectedDomain !== 'all' || selectedCategory !== 'all' || selectedBankFilter !== 'all';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <PageHeader
         title="Katalog Kapabilitas Teknologi"
-        description="Daftar 408 kapabilitas perbankan yang dievaluasi dengan status adopsi pada masing-masing dari 6 bank."
+        description="Eksplorasi 408 kapabilitas perbankan enterprise yang dievaluasi dengan status adopsi pada masing-masing dari 6 bank nasional."
+        badge={
+          <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent/15 text-accent border border-accent/25">
+            Katalog Kartu
+          </span>
+        }
       />
 
       {/* Filter and Search Bar */}
-      <Card className="p-3.5 space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
+      <Card className="p-4 space-y-3.5">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           <div className="md:col-span-4">
             <Input
-              placeholder="Cari kapabilitas, domain, atau merk…"
+              placeholder="Cari kapabilitas, domain, merk…"
               value={searchQuery}
               onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+              onClear={() => setSearchQuery('')}
               icon={<Search />}
               className="w-full"
             />
@@ -115,10 +122,10 @@ export const TechCatalogView: React.FC = () => {
               className="w-full"
             >
               <option value="all">Semua Pilar</option>
-              <option value="WS1">WS1: Core & Digital</option>
-              <option value="WS2">WS2: EDW & BI</option>
-              <option value="WS3">WS3: Cloud & Infra</option>
-              <option value="WS4">WS4: Big Data & AI</option>
+              <option value="WS1">WS1: Core &amp; Digital</option>
+              <option value="WS2">WS2: EDW &amp; BI</option>
+              <option value="WS3">WS3: Cloud &amp; Infra</option>
+              <option value="WS4">WS4: Big Data &amp; AI</option>
             </Select>
           </div>
 
@@ -162,46 +169,46 @@ export const TechCatalogView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-line text-2xs text-subtle">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-line/80 text-xs text-muted">
           <div className="flex items-center gap-2">
             <span>
-              Menampilkan <strong className="text-ink num">{totalFiltered === 0 ? 0 : (effectivePage - 1) * pageSize + 1}</strong> – <strong className="text-ink num">{Math.min(effectivePage * pageSize, totalFiltered)}</strong> dari <strong className="text-ink num">{totalFiltered}</strong> kapabilitas
+              Menampilkan <strong className="text-ink num font-semibold">{totalFiltered === 0 ? 0 : (effectivePage - 1) * pageSize + 1}</strong> – <strong className="text-ink num font-semibold">{Math.min(effectivePage * pageSize, totalFiltered)}</strong> dari <strong className="text-ink num font-semibold">{totalFiltered}</strong> kapabilitas
             </span>
             {isFilterActive && (
               <button
                 onClick={resetFilters}
-                className="text-accent hover:underline font-medium inline-flex items-center gap-1 ml-2"
+                className="text-accent hover:underline font-semibold inline-flex items-center gap-1 ml-2"
               >
-                <RotateCcw className="w-3 h-3" />
+                <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset filter</span>
               </button>
             )}
           </div>
 
           {totalPages > 1 && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 bg-sunken/60 p-0.5 rounded-lg border border-line">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-7 w-7 text-muted hover:text-ink"
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={effectivePage <= 1}
                 aria-label="Halaman sebelumnya"
               >
-                <ChevronLeft />
+                <ChevronLeft className="w-4 h-4" />
               </Button>
-              <span className="px-1 text-2xs font-medium text-ink num">
+              <span className="px-2 text-xs font-semibold text-ink num font-mono">
                 {effectivePage} / {totalPages}
               </span>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-7 w-7 text-muted hover:text-ink"
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={effectivePage >= totalPages}
                 aria-label="Halaman berikutnya"
               >
-                <ChevronRight />
+                <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
           )}
@@ -211,28 +218,33 @@ export const TechCatalogView: React.FC = () => {
       {/* Capabilities Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {paginatedItems.map(item => (
-          <Card key={item.id} className="p-4 flex flex-col justify-between space-y-3.5 hover:border-line-strong transition-colors">
+          <div 
+            key={item.id} 
+            className="group p-5 rounded-2xl bg-surface/90 backdrop-blur-md border border-line hover:border-accent/40 hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between space-y-4 top-hairline"
+          >
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <Badge tone="neutral">{item.workshop}</Badge>
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="px-2 py-0.5 rounded-md text-2xs font-mono font-semibold bg-sunken border border-line text-muted">
+                  {item.workshop}
+                </span>
                 <span className="text-2xs font-mono text-subtle num">ID: {item.id}</span>
               </div>
 
-              <h3 className="font-semibold text-ink text-[13px] leading-snug line-clamp-2">
+              <h3 className="font-bold text-ink text-sm leading-snug line-clamp-2 group-hover:text-accent transition-colors">
                 {item.kapabilitas}
               </h3>
 
-              <div className="flex items-center gap-1.5 mt-1.5 text-2xs text-subtle">
-                <span className="font-medium text-muted">{item.domain}</span>
+              <div className="flex items-center gap-1.5 mt-2 text-2xs text-subtle">
+                <span className="font-semibold text-muted">{item.domain}</span>
                 <span>·</span>
                 <span className="truncate">{item.kategori}</span>
               </div>
             </div>
 
-            {/* 6 Banks implementation grid */}
-            <div className="pt-2.5 border-t border-line space-y-1.5">
-              <span className="text-2xs font-medium text-subtle block">
-                Implementasi di 6 bank:
+            {/* 6 Banks implementation mini grid */}
+            <div className="pt-3 border-t border-line/60 space-y-2">
+              <span className="text-2xs font-bold text-subtle block uppercase tracking-wider">
+                Adopsi di 6 Bank:
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
                 {BANK_BADGES.map(b => {
@@ -246,23 +258,23 @@ export const TechCatalogView: React.FC = () => {
                       type="button"
                       onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: b.slug })}
                       className={cn(
-                        'p-1.5 rounded-md border text-left text-2xs transition-colors',
+                        'p-2 rounded-xl border text-left text-2xs transition-all duration-150',
                         isVerified
-                          ? 'bg-ok-soft/30 border-ok/30 text-ink'
+                          ? 'bg-emerald-500/10 border-emerald-500/30 text-ink hover:border-emerald-500'
                           : isInference
-                          ? 'bg-warn-soft/30 border-warn/30 text-ink'
-                          : 'bg-surface border-line text-subtle hover:bg-sunken/40'
+                          ? 'bg-amber-500/10 border-amber-500/30 text-ink hover:border-amber-500'
+                          : 'bg-sunken/40 border-line/60 text-subtle hover:bg-surface hover:text-ink'
                       )}
                       title={`${b.label}: ${detail.merk || 'Belum'} (${detail.status})`}
                     >
-                      <div className="flex items-center justify-between text-2xs text-muted font-medium">
+                      <div className="flex items-center justify-between text-2xs text-muted font-bold">
                         <span className="flex items-center gap-1">
-                          <BankLogo bankCode={b.slug} size={12} />
+                          <BankLogo bankCode={b.slug} size={13} />
                           <span>{b.label}</span>
                         </span>
                         <StatusDot status={detail.status} />
                       </div>
-                      <div className="truncate mt-0.5 font-medium leading-tight text-ink">
+                      <div className="truncate mt-1 font-semibold leading-tight text-ink text-[11px]">
                         {detail.merk || '–'}
                       </div>
                     </button>
@@ -270,7 +282,7 @@ export const TechCatalogView: React.FC = () => {
                 })}
               </div>
             </div>
-          </Card>
+          </div>
         ))}
       </div>
     </div>

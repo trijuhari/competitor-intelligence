@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
-  Search, ExternalLink, RotateCcw, ArrowRight
+  Search, ExternalLink, RotateCcw, ArrowRight,
+  Building2, CheckCircle2, AlertTriangle, Layers
 } from 'lucide-react';
 import { BankLogo } from '../common/BankLogo';
 import { 
   PageHeader, Card, Stat, Button, Badge, 
-  Input, Select, Meter, StatusDot, cn 
+  Input, Select, Meter, StatusDot, StatusBadge, cn 
 } from '../ui';
 
 const WORKSHOP_META: Record<string, { label: string; desc: string }> = {
@@ -100,8 +101,7 @@ export const BankProfilesView: React.FC = () => {
         const matchCap = item.kapabilitas.toLowerCase().includes(q);
         const matchDom = item.domain.toLowerCase().includes(q);
         const matchMerk = detail.merk?.toLowerCase().includes(q);
-        const matchLink = detail.link?.toLowerCase().includes(q);
-        if (!matchCap && !matchDom && !matchMerk && !matchLink) return false;
+        if (!matchCap && !matchDom && !matchMerk) return false;
       }
 
       return true;
@@ -109,20 +109,25 @@ export const BankProfilesView: React.FC = () => {
   }, [bankCapabilities, workshopFilter, domainFilter, statusFilter, searchQuery]);
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
       <PageHeader
-        title="Profil Bank & Lanskap Arsitektur"
-        description="Eksplorasi mendalam profil implementasi teknologi di setiap bank BUMN (BRI, Mandiri, BNI, BTN, BSI) & BCA."
+        title={`Profil Institusi: ${currentBank.nama}`}
+        description={`Katalog implementasi kapabilitas teknologi, produk digital unggulan, dan verifikasi adopsi stack ${currentBank.singkatan}.`}
+        badge={
+          <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent/15 text-accent border border-accent/25">
+            Profil Bank
+          </span>
+        }
         actions={
-          <Button variant="secondary" onClick={() => navigate('/analyst/head-to-head')}>
-            Bandingkan di Head-to-Head
-            <ArrowRight />
+          <Button variant="secondary" onClick={() => navigate('/analyst/matrix')} className="shadow-xs font-semibold">
+            <span>Matriks Riset Lengkap</span>
+            <ArrowRight className="w-4 h-4 text-accent" />
           </Button>
         }
       />
 
-      {/* Bank Tabs Selector */}
+      {/* Bank Tabs Selector (Sleek Modern Pills) */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         {banks.map(bank => {
           const isSelected = bank.id === currentBank.id;
@@ -131,43 +136,55 @@ export const BankProfilesView: React.FC = () => {
               key={bank.id}
               onClick={() => setSelectedBankId(bank.id)}
               className={cn(
-                'flex items-center gap-2 px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors border whitespace-nowrap',
+                'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-150 border whitespace-nowrap shadow-2xs',
                 isSelected
-                  ? 'bg-surface border-line-strong text-ink shadow-subtle'
-                  : 'bg-sunken/50 border-line text-muted hover:text-ink hover:bg-sunken'
+                  ? 'bg-gradient-to-r from-blue-600 to-sky-500 text-white border-transparent shadow-md shadow-blue-500/25 scale-[1.02]'
+                  : 'bg-surface/90 border-line text-muted hover:text-ink hover:bg-sunken/80'
               )}
             >
-              <BankLogo bankCode={bank.singkatan} size={18} />
+              <BankLogo bankCode={bank.singkatan} size={20} />
               <span>{bank.singkatan}</span>
-              {bank.isFokusUtama && <Badge tone="accent">Fokus</Badge>}
+              {bank.isFokusUtama && (
+                <span className={cn('px-1.5 py-0.2 rounded-full text-[10px] font-bold', isSelected ? 'bg-white/25 text-white' : 'bg-accent/15 text-accent')}>
+                  Fokus
+                </span>
+              )}
             </button>
           );
         })}
       </div>
 
       {/* Selected Bank Profile Header Card */}
-      <Card className="p-5 space-y-4">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3.5">
-            <div className="p-2 rounded-lg border border-line bg-surface shrink-0">
-              <BankLogo bankCode={currentBank.singkatan} size={48} />
+      <div className="relative overflow-hidden rounded-2xl bg-surface/90 backdrop-blur-xl border border-line p-6 shadow-card top-hairline">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="flex items-start gap-4">
+            <div className="p-3 rounded-2xl border border-line bg-surface/90 shadow-sm shrink-0">
+              <BankLogo bankCode={currentBank.singkatan} size={54} />
             </div>
-            <div>
+            <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-xl font-semibold text-ink">{currentBank.nama}</h2>
-                {currentBank.isFokusUtama && <Badge tone="accent">Target Analisis Utama</Badge>}
+                <h2 className="text-xl sm:text-2xl font-extrabold text-ink tracking-tight font-sans">
+                  {currentBank.nama}
+                </h2>
+                {currentBank.isFokusUtama && (
+                  <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent text-white shadow-xs">
+                    Target Benchmark Utama
+                  </span>
+                )}
               </div>
-              <p className="text-[13px] text-muted mt-1 max-w-xl leading-relaxed">
+              <p className="text-xs sm:text-[13px] text-muted max-w-2xl leading-relaxed">
                 {currentBank.deskripsi}
               </p>
 
               {currentBank.produkDigital && currentBank.produkDigital.length > 0 && (
-                <div className="flex items-center flex-wrap gap-1.5 mt-2.5">
-                  <span className="text-2xs font-medium text-subtle mr-1">
-                    Produk digital:
+                <div className="flex items-center flex-wrap gap-1.5 pt-2">
+                  <span className="text-2xs font-bold text-subtle mr-1 uppercase tracking-wider">
+                    Produk Digital:
                   </span>
                   {currentBank.produkDigital.map((prod, idx) => (
-                    <Badge key={idx} tone="neutral">{prod}</Badge>
+                    <span key={idx} className="px-2.5 py-0.5 rounded-full text-2xs font-semibold bg-sunken border border-line text-ink">
+                      {prod}
+                    </span>
                   ))}
                 </div>
               )}
@@ -175,41 +192,43 @@ export const BankProfilesView: React.FC = () => {
           </div>
 
           {/* Quick Metrics */}
-          <div className="grid grid-cols-3 gap-2 w-full md:w-auto shrink-0 border-t md:border-t-0 md:border-l border-line pt-3 md:pt-0 md:pl-5">
-            <div className="text-center px-3">
-              <div className="text-xl font-semibold text-ok num">{verifiedCount}</div>
-              <div className="text-2xs text-subtle uppercase">Verified</div>
+          <div className="grid grid-cols-3 gap-3 w-full md:w-auto shrink-0 border-t md:border-t-0 md:border-l border-line/80 pt-4 md:pt-0 md:pl-6">
+            <div className="text-center px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 num">{verifiedCount}</div>
+              <div className="text-2xs font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Verified</div>
             </div>
-            <div className="text-center px-3">
-              <div className="text-xl font-semibold text-warn num">{inferenceCount}</div>
-              <div className="text-2xs text-subtle uppercase">Inferensi</div>
+            <div className="text-center px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 num">{inferenceCount}</div>
+              <div className="text-2xs font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider">Inferensi</div>
             </div>
-            <div className="text-center px-3">
-              <div className="text-xl font-semibold text-subtle num">{belumCount}</div>
-              <div className="text-2xs text-subtle uppercase">Belum</div>
+            <div className="text-center px-3 py-2 rounded-xl bg-sunken border border-line">
+              <div className="text-2xl font-extrabold text-subtle num">{belumCount}</div>
+              <div className="text-2xs font-bold text-subtle uppercase tracking-wider">Belum</div>
             </div>
           </div>
         </div>
-      </Card>
+      </div>
 
       {/* 4 Workshops Progress for this Bank */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {Object.entries(WORKSHOP_META).map(([key, meta]) => {
           const stats = wsCounts[key] || { total: 0, verified: 0 };
           const pct = Math.round((stats.verified / (stats.total || 1)) * 100);
 
           return (
-            <Card key={key} className="p-3.5 space-y-2">
+            <Card key={key} className="p-4 space-y-2.5 top-hairline">
               <div className="flex items-center justify-between">
-                <Badge tone="neutral">{key}</Badge>
-                <span className="text-xs font-semibold num text-ink">{pct}%</span>
+                <span className="px-2 py-0.5 rounded-md text-2xs font-mono font-semibold bg-sunken border border-line text-muted">
+                  {key}
+                </span>
+                <span className="text-sm font-extrabold num text-ink">{pct}%</span>
               </div>
-              <div className="text-[13px] font-medium text-ink leading-tight">{meta.label.split(': ')[1]}</div>
+              <div className="text-sm font-bold text-ink leading-tight">{meta.label.split(': ')[1]}</div>
               <Meter
                 total={stats.total}
-                segments={[{ value: stats.verified, className: 'bg-ok' }]}
+                segments={[{ value: stats.verified, className: 'bg-emerald-500' }]}
               />
-              <div className="text-2xs text-subtle num">
+              <div className="text-2xs text-subtle num font-mono">
                 {stats.verified} dari {stats.total} kapabilitas terverifikasi
               </div>
             </Card>
@@ -218,13 +237,14 @@ export const BankProfilesView: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <Card className="p-3.5 space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
+      <Card className="p-4 space-y-3.5">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           <div className="md:col-span-5">
             <Input
               placeholder={`Cari kapabilitas atau merk di ${currentBank.singkatan}…`}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
+              onClear={() => setSearchQuery('')}
               icon={<Search />}
               className="w-full"
             />
@@ -237,10 +257,10 @@ export const BankProfilesView: React.FC = () => {
               className="w-full"
             >
               <option value="all">Semua Pilar</option>
-              <option value="WS1">WS1: Core & Digital</option>
-              <option value="WS2">WS2: EDW & BI</option>
-              <option value="WS3">WS3: Cloud & Infra</option>
-              <option value="WS4">WS4: Big Data & AI</option>
+              <option value="WS1">WS1: Core &amp; Digital</option>
+              <option value="WS2">WS2: EDW &amp; BI</option>
+              <option value="WS3">WS3: Cloud &amp; Infra</option>
+              <option value="WS4">WS4: Big Data &amp; AI</option>
             </Select>
           </div>
 
@@ -271,9 +291,9 @@ export const BankProfilesView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-2xs text-subtle pt-2 border-t border-line">
+        <div className="flex items-center justify-between text-xs text-muted pt-3 border-t border-line/80">
           <div>
-            Menampilkan <strong className="text-ink num">{filteredCaps.length}</strong> dari <strong className="text-ink num">{bankCapabilities.length}</strong> kapabilitas untuk <strong>{currentBank.nama}</strong>
+            Menampilkan <strong className="text-ink num font-semibold">{filteredCaps.length}</strong> dari <strong className="text-ink num font-semibold">{bankCapabilities.length}</strong> kapabilitas untuk <strong>{currentBank.nama}</strong>
           </div>
           {(searchQuery || workshopFilter !== 'all' || domainFilter !== 'all' || statusFilter !== 'all') && (
             <button
@@ -283,9 +303,9 @@ export const BankProfilesView: React.FC = () => {
                 setDomainFilter('all');
                 setStatusFilter('all');
               }}
-              className="text-accent hover:underline font-medium inline-flex items-center gap-1"
+              className="text-accent hover:underline font-semibold inline-flex items-center gap-1"
             >
-              <RotateCcw className="w-3 h-3" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset filter</span>
             </button>
           )}
@@ -293,72 +313,68 @@ export const BankProfilesView: React.FC = () => {
       </Card>
 
       {/* Capabilities Table */}
-      <Card>
+      <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[13px] border-collapse">
             <thead>
-              <tr className="border-b border-line bg-sunken text-xs text-muted">
-                <th className="py-2.5 px-3 w-12 text-center font-medium">No</th>
-                <th className="py-2.5 px-2 w-14 text-center font-medium">Pilar</th>
-                <th className="py-2.5 px-3 w-48 font-medium">Domain & Kategori</th>
-                <th className="py-2.5 px-4 min-w-[220px] font-medium">Kapabilitas</th>
-                <th className="py-2.5 px-4 w-72 font-medium">Solusi / Merk ({currentBank.singkatan})</th>
-                <th className="py-2.5 px-3 w-32 text-center font-medium">Status Verifikasi</th>
+              <tr className="border-b border-line bg-sunken/80 text-xs text-muted">
+                <th className="py-3 px-3 w-12 text-center font-bold">No</th>
+                <th className="py-3 px-2 w-14 text-center font-bold">Pilar</th>
+                <th className="py-3 px-4 w-48 font-bold">Domain &amp; Kategori</th>
+                <th className="py-3 px-4 min-w-[220px] font-bold">Kapabilitas</th>
+                <th className="py-3 px-4 w-80 font-bold">Solusi / Merk ({currentBank.singkatan})</th>
+                <th className="py-3 px-3 w-36 text-center font-bold">Status Verifikasi</th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-line">
+            <tbody className="divide-y divide-line/60">
               {filteredCaps.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-subtle text-xs">
+                  <td colSpan={6} className="py-14 text-center text-subtle text-xs">
                     Tidak ada kapabilitas yang cocok dengan filter yang dipilih.
                   </td>
                 </tr>
               ) : (
                 filteredCaps.map(({ item, detail }) => (
-                  <tr key={item.id} className="hover:bg-sunken/40 transition-colors">
-                    <td className="py-2.5 px-3 text-center num text-subtle text-xs align-top">
+                  <tr key={item.id} className="hover:bg-sunken/30 transition-colors">
+                    <td className="py-3 px-3 text-center num text-subtle text-xs align-top font-mono">
                       {item.no}
                     </td>
 
-                    <td className="py-2.5 px-2 text-center align-top">
-                      <Badge tone="neutral">{item.workshop}</Badge>
+                    <td className="py-3 px-2 text-center align-top">
+                      <span className="px-2 py-0.5 rounded-md text-2xs font-mono font-semibold bg-sunken border border-line text-muted">
+                        {item.workshop}
+                      </span>
                     </td>
 
-                    <td className="py-2.5 px-3 align-top">
-                      <div className="font-medium text-ink leading-tight">{item.domain}</div>
+                    <td className="py-3 px-4 align-top">
+                      <div className="font-semibold text-ink leading-snug">{item.domain}</div>
                       <div className="text-2xs text-subtle mt-0.5">{item.kategori}</div>
                     </td>
 
-                    <td className="py-2.5 px-4 font-medium text-ink align-top">
+                    <td className="py-3 px-4 font-semibold text-ink align-top">
                       <div className="leading-snug">{item.kapabilitas}</div>
-                      <div className="text-2xs text-subtle mt-0.5 num">ID: {item.id}</div>
+                      <div className="text-2xs text-subtle mt-0.5 num font-mono">ID: {item.id}</div>
                     </td>
 
-                    <td className="py-2.5 px-4 align-top">
+                    <td className="py-3 px-4 align-top">
                       <button
                         type="button"
                         onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: bankSlug })}
                         className="text-left group flex items-start gap-1.5"
                       >
-                        <span className="font-semibold text-ink group-hover:text-accent transition-colors leading-snug">
+                        <span className="font-bold text-ink group-hover:text-accent transition-colors leading-snug">
                           {detail.merk || '–'}
                         </span>
-                        {detail.link && <ExternalLink className="w-3 h-3 text-subtle shrink-0 mt-0.5" />}
+                        {detail.link && <ExternalLink className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5" />}
                       </button>
                       {detail.pic && detail.pic !== '-' && (
-                        <div className="text-2xs text-subtle mt-0.5">PIC: {detail.pic}</div>
+                        <div className="text-2xs text-subtle mt-0.5 font-mono">PIC: {detail.pic}</div>
                       )}
                     </td>
 
-                    <td className="py-2.5 px-3 text-center align-top">
-                      <span className={cn(
-                        'inline-flex items-center gap-1.5 text-xs font-medium',
-                        detail.status === 'Terverifikasi' ? 'text-ok' : detail.status === 'Inferensi' ? 'text-warn' : 'text-subtle'
-                      )}>
-                        <StatusDot status={detail.status} />
-                        {detail.status || 'Belum'}
-                      </span>
+                    <td className="py-3 px-3 text-center align-top">
+                      <StatusBadge status={detail.status} size="xs" />
                     </td>
                   </tr>
                 ))

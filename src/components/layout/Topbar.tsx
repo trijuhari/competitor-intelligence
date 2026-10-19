@@ -22,72 +22,95 @@ export const Topbar: React.FC<{ onOpenSidebar: () => void }> = ({ onOpenSidebar 
   const { group, item } = findActiveNav(currentPath);
 
   return (
-    <header className="sticky top-0 z-30 h-12 bg-canvas/90 backdrop-blur-sm border-b border-line">
-      <div className="h-full w-full px-4 lg:px-8 flex items-center gap-3">
-        {/* Mobile drawer button */}
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="lg:hidden -ml-2" 
-          onClick={onOpenSidebar} 
-          aria-label="Buka menu"
-        >
-          <MenuIcon />
-        </Button>
+    <header className="sticky top-0 z-30 h-14 bg-surface/85 backdrop-blur-xl border-b border-line/80 transition-colors">
+      <div className="h-full w-full px-4 lg:px-8 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3 min-w-0">
+          {/* Mobile drawer button */}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="lg:hidden -ml-2 text-muted hover:text-ink" 
+            onClick={onOpenSidebar} 
+            aria-label="Buka menu"
+          >
+            <MenuIcon className="w-5 h-5" />
+          </Button>
 
-        {/* Desktop sidebar toggle button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="hidden lg:inline-flex -ml-2 text-subtle hover:text-ink"
-          onClick={toggleSidebar}
-          title={isSidebarOpen ? 'Sembunyikan sidebar (Ctrl+B)' : 'Tampilkan sidebar (Ctrl+B)'}
-          aria-label={isSidebarOpen ? 'Sembunyikan sidebar' : 'Tampilkan sidebar'}
-        >
-          {isSidebarOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
-        </Button>
+          {/* Desktop sidebar toggle button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden lg:inline-flex -ml-2 text-subtle hover:text-ink transition-transform active:scale-95"
+            onClick={toggleSidebar}
+            title={isSidebarOpen ? 'Sembunyikan sidebar (Ctrl+B)' : 'Tampilkan sidebar (Ctrl+B)'}
+            aria-label={isSidebarOpen ? 'Sembunyikan sidebar' : 'Tampilkan sidebar'}
+          >
+            {isSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
+          </Button>
 
-        {/* Breadcrumb navigation */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[13px] min-w-0">
-          <span className="text-subtle">{group.label}</span>
-          <ChevronRight className="w-3.5 h-3.5 text-line-strong shrink-0" />
-          <span className="text-ink font-medium truncate">{item.label}</span>
-        </nav>
+          {/* Breadcrumb navigation */}
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px] min-w-0">
+            <span className="text-subtle font-medium">{group.label}</span>
+            <ChevronRight className="w-3.5 h-3.5 text-line-strong shrink-0" />
+            <span className="text-ink font-semibold truncate bg-accent/10 px-2 py-0.5 rounded-md text-accent">
+              {item.label}
+            </span>
+          </nav>
+        </div>
+
+        {/* Center pill: Global Context Indicator (hidden on small screens) */}
+        <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-sunken/60 border border-line text-xs font-medium text-muted">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+          <span>408 Kapabilitas Arsitektur</span>
+          <span className="text-subtle">·</span>
+          <span>13 Domain</span>
+          <span className="text-subtle">·</span>
+          <span>6 Bank Benchmark</span>
+        </div>
 
         {/* Actions */}
-        <div className="ml-auto flex items-center gap-1.5">
+        <div className="flex items-center gap-2 shrink-0">
           <Menu
             trigger={(_, toggle) => (
-              <Button size="sm" onClick={toggle}>
-                <Download />
+              <Button size="sm" variant="secondary" onClick={toggle} className="gap-2 font-medium">
+                <Download className="w-3.5 h-3.5 text-muted" />
                 <span className="hidden sm:inline">Export</span>
               </Button>
             )}
-            className="w-60"
+            className="w-64"
           >
             {close => (
               <>
+                <div className="px-2.5 py-1.5 text-2xs font-semibold text-subtle uppercase tracking-wider">
+                  Unduh Dokumen Riset
+                </div>
                 <MenuItem
-                  icon={<FileSpreadsheet />}
+                  icon={<FileSpreadsheet className="text-emerald-500" />}
                   hint={`${researchItems.length} baris`}
                   onClick={() => { exportResearchMatrixCSV(); close(); }}
                 >
-                  Matriks riset (CSV)
+                  Matriks Riset (CSV)
                 </MenuItem>
-                <MenuItem icon={<FileJson />} onClick={() => { exportDataJSON(); close(); }}>
-                  Backup lengkap (JSON)
+                <MenuItem 
+                  icon={<FileJson className="text-blue-500" />} 
+                  hint="Semua Entitas"
+                  onClick={() => { exportDataJSON(); close(); }}
+                >
+                  Full Database Backup (JSON)
                 </MenuItem>
               </>
             )}
           </Menu>
+
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
             aria-label="Ganti tema"
+            className="text-subtle hover:text-ink transition-transform duration-200 hover:rotate-12"
             title={theme === 'dark' ? 'Mode terang' : 'Mode gelap'}
           >
-            {theme === 'dark' ? <Sun /> : <Moon />}
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
           </Button>
         </div>
       </div>

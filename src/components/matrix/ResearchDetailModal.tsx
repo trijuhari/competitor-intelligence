@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   X, ExternalLink, ShieldCheck, CheckCircle2, AlertTriangle, HelpCircle, 
-  Building2, Cpu, Globe, UserCheck, Save, Copy, Check, ArrowRight
+  Building2, Cpu, Globe, UserCheck, Save, Copy, Check, ArrowRight,
+  Sparkles, Link2
 } from 'lucide-react';
 import { VerificationStatus, BankCapabilityDetail } from '../../types';
 import { formatDashLineBreaks } from '../../utils/helpers';
 import { BankLogo } from '../common/BankLogo';
+import { Button, Badge, StatusDot, StatusBadge, cn } from '../ui';
 
 export const ResearchDetailModal: React.FC = () => {
   const { 
@@ -80,73 +82,47 @@ export const ResearchDetailModal: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const getStatusBadge = (status: VerificationStatus) => {
-    switch (status) {
-      case 'Terverifikasi':
-        return {
-          bg: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-          dot: 'bg-emerald-500',
-          label: 'Terverifikasi (Fakta Resmi / Dokumen Publik)'
-        };
-      case 'Inferensi':
-        return {
-          bg: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-          dot: 'bg-amber-400',
-          label: 'Inferensi (Korelasi Industri / Pola Teknis)'
-        };
-      default:
-        return {
-          bg: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
-          dot: 'bg-rose-400',
-          label: 'Belum Terdata / Evaluasi (–)'
-        };
-    }
-  };
-
-  const currentStatusBadge = getStatusBadge(currentBankDetail.status);
-
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 animate-fade-in">
       <div 
-        className="bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden text-white animate-in fade-in zoom-in-95 duration-150"
+        className="bg-surface border border-line rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden text-ink animate-fade-in top-hairline"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-6 bg-slate-800/80 border-b border-slate-700/80 flex items-start justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center space-x-2 text-xs font-mono">
-              <span className="px-2.5 py-0.5 rounded-full bg-blue-500 text-white font-extrabold text-[10px]">
+        <div className="p-6 bg-sunken/60 border-b border-line flex items-start justify-between gap-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-xs font-mono flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-full bg-accent text-white font-extrabold text-[10px]">
                 {item.workshop}
               </span>
-              <span className="text-slate-400">#{item.no}</span>
-              <span className="text-slate-500">·</span>
-              <span className="text-orange-400 font-bold">{item.domain}</span>
-              <span className="text-slate-500">·</span>
-              <span className="px-2 py-0.5 rounded bg-slate-700/80 text-slate-300 text-[10px]">
+              <span className="text-subtle">#{item.no}</span>
+              <span className="text-subtle">·</span>
+              <span className="font-bold text-accent">{item.domain}</span>
+              <span className="text-subtle">·</span>
+              <span className="px-2 py-0.5 rounded-md bg-surface border border-line text-muted text-[10px]">
                 {item.kategori}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">
+            <h2 className="text-xl sm:text-2xl font-bold text-ink tracking-tight leading-snug">
               {item.kapabilitas}
             </h2>
           </div>
 
           <button
             onClick={() => setSelectedResearchCell(null)}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
+            className="p-2 text-subtle hover:text-ink rounded-xl hover:bg-sunken transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* 6 Banks Tab Selector */}
-        <div className="px-6 py-3 bg-slate-950/50 border-b border-slate-800 flex items-center space-x-2 overflow-x-auto scrollbar-none">
-          <span className="text-xs text-slate-400 font-bold mr-1 uppercase tracking-wider text-[10px]">Bank:</span>
+        {/* 6 Banks Tab Selector (Sleek Horizontal Pills) */}
+        <div className="px-6 py-3 bg-sunken/40 border-b border-line flex items-center gap-2 overflow-x-auto scrollbar-none">
+          <span className="text-2xs text-subtle font-bold uppercase tracking-wider mr-1">Bank:</span>
           {['bri', 'mandiri', 'bca', 'bni', 'btn', 'bsi'].map(slug => {
             const b = item.banks[slug];
             const isActive = activeBankSlug === slug;
             const isBRI = slug === 'bri';
-            const statusColor = b?.status === 'Terverifikasi' ? 'bg-emerald-500' : b?.status === 'Inferensi' ? 'bg-amber-400' : 'bg-slate-600';
 
             return (
               <button
@@ -155,17 +131,18 @@ export const ResearchDetailModal: React.FC = () => {
                   setActiveBankSlug(slug);
                   setIsEditing(false);
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 whitespace-nowrap ${
+                className={cn(
+                  'px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap border',
                   isActive
                     ? isBRI 
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30 ring-2 ring-blue-400'
-                      : 'bg-slate-700 text-white shadow-md'
-                    : 'bg-slate-800/80 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
-                }`}
+                      ? 'bg-accent text-white border-accent shadow-md shadow-blue-500/30'
+                      : 'bg-surface text-ink border-line-strong shadow-xs'
+                    : 'bg-surface/60 border-line text-muted hover:text-ink hover:bg-sunken'
+                )}
               >
-                <span className={`w-2 h-2 rounded-full ${statusColor}`} />
+                <BankLogo bankCode={slug} size={16} />
                 <span className="uppercase">{slug}</span>
-                {b?.status === 'Terverifikasi' && <span className="text-[10px]">✓</span>}
+                <StatusDot status={b?.status} />
               </button>
             );
           })}
@@ -174,30 +151,27 @@ export const ResearchDetailModal: React.FC = () => {
         {/* Content Body */}
         <div className="p-6 space-y-6 text-xs max-h-[70vh] overflow-y-auto">
           {/* Active Bank Overview Card */}
-          <div className="p-5 rounded-2xl bg-slate-800/40 border border-slate-700/80 space-y-4">
-            <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-slate-700/60">
-              <div className="flex items-center space-x-3">
+          <div className="p-5 rounded-2xl bg-sunken/40 border border-line space-y-4">
+            <div className="flex items-center justify-between flex-wrap gap-3 pb-3.5 border-b border-line/80">
+              <div className="flex items-center gap-3">
                 <BankLogo bankCode={activeBankSlug} size={36} />
                 <div>
-                  <div className="font-extrabold text-base text-white flex items-center space-x-2">
+                  <div className="font-bold text-base text-ink flex items-center gap-2">
                     <span>{currentBankObj?.nama || currentBankDetail.bankCode}</span>
                     {activeBankSlug === 'bri' && (
-                      <span className="px-2 py-0.5 rounded bg-blue-600 text-white text-[9px] font-black uppercase">
-                        Target Analisis
+                      <span className="px-2 py-0.2 rounded-full bg-accent text-white text-[10px] font-bold">
+                        Fokus Benchmark
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    PIC Penguji Data: <strong className="text-slate-200">{currentBankDetail.pic || 'Admin'}</strong>
+                  <div className="text-[11px] text-muted font-mono mt-0.5">
+                    PIC Penguji: <strong className="text-ink">{currentBankDetail.pic || 'Admin'}</strong>
                   </div>
                 </div>
               </div>
 
               {/* Status Badge */}
-              <div className={`px-3 py-1.5 rounded-xl border flex items-center space-x-2 ${currentStatusBadge.bg}`}>
-                <span className={`w-2 h-2 rounded-full ${currentStatusBadge.dot}`} />
-                <span className="font-bold text-xs">{currentBankDetail.status}</span>
-              </div>
+              <StatusBadge status={currentBankDetail.status} size="sm" />
             </div>
 
             {/* Readonly View vs Edit Form */}
@@ -205,32 +179,32 @@ export const ResearchDetailModal: React.FC = () => {
               <div className="space-y-4">
                 {/* Tech Merk Display */}
                 <div>
-                  <span className="text-slate-400 font-mono text-[11px] block uppercase tracking-wider mb-1">
+                  <span className="text-subtle font-mono text-[11px] block uppercase tracking-wider mb-1.5 font-bold">
                     Merk / Stack Name yang Digunakan:
                   </span>
-                  <div className="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm font-black text-blue-300 whitespace-pre-line leading-relaxed">
-                    {formatDashLineBreaks(currentBankDetail.merk) || 'Belum Diketahui / TBD'}
+                  <div className="p-4 rounded-xl bg-surface border border-line text-[13.5px] font-bold text-accent whitespace-pre-line leading-relaxed shadow-xs">
+                    {formatDashLineBreaks(currentBankDetail.merk) || '– Belum Terdata –'}
                   </div>
                 </div>
 
                 {/* Evidence / Source Link */}
                 <div>
-                  <span className="text-slate-400 font-mono text-[11px] block uppercase tracking-wider mb-1">
-                    Link Rujukan & Bukti Sumber:
+                  <span className="text-subtle font-mono text-[11px] block uppercase tracking-wider mb-1.5 font-bold">
+                    Link Rujukan &amp; Bukti Sumber:
                   </span>
-                  <div className="p-4 rounded-xl bg-slate-900 border border-slate-700 space-y-2">
+                  <div className="p-4 rounded-xl bg-surface border border-line space-y-2.5 shadow-xs">
                     {currentBankDetail.link ? (
                       <>
-                        <p className="text-slate-300 leading-relaxed font-sans text-xs">
+                        <p className="text-ink leading-relaxed font-sans text-xs">
                           {currentBankDetail.link}
                         </p>
                         {currentBankDetail.url && (
-                          <div className="pt-2 border-t border-slate-800">
+                          <div className="pt-2 border-t border-line/60">
                             <a
                               href={currentBankDetail.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 transition font-bold text-[11px]"
+                              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-colors font-bold text-xs"
                             >
                               <span>Buka Sumber Rujukan Asli</span>
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -239,7 +213,7 @@ export const ResearchDetailModal: React.FC = () => {
                         )}
                       </>
                     ) : (
-                      <div className="text-slate-500 italic py-1">
+                      <div className="text-subtle italic py-1">
                         Belum ada rujukan publik yang tercatat untuk kapabilitas ini.
                       </div>
                     )}
@@ -247,31 +221,35 @@ export const ResearchDetailModal: React.FC = () => {
                 </div>
 
                 {/* Actions Bar */}
-                <div className="flex items-center justify-between pt-2 flex-wrap gap-2">
-                  <button
+                <div className="flex items-center justify-between pt-2 flex-wrap gap-3">
+                  <Button
+                    variant="secondary"
+                    size="sm"
                     onClick={handleCopyCitation}
-                    className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition"
+                    className="gap-2 font-semibold"
                   >
-                    {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
+                    {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-subtle" />}
                     <span>{copied ? 'Berhasil Disalin!' : 'Salin Kutipan Riset'}</span>
-                  </button>
+                  </Button>
 
                   {canEdit && (
-                    <button
+                    <Button
+                      variant="primary"
+                      size="sm"
                       onClick={handleStartEdit}
-                      className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition shadow-md shadow-blue-900/30"
+                      className="gap-2 font-semibold"
                     >
                       <Save className="w-4 h-4" />
                       <span>Edit Data Kapabilitas</span>
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>
             ) : (
-              /* Inline Edit Form for Admin / Analyst */
+              /* Inline Edit Form for Admin */
               <form onSubmit={handleSave} className="space-y-4 pt-2">
                 <div>
-                  <label className="text-slate-300 font-bold block mb-1">
+                  <label className="text-ink font-semibold block mb-1">
                     Merk / Stack Name:
                   </label>
                   <input
@@ -279,29 +257,29 @@ export const ResearchDetailModal: React.FC = () => {
                     value={editMerk}
                     onChange={e => setEditMerk(e.target.value)}
                     placeholder="Misal: Silverlake SIBS, SAP ERP, Red Hat OpenShift..."
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-surface border border-line text-ink focus:outline-none focus:border-accent text-xs"
                     required
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-slate-300 font-bold block mb-1">
+                    <label className="text-ink font-semibold block mb-1">
                       Status Verifikasi:
                     </label>
                     <select
                       value={editStatus}
                       onChange={e => setEditStatus(e.target.value as VerificationStatus)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                      className="w-full px-3 py-2 rounded-xl bg-surface border border-line text-ink focus:outline-none focus:border-accent text-xs"
                     >
-                      <option value="Terverifikasi">Terverifikasi (Terbukti di Publik/Laporan)</option>
-                      <option value="Inferensi">Inferensi (Indikasi Industri/Korelasi)</option>
-                      <option value="Belum">Belum Diketahui / TBD</option>
+                      <option value="Terverifikasi">Terverifikasi (Terbukti Publik/Studi Kasus)</option>
+                      <option value="Inferensi">Inferensi (Indikasi Industri/Lowongan Kerja)</option>
+                      <option value="Belum">Belum Terdata / Evaluasi</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="text-slate-300 font-bold block mb-1">
+                    <label className="text-ink font-semibold block mb-1">
                       PIC Pencatat:
                     </label>
                     <input
@@ -309,13 +287,13 @@ export const ResearchDetailModal: React.FC = () => {
                       value={editPic}
                       onChange={e => setEditPic(e.target.value)}
                       placeholder="Admin"
-                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                      className="w-full px-3 py-2 rounded-xl bg-surface border border-line text-ink focus:outline-none focus:border-accent text-xs"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-slate-300 font-bold block mb-1">
+                  <label className="text-ink font-semibold block mb-1">
                     Link / Sumber Rujukan:
                   </label>
                   <textarea
@@ -323,24 +301,27 @@ export const ResearchDetailModal: React.FC = () => {
                     value={editLink}
                     onChange={e => setEditLink(e.target.value)}
                     placeholder="URL rujukan artikel berita, rilis resmi, atau studi kasus..."
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-surface border border-line text-ink focus:outline-none focus:border-accent text-xs"
                   />
                 </div>
 
-                <div className="flex items-center justify-end space-x-2 pt-2">
-                  <button
-                    type="button"
+                <div className="flex items-center justify-end gap-2.5 pt-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => setIsEditing(false)}
-                    className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition"
+                    className="font-semibold"
                   >
                     Batal
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="sm"
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-md shadow-emerald-900/30"
+                    className="font-semibold"
                   >
                     Simpan Perubahan
-                  </button>
+                  </Button>
                 </div>
               </form>
             )}

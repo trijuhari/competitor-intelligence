@@ -334,24 +334,24 @@ export const ArchitectureBlueprintView: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-20">
-      {/* Header & Page Title */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center space-x-3">
+      {/* Top Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
               <Layers className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center space-x-2">
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-ink tracking-tight">
                   Architecture Topology Blueprint
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">
-                  Interactive View
+                <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent/15 text-accent border border-accent/25">
+                  5 Layer Interaktif
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-2xl">
-                Visualisasi interaktif topologi blok arsitektur enterprise perbankan (5 Layer & 13 Domain) dengan komparasi langsung tech stack {bankA.label} vs {bankB.label}.
+              <p className="text-xs text-muted mt-0.5 max-w-2xl leading-relaxed">
+                Visualisasi interaktif topologi blok arsitektur enterprise perbankan (5 Layer &amp; 13 Domain) dengan komparasi langsung tech stack {bankA.label} vs {bankB.label}.
               </p>
             </div>
           </div>
@@ -359,20 +359,20 @@ export const ArchitectureBlueprintView: React.FC = () => {
 
         {/* Bank Selection Switchers - Strictly 1 Line Horizontal */}
         <div 
-          className="flex flex-row items-center gap-2 sm:gap-2.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card shrink-0 flex-nowrap whitespace-nowrap overflow-x-auto"
+          className="flex flex-row items-center gap-2 sm:gap-2.5 bg-surface/95 backdrop-blur-xl p-2 rounded-2xl border border-line shadow-card shrink-0 flex-nowrap whitespace-nowrap overflow-x-auto"
           style={{ flexWrap: 'nowrap' }}
         >
           {/* Bank 1 Selector */}
-          <div className="flex items-center gap-2 bg-slate-50/90 dark:bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-200/70 dark:border-slate-700/70 shadow-2xs shrink-0">
+          <div className="flex items-center gap-2 bg-sunken/80 px-2.5 py-1.5 rounded-xl border border-line shadow-2xs shrink-0">
             <BankLogo bankCode={bankA.slug} size={24} className="shrink-0" />
-            <span className="text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider shrink-0">Bank 1:</span>
+            <span className="text-subtle font-extrabold text-[10px] uppercase tracking-wider shrink-0">Bank 1:</span>
             <select
               value={bankASlug}
               onChange={e => setBankASlug(e.target.value)}
-              className="w-32 sm:w-40 md:w-44 bg-transparent font-black text-slate-800 dark:text-slate-200 text-xs focus:outline-hidden cursor-pointer truncate"
+              className="w-32 sm:w-40 md:w-44 bg-transparent font-bold text-ink text-xs focus:outline-none cursor-pointer truncate"
             >
               {BANK_OPTIONS.map(b => (
-                <option key={b.slug} value={b.slug} disabled={b.slug === bankBSlug} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-semibold">
+                <option key={b.slug} value={b.slug} disabled={b.slug === bankBSlug} className="bg-surface text-ink font-semibold">
                   {b.label} – {b.fullName}
                 </option>
               ))}
@@ -385,22 +385,22 @@ export const ArchitectureBlueprintView: React.FC = () => {
             onClick={handleSwapBanks}
             title="Tukar Posisi Bank 1 & 2"
             aria-label="Tukar Posisi Bank"
-            className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-blue-600 dark:bg-slate-800 dark:hover:bg-blue-600 text-slate-400 hover:text-white dark:text-slate-400 dark:hover:text-white flex items-center justify-center transition-all shrink-0 shadow-2xs cursor-pointer active:scale-95"
+            className="w-8 h-8 rounded-xl bg-sunken hover:bg-accent text-muted hover:text-white flex items-center justify-center transition-all shrink-0 shadow-2xs cursor-pointer active:scale-95"
           >
             <ArrowLeftRight className="w-3.5 h-3.5" />
           </button>
 
           {/* Bank 2 Selector */}
-          <div className="flex items-center gap-2 bg-slate-50/90 dark:bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-200/70 dark:border-slate-700/70 shadow-2xs shrink-0">
+          <div className="flex items-center gap-2 bg-sunken/80 px-2.5 py-1.5 rounded-xl border border-line shadow-2xs shrink-0">
             <BankLogo bankCode={bankB.slug} size={24} className="shrink-0" />
-            <span className="text-slate-400 dark:text-slate-500 font-extrabold text-[10px] uppercase tracking-wider shrink-0">Bank 2:</span>
+            <span className="text-subtle font-extrabold text-[10px] uppercase tracking-wider shrink-0">Bank 2:</span>
             <select
               value={bankBSlug}
               onChange={e => setBankBSlug(e.target.value)}
-              className="w-32 sm:w-40 md:w-44 bg-transparent font-black text-slate-800 dark:text-slate-200 text-xs focus:outline-hidden cursor-pointer truncate"
+              className="w-32 sm:w-40 md:w-44 bg-transparent font-bold text-ink text-xs focus:outline-none cursor-pointer truncate"
             >
               {BANK_OPTIONS.map(b => (
-                <option key={b.slug} value={b.slug} disabled={b.slug === bankASlug} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-semibold">
+                <option key={b.slug} value={b.slug} disabled={b.slug === bankASlug} className="bg-surface text-ink font-semibold">
                   {b.label} – {b.fullName}
                 </option>
               ))}
@@ -410,16 +410,16 @@ export const ArchitectureBlueprintView: React.FC = () => {
       </div>
 
       {/* Control Bar: Mode Toggle, Layer Filters & Search */}
-      <div className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="bg-surface/90 backdrop-blur-md p-3.5 rounded-2xl border border-line shadow-card flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Mode Selector */}
-        <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-full md:w-auto">
+        <div className="flex items-center bg-sunken/80 p-1 rounded-xl w-full md:w-auto border border-line/60">
           <button
             type="button"
             onClick={() => setViewMode('duel')}
             className={`flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 ${
               viewMode === 'duel'
-                ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-2xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-surface text-accent shadow-xs border border-line/60'
+                : 'text-muted hover:text-ink'
             }`}
           >
             <ArrowLeftRight className="w-3.5 h-3.5" />
@@ -430,8 +430,8 @@ export const ArchitectureBlueprintView: React.FC = () => {
             onClick={() => setViewMode('single')}
             className={`flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 ${
               viewMode === 'single'
-                ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-2xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-surface text-accent shadow-xs border border-line/60'
+                : 'text-muted hover:text-ink'
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
@@ -442,8 +442,8 @@ export const ArchitectureBlueprintView: React.FC = () => {
             onClick={() => setViewMode('parity')}
             className={`flex-1 md:flex-none px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5 ${
               viewMode === 'parity'
-                ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-2xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-surface text-accent shadow-xs border border-line/60'
+                : 'text-muted hover:text-ink'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -453,13 +453,13 @@ export const ArchitectureBlueprintView: React.FC = () => {
 
         {/* Search Input */}
         <div className="relative w-full md:w-72">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-subtle absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Cari blok, merk, teknologi (mis: Kafka, OpenShift)..."
+            placeholder="Cari blok, merk, teknologi (Kafka, OpenShift)..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-line text-xs bg-surface text-ink placeholder:text-subtle focus:outline-none focus:border-accent"
           />
         </div>
 
@@ -468,10 +468,10 @@ export const ArchitectureBlueprintView: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveLayerFilter('all')}
-            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shrink-0 transition ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition ${
               activeLayerFilter === 'all'
-                ? 'bg-blue-600 text-white'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
+                ? 'bg-accent text-white shadow-xs'
+                : 'bg-sunken text-muted hover:text-ink'
             }`}
           >
             Semua (5 Layer)
@@ -481,10 +481,10 @@ export const ArchitectureBlueprintView: React.FC = () => {
               key={layer.id}
               type="button"
               onClick={() => setActiveLayerFilter(layer.id)}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shrink-0 transition flex items-center space-x-1 ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition flex items-center space-x-1 ${
                 activeLayerFilter === layer.id
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
+                  ? 'bg-accent text-white shadow-xs'
+                  : 'bg-sunken text-muted hover:text-ink'
               }`}
             >
               <span>L{layer.id}</span>
@@ -494,35 +494,35 @@ export const ArchitectureBlueprintView: React.FC = () => {
       </div>
 
       {/* Blueprint Summary Ribbon */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="bg-white/90 dark:bg-slate-900/90 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Total Blok Arsitektur</div>
-          <div className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">{stats.total} Komponen Kunci</div>
-          <div className="text-[10px] text-slate-500">Mencakup 5 Layer Utama</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <div className="p-4 rounded-xl bg-surface/90 border border-line shadow-card top-hairline">
+          <div className="text-2xs font-bold tracking-wider uppercase text-subtle">Total Blok Arsitektur</div>
+          <div className="text-2xl font-extrabold text-ink mt-0.5">{stats.total} Komponen Kunci</div>
+          <div className="text-xs text-subtle mt-0.5">Mencakup 5 Layer Utama</div>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-500/10 to-indigo-500/5 p-3.5 rounded-2xl border border-blue-500/20 shadow-2xs flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25 shadow-card top-hairline flex items-center justify-between">
           <div>
-            <div className="text-[10px] font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-300">Keunggulan {bankA.label}</div>
-            <div className="text-2xl font-black text-blue-900 dark:text-blue-100 mt-0.5">{stats.aAdvantage} Blok</div>
-            <div className="text-[10px] text-blue-600 dark:text-blue-400">Terverifikasi di {bankA.label} saja</div>
+            <div className="text-2xs font-bold tracking-wider uppercase text-accent">Keunggulan {bankA.label}</div>
+            <div className="text-2xl font-extrabold text-accent mt-0.5">{stats.aAdvantage} Blok</div>
+            <div className="text-xs text-muted mt-0.5">Terverifikasi di {bankA.label} saja</div>
           </div>
-          <BankLogo bankCode={bankA.slug} size={28} className="shrink-0" />
+          <BankLogo bankCode={bankA.slug} size={32} className="shrink-0" />
         </div>
 
-        <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/5 p-3.5 rounded-2xl border border-amber-500/20 shadow-2xs flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 shadow-card top-hairline flex items-center justify-between">
           <div>
-            <div className="text-[10px] font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-300">Keunggulan {bankB.label}</div>
-            <div className="text-2xl font-black text-amber-900 dark:text-amber-100 mt-0.5">{stats.bAdvantage} Blok</div>
-            <div className="text-[10px] text-amber-600 dark:text-amber-400">Celah arsitektur bagi {bankA.label}</div>
+            <div className="text-2xs font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400">Keunggulan {bankB.label}</div>
+            <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 mt-0.5">{stats.bAdvantage} Blok</div>
+            <div className="text-xs text-muted mt-0.5">Celah arsitektur bagi {bankA.label}</div>
           </div>
-          <BankLogo bankCode={bankB.slug} size={28} className="shrink-0" />
+          <BankLogo bankCode={bankB.slug} size={32} className="shrink-0" />
         </div>
 
-        <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 p-3.5 rounded-2xl border border-emerald-500/20 shadow-2xs">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Paritas Bersama</div>
-          <div className="text-2xl font-black text-emerald-900 dark:text-emerald-100 mt-0.5">{stats.parityCount} Blok</div>
-          <div className="text-[10px] text-emerald-600 dark:text-emerald-400">Keduanya Terverifikasi Setara</div>
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/25 shadow-card top-hairline">
+          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400">Paritas Bersama</div>
+          <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">{stats.parityCount} Blok</div>
+          <div className="text-xs text-muted mt-0.5">Keduanya Terverifikasi Setara</div>
         </div>
       </div>
 
@@ -538,7 +538,7 @@ export const ArchitectureBlueprintView: React.FC = () => {
           return (
             <div key={layer.id} className="relative">
               {/* Layer Container Card */}
-              <div className={`rounded-3xl border ${layer.borderColor} bg-white dark:bg-slate-900/90 shadow-card overflow-hidden transition-all duration-200`}>
+              <div className={`rounded-3xl border ${layer.borderColor} bg-surface/95 backdrop-blur-md shadow-card overflow-hidden transition-all duration-200 top-hairline`}>
                 {/* Layer Header Banner */}
                 <div className={`px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r ${layer.color} text-white flex flex-col md:flex-row md:items-center justify-between gap-2`}>
                   <div className="flex items-center space-x-3">

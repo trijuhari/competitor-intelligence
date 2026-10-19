@@ -107,10 +107,10 @@ export const AppContent: React.FC = () => {
       {/* Content area that dynamically expands when sidebar is hidden */}
       <div className={cn(
         'flex flex-col min-h-screen transition-[padding] duration-200 ease-in-out',
-        isSidebarOpen ? 'lg:pl-60' : 'lg:pl-0'
+        isSidebarOpen ? 'lg:pl-64' : 'lg:pl-0'
       )}>
         <Topbar onOpenSidebar={() => setMobileNavOpen(true)} />
-        <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 lg:px-8 py-6 pb-16">
+        <main className="flex-1 w-full max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20">
           {renderMainContent()}
         </main>
       </div>

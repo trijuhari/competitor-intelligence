@@ -3,69 +3,79 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------
-   Design tokens
-   One neutral ramp, one accent (BRI blue), three semantic statuses.
-   Colour is reserved for meaning: status (ok / warn / none) & bank identity.
+   Modern Enterprise Fintech Design Tokens
+   Rich contrast, subtle atmospheric lighting, vibrant semantic indicators.
 ------------------------------------------------------------------- */
 @layer base {
   :root {
-    --canvas: 220 14% 97.5%;
+    --canvas: 215 25% 97%;
     --surface: 0 0% 100%;
-    --sunken: 220 14% 95.5%;
-    --line: 220 13% 91%;
-    --line-strong: 220 11% 83%;
-    --ink: 222 25% 12%;
-    --muted: 220 9% 38%;
-    --subtle: 220 8% 56%;
+    --surface-elevated: 210 20% 99%;
+    --sunken: 216 20% 94%;
+    --line: 216 16% 88%;
+    --line-strong: 216 14% 78%;
+    --ink: 222 47% 11%;
+    --muted: 217 19% 38%;
+    --subtle: 217 15% 58%;
 
-    --accent: 208 100% 31%;
+    --accent: 210 100% 36%;
     --accent-fg: 0 0% 100%;
-    --accent-soft: 208 80% 96%;
+    --accent-soft: 210 95% 94%;
 
-    --ok: 152 62% 32%;
-    --ok-soft: 150 50% 95%;
-    --warn: 30 92% 40%;
-    --warn-soft: 40 90% 95%;
-    --danger: 0 65% 48%;
-    --danger-soft: 0 80% 97%;
+    --ok: 154 75% 32%;
+    --ok-soft: 152 70% 93%;
+    --warn: 38 92% 42%;
+    --warn-soft: 38 90% 93%;
+    --danger: 0 72% 50%;
+    --danger-soft: 0 85% 95%;
   }
 
   .dark {
-    --canvas: 222 18% 7%;
-    --surface: 222 16% 10%;
-    --sunken: 222 16% 8.5%;
-    --line: 222 12% 17%;
-    --line-strong: 222 10% 25%;
-    --ink: 220 15% 93%;
-    --muted: 220 9% 66%;
-    --subtle: 220 7% 48%;
+    --canvas: 224 45% 6%;
+    --surface: 224 35% 9.5%;
+    --surface-elevated: 224 30% 13%;
+    --sunken: 224 40% 7.5%;
+    --line: 224 25% 18%;
+    --line-strong: 224 22% 26%;
+    --ink: 214 32% 95%;
+    --muted: 217 18% 70%;
+    --subtle: 217 14% 50%;
 
-    --accent: 208 90% 64%;
-    --accent-fg: 222 30% 8%;
-    --accent-soft: 208 55% 15%;
+    --accent: 206 100% 50%;
+    --accent-fg: 0 0% 100%;
+    --accent-soft: 214 70% 14%;
 
-    --ok: 152 50% 52%;
-    --ok-soft: 152 40% 12%;
-    --warn: 36 85% 60%;
-    --warn-soft: 36 50% 12%;
-    --danger: 0 70% 64%;
-    --danger-soft: 0 40% 13%;
+    --ok: 154 70% 45%;
+    --ok-soft: 154 60% 10%;
+    --warn: 38 95% 54%;
+    --warn-soft: 38 75% 10%;
+    --danger: 0 84% 60%;
+    --danger-soft: 0 70% 12%;
   }
 
   html {
-    font-feature-settings: 'ss01', 'cv11';
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-canvas text-ink antialiased font-sans min-h-screen text-sm;
+    @apply bg-canvas text-ink antialiased font-sans min-h-screen text-[13.5px] selection:bg-blue-500/25 selection:text-ink;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.04) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.03) 0px, transparent 50%);
+    background-attachment: fixed;
   }
 
-  ::selection {
-    background: hsl(var(--accent) / 0.18);
+  .dark body {
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(2, 132, 199, 0.12) 0%, transparent 70%),
+      radial-gradient(circle at 100% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 0% 40%, rgba(14, 165, 233, 0.04) 0%, transparent 40%);
+    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight text-ink;
+    @apply tracking-tight text-ink font-semibold;
   }
 
   :focus-visible {
@@ -88,16 +98,16 @@
 
 /* Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--line-strong));
+  background: hsl(var(--line-strong) / 0.7);
   border-radius: 9999px;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -105,33 +115,64 @@
   background-clip: content-box;
 }
 
+/* Modern Animations */
 @keyframes pulse-subtle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.97); }
 }
 
 .animate-pulse-subtle {
   animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(2px); }
-  to { opacity: 1; transform: none; }
+@keyframes ping-slow {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fade-in 140ms ease-out;
+  animation: fade-in-up 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Legacy card utilities, kept for un-migrated views but rendered flat. */
+/* Glass & Card System */
 .glass-panel {
-  @apply bg-surface border border-line rounded-lg;
+  @apply bg-surface/90 backdrop-blur-md border border-line rounded-xl shadow-card transition-all;
 }
 
 .glass-panel-hover {
-  @apply bg-surface border border-line rounded-lg transition-colors hover:border-line-strong;
+  @apply bg-surface/90 backdrop-blur-md border border-line rounded-xl shadow-card transition-all duration-200 hover:border-line-strong hover:shadow-card-hover hover:-translate-y-0.5;
+}
+
+.glass-card-interactive {
+  @apply relative overflow-hidden rounded-xl bg-surface/90 backdrop-blur-md border border-line transition-all duration-200 hover:border-accent/40 hover:shadow-glow-blue hover:-translate-y-0.5;
+}
+
+/* Hairline gradient highlight for cards */
+.top-hairline {
+  position: relative;
+}
+.top-hairline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  pointer-events: none;
 }
 
 .pill-badge {
-  @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium transition-all;
 }
+
