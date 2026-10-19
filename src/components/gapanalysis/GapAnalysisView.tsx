@@ -1,8 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   AlertTriangle, ShieldCheck, CheckCircle2, 
-  Search, ExternalLink, RotateCcw, ArrowRight, Flame
+  Search, ExternalLink, RotateCcw, ArrowRight
 } from 'lucide-react';
 import { BankLogo } from '../common/BankLogo';
 import { 
@@ -28,25 +28,8 @@ export const GapAnalysisView: React.FC = () => {
   const [activeTab, setActiveTabState] = useState<'gaps' | 'advantages' | 'consensus'>('gaps');
   const [workshopFilter, setWorkshopFilter] = useState('all');
   const [domainFilter, setDomainFilter] = useState('all');
-  const [competitorFilter, setCompetitorFilter] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      const focus = new URLSearchParams(window.location.search).get('focus');
-      if (focus === 'mandiri_bca') return 'mandiri_bca';
-    }
-    return 'all';
-  });
+  const [competitorFilter, setCompetitorFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Handle URL change or deep-link
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const focus = new URLSearchParams(window.location.search).get('focus');
-      if (focus === 'mandiri_bca') {
-        setActiveTabState('gaps');
-        setCompetitorFilter('mandiri_bca');
-      }
-    }
-  }, []);
 
   const allDomains = useMemo(() => {
     return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
@@ -111,13 +94,6 @@ export const GapAnalysisView: React.FC = () => {
     };
   }, [researchItems]);
 
-  // Direksi Focus count: items where Mandiri or BCA is verified while BRI is not
-  const mandiriBcaThreatsCount = useMemo(() => {
-    return gapsList.filter(entry => 
-      entry.verifiedCompetitors?.some((vc: any) => vc.bank.slug === 'mandiri' || vc.bank.slug === 'bca')
-    ).length;
-  }, [gapsList]);
-
   const activeList = activeTab === 'gaps' ? gapsList : activeTab === 'advantages' ? advantagesList : consensusList;
 
   const filteredList = useMemo(() => {
@@ -127,15 +103,8 @@ export const GapAnalysisView: React.FC = () => {
       if (domainFilter !== 'all' && item.domain !== domainFilter) return false;
 
       if (activeTab === 'gaps' && competitorFilter !== 'all') {
-        if (competitorFilter === 'mandiri_bca') {
-          const hasMandiriOrBca = entry.verifiedCompetitors?.some((vc: any) => 
-            vc.bank.slug === 'mandiri' || vc.bank.slug === 'bca'
-          );
-          if (!hasMandiriOrBca) return false;
-        } else {
-          const hasSpecificComp = entry.verifiedCompetitors?.some((vc: any) => vc.bank.slug === competitorFilter);
-          if (!hasSpecificComp) return false;
-        }
+        const hasSpecificComp = entry.verifiedCompetitors?.some((vc: any) => vc.bank.slug === competitorFilter);
+        if (!hasSpecificComp) return false;
       }
 
       if (searchQuery.trim()) {
@@ -159,23 +128,10 @@ export const GapAnalysisView: React.FC = () => {
         title="Gap Analysis & Peluang Strategis"
         description="Pemetaan celah teknologi di mana bank kompetitor telah terverifikasi mengadopsi solusi modern, dibandingkan keunggulan eksklusif dan standar paritas industri."
         actions={
-          <div className="flex items-center gap-2">
-            <Button 
-              variant={competitorFilter === 'mandiri_bca' && activeTab === 'gaps' ? 'primary' : 'secondary'}
-              onClick={() => {
-                setActiveTabState('gaps');
-                setCompetitorFilter(prev => prev === 'mandiri_bca' ? 'all' : 'mandiri_bca');
-              }}
-              className={competitorFilter === 'mandiri_bca' && activeTab === 'gaps' ? 'bg-warn text-white border-warn hover:bg-warn/90' : ''}
-            >
-              <Flame className="w-3.5 h-3.5" />
-              <span>Fokus Direksi: Mandiri & BCA ({mandiriBcaThreatsCount})</span>
-            </Button>
-            <Button variant="secondary" onClick={() => navigate('/analyst/matrix')}>
-              Buka matriks riset
-              <ArrowRight />
-            </Button>
-          </div>
+          <Button variant="secondary" onClick={() => navigate('/analyst/matrix')}>
+            Buka matriks riset
+            <ArrowRight />
+          </Button>
         }
       />
 
@@ -255,7 +211,6 @@ export const GapAnalysisView: React.FC = () => {
                 className="w-full"
               >
                 <option value="all">Semua Kompetitor</option>
-                <option value="mandiri_bca">⚔️ Mandiri & BCA (Fokus Direksi - {mandiriBcaThreatsCount})</option>
                 {COMPETITORS.map(c => (
                   <option key={c.slug} value={c.slug}>{c.label}</option>
                 ))}
@@ -267,9 +222,6 @@ export const GapAnalysisView: React.FC = () => {
         <div className="flex items-center justify-between text-2xs text-subtle pt-2 border-t border-line">
           <div>
             Menampilkan <strong className="text-ink num">{filteredList.length}</strong> kapabilitas
-            {competitorFilter === 'mandiri_bca' && (
-              <span className="ml-2 text-warn font-medium">(Filter Fokus Direksi: Mandiri & BCA)</span>
-            )}
           </div>
           {(searchQuery || workshopFilter !== 'all' || domainFilter !== 'all' || competitorFilter !== 'all') && (
             <button
@@ -287,34 +239,6 @@ export const GapAnalysisView: React.FC = () => {
           )}
         </div>
       </Card>
-
-      {/* Executive Callout Banner when Direksi Focus filter is active */}
-      {activeTab === 'gaps' && competitorFilter === 'mandiri_bca' && (
-        <div className="p-3.5 rounded-lg border border-warn/30 bg-warn-soft/30 flex items-center justify-between gap-3 text-xs">
-          <div className="flex items-start sm:items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-warn/15 text-warn flex items-center justify-center shrink-0">
-              <Flame className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="font-semibold text-ink flex items-center gap-2">
-                <span>Mode Fokus Direksi: Radar Ancaman Mandiri & BCA</span>
-                <Badge tone="warn">{filteredList.length} Celah Kritis</Badge>
-              </div>
-              <p className="text-muted text-2xs mt-0.5">
-                Menampilkan kapabilitas di mana Bank Mandiri atau BCA telah terverifikasi mengadopsi solusi modern di level produksi, sementara BRI belum terverifikasi.
-              </p>
-            </div>
-          </div>
-          <Button 
-            size="sm" 
-            variant="ghost" 
-            onClick={() => setCompetitorFilter('all')}
-            className="shrink-0 text-muted hover:text-ink text-xs"
-          >
-            Reset ke Semua Kompetitor
-          </Button>
-        </div>
-      )}
 
       {/* Main Results Table */}
       <Card>

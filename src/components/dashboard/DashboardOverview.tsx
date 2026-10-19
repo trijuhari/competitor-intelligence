@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   ArrowRight, Search, ShieldCheck, AlertTriangle, CheckCircle2,
-  Layers, ArrowUpRight, Database, ExternalLink, Flame
+  Layers, ArrowUpRight, Database, ExternalLink
 } from 'lucide-react';
 import { BankLogo } from '../common/BankLogo';
 import { 
@@ -48,7 +48,7 @@ export const DashboardOverview: React.FC = () => {
 
   const [workshopFilter, setWorkshopFilter] = useState<string>('all');
   const [domainSearch, setDomainSearch] = useState<string>('');
-  const [triageTab, setTriageTab] = useState<'threats' | 'gaps' | 'moats' | 'consensus'>('threats');
+  const [triageTab, setTriageTab] = useState<'gaps' | 'moats' | 'consensus'>('gaps');
 
   const totalCapabilities = researchItems.length;
   const totalEvaluations = totalCapabilities * BANK_CONFIG.length;
@@ -169,17 +169,7 @@ export const DashboardOverview: React.FC = () => {
     });
   }, [domainStats, workshopFilter, domainSearch]);
 
-  const mandiriBcaThreats = useMemo(() => {
-    return competitorGaps.filter(item => {
-      const mandiri = item.banks?.mandiri?.status === 'Terverifikasi';
-      const bca = item.banks?.bca?.status === 'Terverifikasi';
-      return mandiri || bca;
-    });
-  }, [competitorGaps]);
-
-  const triageItems = triageTab === 'threats'
-    ? mandiriBcaThreats
-    : triageTab === 'gaps' 
+  const triageItems = triageTab === 'gaps' 
     ? competitorGaps 
     : triageTab === 'moats' 
     ? briLeadingCaps 
@@ -192,22 +182,14 @@ export const DashboardOverview: React.FC = () => {
         title="Executive Overview"
         description="Analitik komparasi arsitektur teknologi Bank BRI terhadap 5 bank kompetitor Himbara & BCA berdasarkan 408 kapabilitas riset."
         actions={
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="secondary" 
-              onClick={() => navigate('/analyst/gap-analysis?focus=mandiri_bca')}
-              className="border-warn/40 text-warn hover:bg-warn-soft/20"
-            >
-              <Flame className="w-3.5 h-3.5" />
-              <span>Radar Direksi: {mandiriBcaThreats.length} Gap Mandiri & BCA</span>
-            </Button>
+          <>
             <Button variant="secondary" onClick={() => navigate('/analyst/head-to-head')}>
               Head-to-head
             </Button>
             <Button variant="primary" onClick={() => navigate('/analyst/matrix')}>
               Buka matriks riset
             </Button>
-          </div>
+          </>
         }
       />
 
@@ -228,12 +210,9 @@ export const DashboardOverview: React.FC = () => {
         <Stat
           label="Celah Arsitektur (Gaps)"
           value={competitorGaps.length}
-          hint={`${mandiriBcaThreats.length} ancaman langsung Mandiri & BCA`}
+          hint="Kompetitor terverifikasi, BRI belum"
           valueClassName="text-warn"
-          onClick={() => {
-            setTriageTab('threats');
-            navigate('/analyst/gap-analysis?focus=mandiri_bca');
-          }}
+          onClick={() => navigate('/analyst/gap-analysis')}
         />
         <Stat
           label="Keunggulan Eksklusif BRI"
@@ -437,9 +416,8 @@ export const DashboardOverview: React.FC = () => {
             actions={
               <SegmentedControl
                 value={triageTab}
-                onChange={v => setTriageTab(v as any)}
+                onChange={setTriageTab}
                 options={[
-                  { value: 'threats', label: `⚔️ Mandiri & BCA (${mandiriBcaThreats.length})` },
                   { value: 'gaps', label: `Gaps (${competitorGaps.length})` },
                   { value: 'moats', label: `Moats (${briLeadingCaps.length})` },
                   { value: 'consensus', label: `Standar (${consensusCaps.length})` },
@@ -449,55 +427,32 @@ export const DashboardOverview: React.FC = () => {
           />
 
           <div className="p-4 space-y-2.5">
-            {triageItems.slice(0, 6).map((item, idx) => {
-              const mandiriSolution = item.banks?.mandiri?.status === 'Terverifikasi' ? item.banks.mandiri.merk : null;
-              const bcaSolution = item.banks?.bca?.status === 'Terverifikasi' ? item.banks.bca.merk : null;
-              
-              return (
-                <div 
-                  key={idx}
-                  className="p-3 rounded-md border border-line bg-surface hover:bg-sunken/60 transition-colors flex flex-col gap-1.5 cursor-pointer"
-                  onClick={() => {
-                    setSelectedResearchCell({ capId: item.id, bankCode: 'bri' });
-                  }}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-[13px] font-medium text-ink leading-snug line-clamp-1">
-                      {item.kapabilitas}
-                    </span>
-                    <Badge tone={triageTab === 'threats' || triageTab === 'gaps' ? 'warn' : triageTab === 'moats' ? 'ok' : 'accent'}>
-                      {item.workshop}
-                    </Badge>
-                  </div>
-
-                  {triageTab === 'threats' && (mandiriSolution || bcaSolution) && (
-                    <div className="text-2xs text-muted flex items-center gap-1.5 flex-wrap pt-0.5">
-                      <span className="text-subtle font-medium">Solusi Terverifikasi:</span>
-                      {mandiriSolution && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-warn-soft/30 text-ink font-medium">
-                          <BankLogo bankCode="mandiri" size={12} />
-                          <span className="truncate max-w-[120px]">{mandiriSolution}</span>
-                        </span>
-                      )}
-                      {bcaSolution && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-warn-soft/30 text-ink font-medium">
-                          <BankLogo bankCode="bca" size={12} />
-                          <span className="truncate max-w-[120px]">{bcaSolution}</span>
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between text-2xs text-subtle">
-                    <span className="truncate">{item.domain} · {item.kategori}</span>
-                    <span className="flex items-center gap-1 text-muted hover:text-ink shrink-0 font-medium">
-                      Lihat detail
-                      <ArrowUpRight className="w-3 h-3" />
-                    </span>
-                  </div>
+            {triageItems.slice(0, 6).map((item, idx) => (
+              <div 
+                key={idx}
+                className="p-3 rounded-md border border-line bg-surface hover:bg-sunken/60 transition-colors flex flex-col gap-1.5 cursor-pointer"
+                onClick={() => {
+                  setSelectedResearchCell({ capId: item.id, bankCode: 'bri' });
+                }}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <span className="text-[13px] font-medium text-ink leading-snug line-clamp-1">
+                    {item.kapabilitas}
+                  </span>
+                  <Badge tone={triageTab === 'gaps' ? 'warn' : triageTab === 'moats' ? 'ok' : 'accent'}>
+                    {item.workshop}
+                  </Badge>
                 </div>
-              );
-            })}
+
+                <div className="flex items-center justify-between text-2xs text-subtle">
+                  <span className="truncate">{item.domain} · {item.kategori}</span>
+                  <span className="flex items-center gap-1 text-muted hover:text-ink shrink-0 font-medium">
+                    Lihat detail
+                    <ArrowUpRight className="w-3 h-3" />
+                  </span>
+                </div>
+              </div>
+            ))}
 
             <div className="pt-2">
               <Button
@@ -505,16 +460,11 @@ export const DashboardOverview: React.FC = () => {
                 size="sm"
                 className="w-full justify-center"
                 onClick={() => {
-                  if (triageTab === 'threats') navigate('/analyst/gap-analysis?focus=mandiri_bca');
-                  else if (triageTab === 'gaps') navigate('/analyst/gap-analysis');
+                  if (triageTab === 'gaps') navigate('/analyst/gap-analysis');
                   else navigate('/analyst/matrix');
                 }}
               >
-                {triageTab === 'threats' 
-                  ? `Buka ${mandiriBcaThreats.length} Celah Mandiri & BCA di Gap Analysis`
-                  : triageTab === 'gaps' 
-                  ? 'Buka Gap Analysis View' 
-                  : 'Eksplorasi di Matriks Riset'}
+                {triageTab === 'gaps' ? 'Buka Gap Analysis View' : 'Eksplorasi di Matriks Riset'}
                 <ArrowRight />
               </Button>
             </div>

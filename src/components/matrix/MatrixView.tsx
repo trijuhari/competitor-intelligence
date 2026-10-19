@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   Search, ExternalLink, ChevronLeft, ChevronRight, 
-  RotateCcw, ArrowRight, Download, Flame
+  RotateCcw, ArrowRight, Download
 } from 'lucide-react';
 import { formatDashLineBreaks } from '../../utils/helpers';
 import { BankLogo } from '../common/BankLogo';
@@ -41,18 +41,8 @@ export const MatrixView: React.FC = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [direksiThreatsOnly, setDireksiThreatsOnly] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(50);
-
-  // Direksi Focus count: items where Mandiri or BCA is verified while BRI is not
-  const direksiThreatsCount = useMemo(() => {
-    return researchItems.filter(item => {
-      const briNotVerif = item.banks?.bri?.status !== 'Terverifikasi';
-      const mandiriOrBcaVerif = item.banks?.mandiri?.status === 'Terverifikasi' || item.banks?.bca?.status === 'Terverifikasi';
-      return briNotVerif && mandiriOrBcaVerif;
-    }).length;
-  }, [researchItems]);
 
   const allDomains = useMemo(() => {
     return Array.from(new Set(researchItems.map(item => item.domain))).filter(Boolean);
@@ -97,12 +87,6 @@ export const MatrixView: React.FC = () => {
       if (domainFilter !== 'all' && item.domain !== domainFilter) return false;
       if (categoryFilter !== 'all' && item.kategori !== categoryFilter) return false;
 
-      if (direksiThreatsOnly) {
-        const briNotVerif = item.banks?.bri?.status !== 'Terverifikasi';
-        const mandiriOrBcaVerif = item.banks?.mandiri?.status === 'Terverifikasi' || item.banks?.bca?.status === 'Terverifikasi';
-        if (!briNotVerif || !mandiriOrBcaVerif) return false;
-      }
-
       if (statusFilter !== 'all') {
         const hasStatus = Object.values(item.banks).some(b => b.status === statusFilter);
         if (!hasStatus) return false;
@@ -121,7 +105,7 @@ export const MatrixView: React.FC = () => {
 
       return true;
     });
-  }, [researchItems, workshopFilter, domainFilter, categoryFilter, statusFilter, searchQuery, direksiThreatsOnly]);
+  }, [researchItems, workshopFilter, domainFilter, categoryFilter, statusFilter, searchQuery]);
 
   const totalFiltered = filteredResearchItems.length;
   const totalPages = pageSize === -1 ? 1 : Math.ceil(totalFiltered / pageSize);
@@ -139,12 +123,11 @@ export const MatrixView: React.FC = () => {
     setCategoryFilter('all');
     setStatusFilter('all');
     setSearchQuery('');
-    setDireksiThreatsOnly(false);
     setCurrentPage(1);
   };
 
   const isFilterActive = workshopFilter !== 'all' || domainFilter !== 'all' || 
-    categoryFilter !== 'all' || statusFilter !== 'all' || searchQuery.trim() !== '' || direksiThreatsOnly;
+    categoryFilter !== 'all' || statusFilter !== 'all' || searchQuery.trim() !== '';
 
   return (
     <div className="space-y-6">
@@ -153,18 +136,7 @@ export const MatrixView: React.FC = () => {
         title="Matriks Riset Kapabilitas Teknologi"
         description="Basis data riset komparasi teknologi perbankan Himbara & BCA di 408 kapabilitas, 13 domain, dan 6 bank."
         actions={
-          <div className="flex items-center gap-2">
-            <Button 
-              variant={direksiThreatsOnly ? 'primary' : 'secondary'}
-              onClick={() => {
-                setDireksiThreatsOnly(!direksiThreatsOnly);
-                setCurrentPage(1);
-              }}
-              className={direksiThreatsOnly ? 'bg-warn text-white border-warn hover:bg-warn/90' : ''}
-            >
-              <Flame className="w-3.5 h-3.5" />
-              <span>Fokus Direksi: Gap Mandiri & BCA ({direksiThreatsCount})</span>
-            </Button>
+          <>
             <Button variant="secondary" onClick={exportResearchMatrixCSV}>
               <Download />
               <span>Export CSV</span>
@@ -173,7 +145,7 @@ export const MatrixView: React.FC = () => {
               Head-to-head
               <ArrowRight />
             </Button>
-          </div>
+          </>
         }
       />
 
@@ -340,34 +312,6 @@ export const MatrixView: React.FC = () => {
         </div>
       </Card>
 
-      {/* Executive Callout Banner when Direksi Focus filter is active */}
-      {direksiThreatsOnly && (
-        <div className="p-3.5 rounded-lg border border-warn/30 bg-warn-soft/30 flex items-center justify-between gap-3 text-xs">
-          <div className="flex items-start sm:items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-warn/15 text-warn flex items-center justify-center shrink-0">
-              <Flame className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="font-semibold text-ink flex items-center gap-2">
-                <span>Mode Fokus Direksi: Radar Ancaman Mandiri & BCA</span>
-                <Badge tone="warn">{filteredResearchItems.length} Kapabilitas Kritis</Badge>
-              </div>
-              <p className="text-muted text-2xs mt-0.5">
-                Menampilkan 20 kapabilitas di mana Bank Mandiri atau BCA telah terverifikasi mengadopsi solusi produksi, sementara BRI belum terverifikasi.
-              </p>
-            </div>
-          </div>
-          <Button 
-            size="sm" 
-            variant="ghost" 
-            onClick={() => setDireksiThreatsOnly(false)}
-            className="shrink-0 text-muted hover:text-ink text-xs"
-          >
-            Tampilkan Semua Data
-          </Button>
-        </div>
-      )}
-
       {/* Research Matrix Table */}
       <Card>
         <div className="overflow-x-auto">
@@ -380,26 +324,21 @@ export const MatrixView: React.FC = () => {
                 <th className="py-2.5 px-4 min-w-[220px] font-medium sticky left-0 bg-sunken z-20">
                   Kapabilitas / Sistem
                 </th>
-                {BANK_SLUGS.map(b => {
-                  const isThreatTarget = direksiThreatsOnly && (b.key === 'mandiri' || b.key === 'bca');
-                  return (
-                    <th
-                      key={b.key}
-                      className={cn(
-                        'py-2.5 px-3 text-center min-w-[170px] max-w-[210px] font-medium transition-colors',
-                        b.isFocus && 'bg-accent-soft/30 text-accent font-semibold',
-                        isThreatTarget && 'bg-warn-soft/40 text-warn font-semibold border-b-2 border-warn'
-                      )}
-                    >
-                      <div className="inline-flex items-center justify-center gap-1.5">
-                        <BankLogo bankCode={b.key} size={16} />
-                        <span>{b.label}</span>
-                        {b.isFocus && <Badge tone="accent">Fokus</Badge>}
-                        {isThreatTarget && <Badge tone="warn">Kompetitor</Badge>}
-                      </div>
-                    </th>
-                  );
-                })}
+                {BANK_SLUGS.map(b => (
+                  <th
+                    key={b.key}
+                    className={cn(
+                      'py-2.5 px-3 text-center min-w-[170px] max-w-[210px] font-medium',
+                      b.isFocus && 'bg-accent-soft/30 text-accent font-semibold'
+                    )}
+                  >
+                    <div className="inline-flex items-center justify-center gap-1.5">
+                      <BankLogo bankCode={b.key} size={16} />
+                      <span>{b.label}</span>
+                      {b.isFocus && <Badge tone="accent">Fokus</Badge>}
+                    </div>
+                  </th>
+                ))}
               </tr>
             </thead>
 
