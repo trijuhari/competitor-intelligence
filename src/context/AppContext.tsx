@@ -289,7 +289,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const refreshSyncStatus = async () => {
     try {
       const status = await api.getSyncStatus();
-      if (status) setSyncStatus(status);
+      if (status) {
+        setSyncStatus(prev => {
+          const merged = {
+            ...prev,
+            ...status,
+            // Preserve user-configured auto sync interval if local has non-zero and server returned default
+            auto_sync_interval: prev.auto_sync_interval !== '0' && status.auto_sync_interval === '0'
+              ? prev.auto_sync_interval
+              : (status.auto_sync_interval || prev.auto_sync_interval),
+            auto_sync: prev.auto_sync !== '0' && status.auto_sync === '0'
+              ? prev.auto_sync
+              : (status.auto_sync || prev.auto_sync),
+            sheet_url: prev.sheet_url || status.sheet_url,
+            apps_script_url: prev.apps_script_url || status.apps_script_url
+          };
+          localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(merged));
+          return merged;
+        });
+      }
     } catch (e) {
       console.warn('Failed to fetch sync status:', e);
     }
@@ -307,9 +325,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addAuditLog('SYNC', 'GoogleSheets', result.summary || 'Sinkronisasi dari Google Sheets berhasil');
       return { success: true, summary: result.summary };
     } catch (err: any) {
-      const errorMsg = !isDbConnected 
-        ? "Backend server belum berjalan (Mode Offline). Jalankan 'npm run server' di terminal untuk melakukan sinkronisasi live Google Sheets." 
-        : (err?.message || 'Gagal sinkronisasi data dari Google Sheets');
+      const errorMsg = err?.message || 'Gagal sinkronisasi data dari Google Sheets';
       await refreshSyncStatus();
       return { success: false, summary: errorMsg, error: errorMsg };
     } finally {
@@ -327,9 +343,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       return result;
     } catch (err: any) {
-      const errorMsg = !isDbConnected 
-        ? "Backend server belum berjalan (Mode Offline). Jalankan 'npm run server' di terminal untuk mengirim data ke Google Sheets." 
-        : (err?.message || 'Gagal mengirim data ke Google Sheets');
+      const errorMsg = err?.message || 'Gagal mengirim data ke Google Sheets';
       await refreshSyncStatus();
       return { success: false, summary: errorMsg, error: errorMsg };
     } finally {

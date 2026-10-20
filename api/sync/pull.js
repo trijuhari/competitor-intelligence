@@ -15,8 +15,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { url } = req.body || {};
-    const targetUrl = url || 'https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0';
+    const targetUrl = (req.body && req.body.url) || (req.query && req.query.url) || 'https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0';
 
     // Parse spreadsheet id and gid
     const sheetIdMatch = targetUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
