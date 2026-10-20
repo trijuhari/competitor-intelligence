@@ -11,6 +11,7 @@ import {
   PageHeader, Card, Stat, Button, Badge, 
   Input, Select, SegmentedControl, StatusDot, StatusBadge, cn 
 } from '../ui';
+import { extractUniqueWorkshops, getWorkshopLabel } from '../../utils/workshop';
 
 const WORKSHOP_META: Record<string, { label: string; desc: string }> = {
   WS1: { label: 'WS1: Core & Digital Banking', desc: 'Core Banking (CBS), Mobile, Web, Payment' },
@@ -45,6 +46,10 @@ export const MatrixView: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(50);
 
+  const allWorkshops = useMemo(() => {
+    return extractUniqueWorkshops(researchItems);
+  }, [researchItems]);
+
   const allDomains = useMemo(() => {
     return Array.from(new Set(researchItems.map(item => item.domain))).filter(Boolean);
   }, [researchItems]);
@@ -58,9 +63,14 @@ export const MatrixView: React.FC = () => {
     let verifiedCount = 0;
     let inferenceCount = 0;
     let belumCount = 0;
+    const wsCounts: Record<string, number> = {};
+    allWorkshops.forEach(ws => { wsCounts[ws] = 0; });
     const totalCells = researchItems.length * BANK_SLUGS.length;
 
     researchItems.forEach(item => {
+      if (item.workshop) {
+        wsCounts[item.workshop] = (wsCounts[item.workshop] || 0) + 1;
+      }
       BANK_SLUGS.forEach(b => {
         const detail = item.banks?.[b.key];
         if (detail?.status === 'Terverifikasi') verifiedCount++;
@@ -75,6 +85,7 @@ export const MatrixView: React.FC = () => {
       verifiedCount,
       inferenceCount,
       belumCount,
+      workshopCounts: wsCounts,
       verifiedPct: Math.round((verifiedCount / (totalCells || 1)) * 100),
       inferencePct: Math.round((inferenceCount / (totalCells || 1)) * 100),
       belumPct: Math.round((belumCount / (totalCells || 1)) * 100),
@@ -198,10 +209,11 @@ export const MatrixView: React.FC = () => {
           onChange={(v) => { setWorkshopFilter(v); setCurrentPage(1); }}
           options={[
             { value: 'all', label: 'Semua Workshop', count: stats.total },
-            { value: 'WS1', label: 'WS1: Core & Digital' },
-            { value: 'WS2', label: 'WS2: EDW & BI' },
-            { value: 'WS3', label: 'WS3: Cloud & Infra' },
-            { value: 'WS4', label: 'WS4: Big Data & AI' },
+            ...allWorkshops.map(ws => ({
+              value: ws,
+              label: getWorkshopLabel(ws),
+              count: stats.workshopCounts[ws]
+            }))
           ]}
         />
       </div>

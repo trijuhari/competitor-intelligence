@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   X, Plus, Save, Layers, Building2, CheckCircle2, 
   AlertTriangle, HelpCircle, ExternalLink 
 } from 'lucide-react';
 import { ResearchItem, VerificationStatus, BankCapabilityDetail } from '../../types';
+import { useApp } from '../../context/AppContext';
+import { extractUniqueWorkshops, getWorkshopLabel } from '../../utils/workshop';
 
 interface AdminResearchAddModalProps {
   isOpen: boolean;
@@ -54,6 +56,11 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
   onAdd
 }) => {
   if (!isOpen) return null;
+
+  const { researchItems } = useApp();
+  const availableWorkshops = useMemo(() => {
+    return extractUniqueWorkshops(researchItems);
+  }, [researchItems]);
 
   const [workshop, setWorkshop] = useState('WS1');
   const [domain, setDomain] = useState(DOMAINS_LIST[0]);
@@ -167,16 +174,19 @@ export const AdminResearchAddModal: React.FC<AdminResearchAddModalProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Workshop</label>
-                <select
+                <input
+                  type="text"
+                  list="workshops-add-datalist"
                   value={workshop}
                   onChange={e => setWorkshop(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-medium text-slate-900 dark:text-slate-100"
-                >
-                  <option value="WS1">WS1: Core & Digital Banking</option>
-                  <option value="WS2">WS2: EDW, MDM & BI</option>
-                  <option value="WS3">WS3: Cloud, Infra & ITSM</option>
-                  <option value="WS4">WS4: Big Data & AI</option>
-                </select>
+                  placeholder="Misal: WS1, WS2, WS5..."
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 uppercase"
+                />
+                <datalist id="workshops-add-datalist">
+                  {availableWorkshops.map(ws => (
+                    <option key={ws} value={ws}>{getWorkshopLabel(ws)}</option>
+                  ))}
+                </datalist>
               </div>
 
               <div>

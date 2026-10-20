@@ -11,6 +11,7 @@ import { formatDashLineBreaks } from '../../utils/helpers';
 import { AdminResearchEditModal } from './AdminResearchEditModal';
 import { AdminResearchAddModal } from './AdminResearchAddModal';
 import { StatusBadge } from '../ui/Badge';
+import { extractUniqueWorkshops, getWorkshopLabel, getWorkshopMeta } from '../../utils/workshop';
 
 const WORKSHOP_META: Record<string, { label: string; color: string; bg: string; border: string }> = {
   WS1: { label: 'WS1: Core & Digital', color: 'text-blue-700 dark:text-blue-300', bg: 'bg-blue-50 dark:bg-blue-950/50', border: 'border-blue-200/80 dark:border-blue-800/80' },
@@ -66,6 +67,10 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
   const setIsAddModalOpen = propSetIsAddModalOpen || setInternalAddModalOpen;
 
   // Domains & Categories lists
+  const allWorkshops = useMemo(() => {
+    return extractUniqueWorkshops(researchItems);
+  }, [researchItems]);
+
   const allDomains = useMemo(() => {
     return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
   }, [researchItems]);
@@ -216,11 +221,10 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
               onChange={e => { setWorkshopFilter(e.target.value); setCurrentPage(1); }}
               className="w-full px-3 py-2 rounded-xl border border-line text-xs bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium shadow-2xs"
             >
-              <option value="all">Semua Workshop</option>
-              <option value="WS1">WS1: Core & Digital</option>
-              <option value="WS2">WS2: EDW & BI</option>
-              <option value="WS3">WS3: Cloud & Infra</option>
-              <option value="WS4">WS4: Big Data & AI</option>
+              <option value="all">Semua Workshop ({allWorkshops.length})</option>
+              {allWorkshops.map(ws => (
+                <option key={ws} value={ws}>{getWorkshopLabel(ws)}</option>
+              ))}
             </select>
           </div>
 
@@ -358,12 +362,7 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
                 </tr>
               ) : (
                 paginatedItems.map(item => {
-                  const ws = WORKSHOP_META[item.workshop] || {
-                    label: item.workshop,
-                    color: 'text-ink',
-                    bg: 'bg-surface-raised',
-                    border: 'border-line'
-                  };
+                  const ws = getWorkshopMeta(item.workshop);
 
                   return (
                     <tr key={item.id} className="hover:bg-surface-raised/50 transition-colors group">

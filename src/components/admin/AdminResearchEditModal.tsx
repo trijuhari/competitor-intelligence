@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   X, Save, Trash2, ExternalLink, ShieldCheck, CheckCircle2, 
   AlertTriangle, HelpCircle, Building2, UserCheck, Layers, Cpu, Link as LinkIcon
 } from 'lucide-react';
 import { ResearchItem, VerificationStatus, BankCapabilityDetail } from '../../types';
+import { useApp } from '../../context/AppContext';
+import { extractUniqueWorkshops, getWorkshopLabel } from '../../utils/workshop';
 
 interface AdminResearchEditModalProps {
   item: ResearchItem;
@@ -58,6 +60,15 @@ export const AdminResearchEditModal: React.FC<AdminResearchEditModalProps> = ({
   onDelete
 }) => {
   if (!isOpen) return null;
+
+  const { researchItems } = useApp();
+  const availableWorkshops = useMemo(() => {
+    const list = extractUniqueWorkshops(researchItems);
+    if (item.workshop && !list.includes(item.workshop)) {
+      list.push(item.workshop);
+    }
+    return list;
+  }, [researchItems, item.workshop]);
 
   // Metadata states
   const [workshop, setWorkshop] = useState(item.workshop || 'WS1');
@@ -199,16 +210,19 @@ export const AdminResearchEditModal: React.FC<AdminResearchEditModalProps> = ({
               {/* Workshop */}
               <div>
                 <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Workshop</label>
-                <select
+                <input
+                  type="text"
+                  list="workshops-edit-datalist"
                   value={workshop}
                   onChange={e => setWorkshop(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="WS1">WS1: Core & Digital Banking</option>
-                  <option value="WS2">WS2: EDW, MDM & BI</option>
-                  <option value="WS3">WS3: Cloud, Infra & ITSM</option>
-                  <option value="WS4">WS4: Big Data & AI</option>
-                </select>
+                  placeholder="Misal: WS1, WS2, WS5..."
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 uppercase"
+                />
+                <datalist id="workshops-edit-datalist">
+                  {availableWorkshops.map(ws => (
+                    <option key={ws} value={ws}>{getWorkshopLabel(ws)}</option>
+                  ))}
+                </datalist>
               </div>
 
               {/* Domain */}

@@ -9,6 +9,7 @@ import {
   PageHeader, Card, Stat, Button, Badge, 
   Input, Select, Meter, StatusDot, StatusBadge, cn 
 } from '../ui';
+import { extractUniqueWorkshops, getWorkshopLabel, getWorkshopMeta } from '../../utils/workshop';
 
 const WORKSHOP_META: Record<string, { label: string; desc: string }> = {
   WS1: { label: 'WS1: Core & Digital', desc: 'Core CBS, Mobile App, Digital Bank' },
@@ -35,6 +36,10 @@ export const BankProfilesView: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
+  const allWorkshops = useMemo(() => {
+    return extractUniqueWorkshops(researchItems);
+  }, [researchItems]);
+
   const allDomains = useMemo(() => {
     return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
   }, [researchItems]);
@@ -49,12 +54,10 @@ export const BankProfilesView: React.FC = () => {
     let verified = 0;
     let inference = 0;
     let belum = 0;
-    const wsMap: Record<string, { total: number; verified: number }> = {
-      WS1: { total: 0, verified: 0 },
-      WS2: { total: 0, verified: 0 },
-      WS3: { total: 0, verified: 0 },
-      WS4: { total: 0, verified: 0 }
-    };
+    const wsMap: Record<string, { total: number; verified: number }> = {};
+    allWorkshops.forEach(ws => {
+      wsMap[ws] = { total: 0, verified: 0 };
+    });
 
     const caps = researchItems.map(item => {
       const detail = (item.banks && item.banks[bankSlug]) || {
@@ -209,9 +212,10 @@ export const BankProfilesView: React.FC = () => {
         </div>
       </div>
 
-      {/* 4 Workshops Progress for this Bank */}
+      {/* Dynamic Workshops Progress for this Bank */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-        {Object.entries(WORKSHOP_META).map(([key, meta]) => {
+        {allWorkshops.map(key => {
+          const meta = getWorkshopMeta(key);
           const stats = wsCounts[key] || { total: 0, verified: 0 };
           const pct = Math.round((stats.verified / (stats.total || 1)) * 100);
 
@@ -256,11 +260,10 @@ export const BankProfilesView: React.FC = () => {
               onChange={e => setWorkshopFilter(e.target.value)}
               className="w-full"
             >
-              <option value="all">Semua Pilar</option>
-              <option value="WS1">WS1: Core &amp; Digital</option>
-              <option value="WS2">WS2: EDW &amp; BI</option>
-              <option value="WS3">WS3: Cloud &amp; Infra</option>
-              <option value="WS4">WS4: Big Data &amp; AI</option>
+              <option value="all">Semua Pilar ({allWorkshops.length})</option>
+              {allWorkshops.map(ws => (
+                <option key={ws} value={ws}>{getWorkshopLabel(ws)}</option>
+              ))}
             </Select>
           </div>
 

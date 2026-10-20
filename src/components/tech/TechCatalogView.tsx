@@ -9,6 +9,7 @@ import {
   PageHeader, Card, Button, Badge, 
   Input, Select, StatusDot, StatusBadge, cn 
 } from '../ui';
+import { extractUniqueWorkshops, getWorkshopLabel } from '../../utils/workshop';
 
 const BANK_BADGES = [
   { slug: 'bri', label: 'BRI', isFocus: true },
@@ -32,6 +33,10 @@ export const TechCatalogView: React.FC = () => {
   const [selectedBankFilter, setSelectedBankFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(30);
+
+  const allWorkshops = useMemo(() => {
+    return extractUniqueWorkshops(researchItems);
+  }, [researchItems]);
 
   const allDomains = useMemo(() => {
     return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
@@ -121,11 +126,10 @@ export const TechCatalogView: React.FC = () => {
               onChange={e => { setSelectedWorkshop(e.target.value); setCurrentPage(1); }}
               className="w-full"
             >
-              <option value="all">Semua Pilar</option>
-              <option value="WS1">WS1: Core &amp; Digital</option>
-              <option value="WS2">WS2: EDW &amp; BI</option>
-              <option value="WS3">WS3: Cloud &amp; Infra</option>
-              <option value="WS4">WS4: Big Data &amp; AI</option>
+              <option value="all">Semua Pilar ({allWorkshops.length})</option>
+              {allWorkshops.map(ws => (
+                <option key={ws} value={ws}>{getWorkshopLabel(ws)}</option>
+              ))}
             </Select>
           </div>
 

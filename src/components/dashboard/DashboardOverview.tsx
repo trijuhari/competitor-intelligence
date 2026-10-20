@@ -10,6 +10,7 @@ import {
   PageHeader, Card, CardHeader, Stat, Button, Badge, 
   Input, SegmentedControl, Meter, StatusDot, cn 
 } from '../ui';
+import { extractUniqueWorkshops, getWorkshopMeta, getWorkshopLabel } from '../../utils/workshop';
 
 const WORKSHOP_META: Record<string, { label: string; desc: string; icon: string; gradient: string }> = {
   WS1: { 
@@ -62,6 +63,10 @@ export const DashboardOverview: React.FC = () => {
   const totalCapabilities = researchItems.length;
   const totalEvaluations = totalCapabilities * BANK_CONFIG.length;
 
+  const allWorkshops = useMemo(() => {
+    return extractUniqueWorkshops(researchItems);
+  }, [researchItems]);
+
   const {
     overallVerified,
     bankStats,
@@ -72,7 +77,8 @@ export const DashboardOverview: React.FC = () => {
     consensusCaps
   } = useMemo(() => {
     let verified = 0;
-    const wsMap: Record<string, number> = { WS1: 0, WS2: 0, WS3: 0, WS4: 0 };
+    const wsMap: Record<string, number> = {};
+    allWorkshops.forEach(ws => { wsMap[ws] = 0; });
     const domainMap: Record<string, { total: number; ws: string; bankVerified: Record<string, number> }> = {};
 
     const bStats = BANK_CONFIG.map(b => ({
@@ -92,7 +98,9 @@ export const DashboardOverview: React.FC = () => {
     const consensus: any[] = [];
 
     researchItems.forEach(item => {
-      if (wsMap[item.workshop] !== undefined) wsMap[item.workshop]++;
+      if (item.workshop) {
+        wsMap[item.workshop] = (wsMap[item.workshop] || 0) + 1;
+      }
 
       if (!domainMap[item.domain]) {
         domainMap[item.domain] = {
@@ -439,10 +447,7 @@ export const DashboardOverview: React.FC = () => {
                 onChange={setWorkshopFilter}
                 options={[
                   { value: 'all', label: 'Semua' },
-                  { value: 'WS1', label: 'WS1' },
-                  { value: 'WS2', label: 'WS2' },
-                  { value: 'WS3', label: 'WS3' },
-                  { value: 'WS4', label: 'WS4' },
+                  ...allWorkshops.map(ws => ({ value: ws, label: ws }))
                 ]}
               />
             </div>
@@ -697,15 +702,18 @@ export const DashboardOverview: React.FC = () => {
         </Card>
       </div>
 
-      {/* 4 Workshop Architecture Pillars Showcase */}
+      {/* Dynamic Workshop Architecture Pillars Showcase */}
       <div>
         <div className="mb-4">
-          <h2 className="text-lg font-bold text-ink tracking-tight">4 Pilar Workshop Arsitektur</h2>
-          <p className="text-xs text-muted">Distribusi 408 kapabilitas untuk sesi modernisasi teknologi perbankan.</p>
+          <h2 className="text-lg font-bold text-ink tracking-tight">
+            {allWorkshops.length} Pilar Workshop Arsitektur
+          </h2>
+          <p className="text-xs text-muted">Distribusi {totalCapabilities} kapabilitas untuk sesi modernisasi teknologi perbankan.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {Object.entries(WORKSHOP_META).map(([key, info]) => {
+          {allWorkshops.map(key => {
+            const info = getWorkshopMeta(key);
             const count = workshopCounts[key] || 0;
             const pct = Math.round((count / (totalCapabilities || 1)) * 100);
 

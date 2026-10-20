@@ -10,6 +10,7 @@ import {
   PageHeader, Card, CardHeader, Stat, Button, Badge, 
   Input, Select, StatusDot, StatusBadge, cn 
 } from '../ui';
+import { extractUniqueWorkshops, getWorkshopLabel } from '../../utils/workshop';
 
 const COMPETITORS = [
   { slug: 'mandiri', label: 'Mandiri', fullName: 'Bank Mandiri' },
@@ -31,6 +32,10 @@ export const GapAnalysisView: React.FC = () => {
   const [domainFilter, setDomainFilter] = useState('all');
   const [competitorFilter, setCompetitorFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const allWorkshops = useMemo(() => {
+    return extractUniqueWorkshops(researchItems);
+  }, [researchItems]);
 
   const allDomains = useMemo(() => {
     return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
@@ -254,11 +259,10 @@ export const GapAnalysisView: React.FC = () => {
               onChange={e => setWorkshopFilter(e.target.value)}
               className="w-full"
             >
-              <option value="all">Semua Pilar (WS1 - WS4)</option>
-              <option value="WS1">WS1: Core &amp; Digital Banking</option>
-              <option value="WS2">WS2: EDW, MDM &amp; BI</option>
-              <option value="WS3">WS3: Cloud, Infra &amp; ITSM</option>
-              <option value="WS4">WS4: Big Data &amp; AI</option>
+              <option value="all">Semua Pilar ({allWorkshops.length})</option>
+              {allWorkshops.map(ws => (
+                <option key={ws} value={ws}>{getWorkshopLabel(ws)}</option>
+              ))}
             </Select>
           </div>
 

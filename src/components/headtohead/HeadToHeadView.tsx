@@ -10,6 +10,7 @@ import {
   PageHeader, Card, CardHeader, Stat, Button, Badge, 
   Input, Select, StatusDot, StatusBadge, cn 
 } from '../ui';
+import { extractUniqueWorkshops, getWorkshopLabel } from '../../utils/workshop';
 
 const BANK_OPTIONS = [
   { slug: 'bri', label: 'BRI', fullName: 'Bank Rakyat Indonesia', isFocus: true },
@@ -37,6 +38,10 @@ export const HeadToHeadView: React.FC = () => {
 
   const bankA = BANK_OPTIONS.find(b => b.slug === bankASlug) || BANK_OPTIONS[0];
   const bankB = BANK_OPTIONS.find(b => b.slug === bankBSlug) || BANK_OPTIONS[1];
+
+  const allWorkshops = useMemo(() => {
+    return extractUniqueWorkshops(researchItems);
+  }, [researchItems]);
 
   const allDomains = useMemo(() => {
     return Array.from(new Set(researchItems.map(i => i.domain))).filter(Boolean);
@@ -303,11 +308,10 @@ export const HeadToHeadView: React.FC = () => {
               onChange={e => setWorkshopFilter(e.target.value)}
               className="w-full"
             >
-              <option value="all">Semua Pilar</option>
-              <option value="WS1">WS1: Core &amp; Digital</option>
-              <option value="WS2">WS2: EDW &amp; BI</option>
-              <option value="WS3">WS3: Cloud &amp; Infra</option>
-              <option value="WS4">WS4: Big Data &amp; AI</option>
+              <option value="all">Semua Pilar ({allWorkshops.length})</option>
+              {allWorkshops.map(ws => (
+                <option key={ws} value={ws}>{getWorkshopLabel(ws)}</option>
+              ))}
             </Select>
           </div>
 
