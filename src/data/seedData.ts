@@ -4840,7 +4840,7 @@ export const INITIAL_AUDIT_LOGS: AuditLog[] = [
     "aksi": "IMPORT",
     "entitas": "Finding",
     "detail": "Sinkronisasi 161 temuan riset terverifikasi dari Banking Technology Research - Sheet1.csv mencakup 6 bank (BRI, Mandiri, BCA, BNI, BTN, BSI).",
-    "timestamp": "2026-10-14 08:30:00"
+    "timestamp": "2026-10-14 08:30:00 WIB"
   },
   {
     "id": "aud-002",
@@ -4849,6 +4849,6 @@ export const INITIAL_AUDIT_LOGS: AuditLog[] = [
     "aksi": "PUBLISH",
     "entitas": "Technology",
     "detail": "Pembaruan 72 katalog teknologi perbankan modern dan benchmark kesiapan GenAI.",
-    "timestamp": "2026-10-14 08:30:05"
+    "timestamp": "2026-10-14 08:30:05 WIB"
   }
 ];

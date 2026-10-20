@@ -23,10 +23,12 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// Helper to log audit
+// Helper to log audit in WIB local time
 const recordAudit = async (userId, userName, aksi, entitas, detail) => {
   const id = `aud-${Date.now()}`;
-  const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, '0');
+  const timestamp = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} WIB`;
   await run(
     `INSERT INTO audit_logs (id, userId, userName, aksi, entitas, detail, timestamp)
      VALUES (?, ?, ?, ?, ?, ?, ?)`,

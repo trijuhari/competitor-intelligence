@@ -505,7 +505,7 @@ export const AdminCMSView: React.FC = () => {
                       <p className="text-ink leading-relaxed font-normal">{log.detail}</p>
                     </div>
                     <span className="text-[11px] text-ink-muted font-mono shrink-0">
-                      {log.timestamp}
+                      {log.timestamp.includes('WIB') ? log.timestamp : `${log.timestamp} WIB`}
                     </span>
                   </div>
                 ))

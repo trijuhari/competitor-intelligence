@@ -11,6 +11,7 @@ import {
 } from '../data/seedData';
 import researchMatrixData from '../data/researchMatrix.json';
 import { api } from '../services/api';
+import { formatLocalTimestamp } from '../utils/helpers';
 
 interface AppContextType {
   banks: Bank[];
@@ -505,7 +506,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       aksi,
       entitas,
       detail,
-      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19)
+      timestamp: formatLocalTimestamp()
     };
     setAuditLogs(prev => [newLog, ...prev]);
   };
