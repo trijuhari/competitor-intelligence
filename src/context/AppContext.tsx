@@ -332,6 +332,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
+  // Background Auto-sync timer (when auto_sync_interval is set to 15, 30, or 60 minutes)
+  useEffect(() => {
+    const mins = parseInt(syncStatus?.auto_sync_interval || '0', 10);
+    if (mins > 0 && syncStatus?.sheet_url) {
+      const timer = setInterval(() => {
+        pullGoogleSheet(syncStatus.sheet_url);
+      }, mins * 60 * 1000);
+      return () => clearInterval(timer);
+    }
+  }, [syncStatus?.auto_sync_interval, syncStatus?.sheet_url]);
+
   const navigate = (path: string) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);

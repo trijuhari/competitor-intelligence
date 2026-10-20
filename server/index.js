@@ -600,10 +600,38 @@ app.post('/api/sync/push', async (req, res) => {
   }
 });
 
+let autoSyncTimer = null;
+const setupAutoSyncScheduler = (intervalMinutes, sheetUrl) => {
+  if (autoSyncTimer) {
+    clearInterval(autoSyncTimer);
+    autoSyncTimer = null;
+  }
+  const mins = parseInt(intervalMinutes, 10);
+  if (mins > 0) {
+    console.log(`⏱️ [AutoSync] Background scheduler active: running every ${mins} minutes`);
+    autoSyncTimer = setInterval(async () => {
+      try {
+        console.log(`🔄 [AutoSync] Executing background pull from Google Sheets...`);
+        const settings = await getSyncSettings();
+        const url = sheetUrl || settings.sheet_url;
+        if (url) {
+          const res = await pullFromGoogleSheet(url, 'Auto Scheduler');
+          await recordAudit('usr-1', 'Auto Scheduler', 'SYNC', 'GoogleSheets', res.summary || 'Auto-sync background pull complete');
+        }
+      } catch (err) {
+        console.error('❌ [AutoSync] Error during background sync:', err.message);
+      }
+    }, mins * 60 * 1000);
+  } else {
+    console.log(`⏸️ [AutoSync] Background auto-sync is disabled (Manual mode)`);
+  }
+};
+
 app.post('/api/sync/config', async (req, res) => {
   try {
     const settings = await updateSyncSettings(req.body || {});
     await recordAudit('usr-1', req.body?.userName || 'Admin', 'UPDATE', 'GoogleSheets', 'Memperbarui konfigurasi Google Sheets Sync');
+    setupAutoSyncScheduler(settings.auto_sync_interval, settings.sheet_url);
     res.json(settings);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -674,6 +702,10 @@ const startServer = async () => {
     await initDatabase();
     await initSyncTables();
     await seedDatabaseIfEmpty();
+    const initialSettings = await getSyncSettings();
+    if (initialSettings.auto_sync_interval && initialSettings.auto_sync_interval !== '0') {
+      setupAutoSyncScheduler(initialSettings.auto_sync_interval, initialSettings.sheet_url);
+    }
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Competitor Intelligence Backend API & Server running on http://localhost:${PORT}`);
     });
