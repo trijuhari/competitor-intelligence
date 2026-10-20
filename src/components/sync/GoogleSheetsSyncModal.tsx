@@ -20,7 +20,8 @@ export const GoogleSheetsSyncModal: React.FC<GoogleSheetsSyncModalProps> = ({ is
     pushGoogleSheet, 
     updateSyncConfig,
     currentUser,
-    researchItems 
+    researchItems,
+    isDbConnected
   } = useApp();
 
   const [sheetUrlInput, setSheetUrlInput] = useState(syncStatus?.sheet_url || '');
@@ -301,9 +302,17 @@ function createResponse(data, statusCode) {
                 </div>
 
                 <div className="text-right shrink-0">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-xl text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                    Database Lokal SQLite Aktif
-                  </span>
+                  {isDbConnected ? (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Database SQLite Aktif
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                      Penyimpanan Browser (Mode Offline)
+                    </span>
+                  )}
                 </div>
               </div>
 
