@@ -202,20 +202,47 @@ export const MatrixView: React.FC = () => {
         </div>
       </div>
 
-      {/* Workshop Quick Switcher */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <SegmentedControl
-          value={workshopFilter}
-          onChange={(v) => { setWorkshopFilter(v); setCurrentPage(1); }}
-          options={[
-            { value: 'all', label: 'Semua Workshop', count: stats.total },
-            ...allWorkshops.map(ws => ({
-              value: ws,
-              label: getWorkshopLabel(ws),
-              count: stats.workshopCounts[ws]
-            }))
-          ]}
-        />
+      {/* Workshop Dropdown Filter */}
+      <div className="flex items-center justify-between gap-3 flex-wrap bg-surface p-3 sm:p-4 rounded-2xl border border-line shadow-card">
+        <div className="flex items-center gap-3 flex-wrap flex-1">
+          <div className="flex items-center gap-2 text-xs font-bold text-ink shrink-0">
+            <span className="w-7 h-7 rounded-lg bg-accent/10 text-accent flex items-center justify-center font-bold">
+              <Layers className="w-4 h-4" />
+            </span>
+            <span>Filter Pilar Workshop:</span>
+          </div>
+
+          <div className="flex-1 min-w-[260px] sm:max-w-md">
+            <Select
+              value={workshopFilter}
+              onChange={(e) => { setWorkshopFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full text-xs font-semibold"
+            >
+              <option value="all">Semua Workshop ({stats.total} Kapabilitas)</option>
+              {allWorkshops.map(ws => (
+                <option key={ws} value={ws}>
+                  {getWorkshopLabel(ws)} ({stats.workshopCounts[ws] || 0} kapabilitas)
+                </option>
+              ))}
+            </Select>
+          </div>
+
+          {workshopFilter !== 'all' && (
+            <span className="px-2.5 py-1 rounded-full text-2xs font-bold bg-accent/10 text-accent border border-accent/25">
+              Terpilih: {workshopFilter} ({stats.workshopCounts[workshopFilter] || 0} kapabilitas)
+            </span>
+          )}
+        </div>
+
+        {workshopFilter !== 'all' && (
+          <button
+            onClick={() => { setWorkshopFilter('all'); setCurrentPage(1); }}
+            className="text-xs font-semibold text-subtle hover:text-ink flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-sunken transition-colors shrink-0"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Tampilkan Semua</span>
+          </button>
+        )}
       </div>
 
       {/* Filter and Search Panel */}
