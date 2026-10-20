@@ -251,6 +251,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [selectedResearchCell, setSelectedResearchCell] = useState<{ capId: string; bankCode: string } | null>(null);
 
   // Google Sheets Sync State
+  const SYNC_STORAGE_KEY = 'competitor_intel_bri_sync_settings_v1';
   const [isSyncModalOpen, setIsSyncModalOpen] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [syncStatus, setSyncStatus] = useState<{
@@ -263,16 +264,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     last_sync_summary: string;
     totalCapabilities: number;
     totalEntries: number;
-  }>({
-    sheet_url: 'https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0',
-    auto_sync: '0',
-    auto_sync_interval: '0',
-    apps_script_url: '',
-    last_sync_time: '',
-    last_sync_status: 'Siap',
-    last_sync_summary: '',
-    totalCapabilities: 408,
-    totalEntries: 2448
+  }>(() => {
+    const saved = localStorage.getItem(SYNC_STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.warn('Failed to parse cached sync settings', e);
+      }
+    }
+    return {
+      sheet_url: 'https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0',
+      auto_sync: '0',
+      auto_sync_interval: '0',
+      apps_script_url: '',
+      last_sync_time: '',
+      last_sync_status: 'Siap',
+      last_sync_summary: '',
+      totalCapabilities: 408,
+      totalEntries: 2448
+    };
   });
 
   const refreshSyncStatus = async () => {
@@ -296,7 +307,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addAuditLog('SYNC', 'GoogleSheets', result.summary || 'Sinkronisasi dari Google Sheets berhasil');
       return { success: true, summary: result.summary };
     } catch (err: any) {
-      const errorMsg = err?.message || 'Gagal sinkronisasi data dari Google Sheets';
+      const errorMsg = !isDbConnected 
+        ? "Backend server belum berjalan (Mode Offline). Jalankan 'npm run server' di terminal untuk melakukan sinkronisasi live Google Sheets." 
+        : (err?.message || 'Gagal sinkronisasi data dari Google Sheets');
       await refreshSyncStatus();
       return { success: false, summary: errorMsg, error: errorMsg };
     } finally {
@@ -314,7 +327,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       return result;
     } catch (err: any) {
-      const errorMsg = err?.message || 'Gagal mengirim data ke Google Sheets';
+      const errorMsg = !isDbConnected 
+        ? "Backend server belum berjalan (Mode Offline). Jalankan 'npm run server' di terminal untuk mengirim data ke Google Sheets." 
+        : (err?.message || 'Gagal mengirim data ke Google Sheets');
       await refreshSyncStatus();
       return { success: false, summary: errorMsg, error: errorMsg };
     } finally {
@@ -323,12 +338,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateSyncConfig = async (config: any) => {
+    // 1. Immediately persist to local state and localStorage
+    setSyncStatus(prev => {
+      const next = { ...prev, ...config };
+      localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+
+    const intervalLabel = config.auto_sync_interval === '0' 
+      ? 'Manual' 
+      : `${config.auto_sync_interval} Menit`;
+    addAuditLog('UPDATE', 'GoogleSheets', `Menyetel interval sinkronisasi otomatis: ${intervalLabel}`);
+
+    // 2. If backend SQLite is connected, push config to server
     try {
       const updated = await api.updateSyncConfig({ ...config, userName: currentUser.nama });
-      if (updated) setSyncStatus(prev => ({ ...prev, ...updated }));
+      if (updated) {
+        setSyncStatus(prev => {
+          const next = { ...prev, ...updated };
+          localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(next));
+          return next;
+        });
+      }
     } catch (err) {
-      console.error('Failed to update sync config:', err);
-      throw err;
+      console.warn('Backend SQLite not reachable for sync config, preserved in local state:', err);
     }
   };
 
