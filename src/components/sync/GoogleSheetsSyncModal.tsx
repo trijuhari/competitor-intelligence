@@ -455,10 +455,13 @@ function createResponse(data, statusCode) {
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 >
                   <option value="0">Manual (Hanya saat tombol ditekan)</option>
-                  <option value="15">Setiap 15 Menit</option>
+                  <option value="15">Setiap 15 Menit (Direkomendasikan)</option>
                   <option value="30">Setiap 30 Menit</option>
                   <option value="60">Setiap 1 Jam</option>
                 </select>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                  Saat diaktifkan, data terbaru dari Google Sheets akan <b>otomatis ditarik saat web pertama kali dibuka</b> dan disinkronkan berkala di latar belakang.
+                </p>
               </div>
 
               <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end space-x-2">

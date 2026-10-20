@@ -146,10 +146,10 @@ export const MatrixView: React.FC = () => {
       {/* Header */}
       <PageHeader
         title="Matriks Riset Kapabilitas Teknologi"
-        description="Basis data riset komparatif teknologi perbankan 6 bank nasional di 408 kapabilitas, 13 domain arsitektur, dan 4 pilar workshop."
+        description={`Basis data riset komparatif teknologi perbankan 6 bank nasional di ${researchItems.length} kapabilitas, ${allDomains.length} domain arsitektur, dan ${allWorkshops.length} pilar workshop.`}
         badge={
           <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent/15 text-accent border border-accent/25">
-            408 Baris Valid
+            {researchItems.length} Baris Valid
           </span>
         }
         actions={

@@ -11,8 +11,8 @@ export default function handler(req, res) {
 
   res.status(200).json({
     sheet_url: 'https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0',
-    auto_sync: '0',
-    auto_sync_interval: '0',
+    auto_sync: '1',
+    auto_sync_interval: '15',
     apps_script_url: '',
     last_sync_time: new Date().toISOString(),
     last_sync_status: 'Siap (Vercel Serverless Sync)',

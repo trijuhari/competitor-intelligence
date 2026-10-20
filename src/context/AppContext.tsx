@@ -275,11 +275,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     return {
       sheet_url: 'https://docs.google.com/spreadsheets/d/1L0WBGmZVrzIHOojtZjYSeSEEggNsMPOG9AhQQj0-PoY/edit?gid=0#gid=0',
-      auto_sync: '0',
-      auto_sync_interval: '0',
+      auto_sync: '1',
+      auto_sync_interval: '15',
       apps_script_url: '',
       last_sync_time: '',
-      last_sync_status: 'Siap',
+      last_sync_status: 'Siap (Auto-Sync Aktif)',
       last_sync_summary: '',
       totalCapabilities: 408,
       totalEntries: 2448
@@ -320,6 +320,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (result.success && result.items && result.items.length > 0) {
         setResearchItems(result.items);
         localStorage.setItem(RESEARCH_STORAGE_KEY, JSON.stringify(result.items));
+        setSyncStatus(prev => {
+          const updated = {
+            ...prev,
+            totalCapabilities: result.items.length,
+            totalEntries: result.items.length * (banks.length || 6),
+            last_sync_time: formatLocalTimestamp(),
+            last_sync_status: 'Tersinkronisasi Live',
+            last_sync_summary: result.summary || `Berhasil sinkronisasi ${result.items.length} kapabilitas dari Google Sheets`
+          };
+          localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(updated));
+          return updated;
+        });
       }
       await refreshSyncStatus();
       addAuditLog('SYNC', 'GoogleSheets', result.summary || 'Sinkronisasi dari Google Sheets berhasil');
@@ -379,7 +391,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  // Background Auto-sync timer (when auto_sync_interval is set to 15, 30, or 60 minutes)
+  // Auto-sync saat pertama kali web dibuka di browser (Mount / First Load)
+  useEffect(() => {
+    let isMounted = true;
+    const initialSyncTimer = setTimeout(() => {
+      if (!isMounted) return;
+      const isAutoSyncActive = syncStatus.auto_sync !== '0';
+      if (isAutoSyncActive && syncStatus.sheet_url) {
+        console.log('[Auto-Sync] Menjalankan sinkronisasi background otomatis dari Google Sheets...');
+        pullGoogleSheet(syncStatus.sheet_url).catch(err => {
+          console.warn('[Auto-Sync] Background sync awal selesai dengan catatan:', err?.message);
+        });
+      }
+    }, 1200);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(initialSyncTimer);
+    };
+  }, []);
+
+  // Background Auto-sync timer (ketika auto_sync_interval disetel ke 15, 30, atau 60 menit)
   useEffect(() => {
     const mins = parseInt(syncStatus?.auto_sync_interval || '0', 10);
     if (mins > 0 && syncStatus?.sheet_url) {
@@ -517,12 +549,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (logs && logs.length > 0) setAuditLogs(logs);
         if (resMatrix && resMatrix.length > 0) setResearchItems(resMatrix);
 
-        api.getSyncStatus().then(st => { if (st) setSyncStatus(st); }).catch(() => {});
-
         setIsDbConnected(true);
       } catch (err) {
-        console.warn('Backend SQLite API not reachable yet. Falling back to local state:', err);
+        console.warn('Backend SQLite API not reachable yet (Mode Vercel/Offline). Falling back to local state:', err);
         setIsDbConnected(false);
+      } finally {
+        refreshSyncStatus().catch(() => {});
       }
     };
 

@@ -98,7 +98,7 @@ export const TechCatalogView: React.FC = () => {
       {/* Header */}
       <PageHeader
         title="Katalog Kapabilitas Teknologi"
-        description="Eksplorasi 408 kapabilitas perbankan enterprise yang dievaluasi dengan status adopsi pada masing-masing dari 6 bank nasional."
+        description={`Eksplorasi ${researchItems.length} kapabilitas perbankan enterprise yang dievaluasi dengan status adopsi pada masing-masing dari 6 bank nasional.`}
         badge={
           <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent/15 text-accent border border-accent/25">
             Katalog Kartu

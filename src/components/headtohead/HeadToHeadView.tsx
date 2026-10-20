@@ -149,7 +149,7 @@ export const HeadToHeadView: React.FC = () => {
       {/* Header */}
       <PageHeader
         title={`Head-to-Head: ${bankA.label} vs ${bankB.label}`}
-        description={`Komparasi langsung implementasi teknologi antara ${bankA.fullName} dan ${bankB.fullName} pada 408 kapabilitas riset.`}
+        description={`Komparasi langsung implementasi teknologi antara ${bankA.fullName} dan ${bankB.fullName} pada ${researchItems.length} kapabilitas riset.`}
         badge={
           <span className="px-2.5 py-0.5 rounded-full text-2xs font-bold bg-accent/15 text-accent border border-accent/25">
             Battlecard Komparasi

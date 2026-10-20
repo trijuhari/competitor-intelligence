@@ -211,7 +211,7 @@ export const DashboardOverview: React.FC = () => {
               Executive Competitor Intelligence
             </h1>
             <p className="text-sm sm:text-[15px] text-muted leading-relaxed">
-              Analitik benchmark komparatif arsitektur teknologi Bank BRI terhadap 5 bank Himbara &amp; BCA berbasis pembuktian nyata (408 kapabilitas, 13 domain arsitektur).
+              Analitik benchmark komparatif arsitektur teknologi Bank BRI terhadap 5 bank Himbara &amp; BCA berbasis pembuktian nyata ({totalCapabilities} kapabilitas, {Object.keys(domainStats).length} domain arsitektur).
             </p>
           </div>
 

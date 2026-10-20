@@ -17,6 +17,7 @@ export const AdminCMSView: React.FC = () => {
     currentUser,
     currentPath,
     navigate,
+    banks,
     researchItems,
     exportDataJSON,
     importDataJSON,
@@ -84,7 +85,7 @@ export const AdminCMSView: React.FC = () => {
   });
 
   const tabList: { id: AdminTab; label: string; icon: React.ElementType; badge?: string | number }[] = [
-    { id: 'findings', label: 'Matriks Riset 408 Baris', icon: Database, badge: researchItems.length },
+    { id: 'findings', label: `Matriks Riset (${researchItems.length} Baris)`, icon: Database, badge: researchItems.length },
     { id: 'sync', label: 'Pusat Sinkronisasi & Backup', icon: FileSpreadsheet, badge: 'Live' },
     { id: 'audit', label: 'Log Audit Trail', icon: History, badge: auditLogs.length },
     { id: 'checklist', label: 'Checklist Kesiapan', icon: ShieldCheck, badge: '100%' }
@@ -118,7 +119,7 @@ export const AdminCMSView: React.FC = () => {
               Kelola Basis Data Intelijen Perbankan
             </h1>
             <p className="text-xs sm:text-sm text-ink-muted leading-relaxed">
-              Pusat kendali 408 baris kapabilitas arsitektur 6 bank nasional, sinkronisasi dua arah Google Sheets, dan kepatuhan audit trail.
+              Pusat kendali {researchItems.length} baris kapabilitas arsitektur {banks.length} bank nasional, sinkronisasi dua arah Google Sheets, dan kepatuhan audit trail.
             </p>
           </div>
 
@@ -285,7 +286,7 @@ export const AdminCMSView: React.FC = () => {
                   {researchItems.length} Kapabilitas
                 </div>
                 <div className="text-[10px] text-ink-muted">
-                  2,448 sel evaluasi (6 Bank × 408 Kapabilitas)
+                  {(researchItems.length * (banks.length || 6)).toLocaleString()} sel evaluasi ({banks.length || 6} Bank × {researchItems.length} Kapabilitas)
                 </div>
               </div>
 
@@ -298,7 +299,7 @@ export const AdminCMSView: React.FC = () => {
                   <span>{syncStatus?.last_sync_time || 'Baru saja'}</span>
                 </div>
                 <div className="text-[10px] text-ink-muted truncate">
-                  {syncStatus?.last_sync_summary || '408 kapabilitas berhasil dimuat ke database SQLite.'}
+                  {syncStatus?.last_sync_summary || `${researchItems.length} kapabilitas berhasil dimuat ke database.`}
                 </div>
               </div>
             </div>
@@ -320,7 +321,7 @@ export const AdminCMSView: React.FC = () => {
               <div className="bg-surface-raised p-4 rounded-xl border border-line space-y-3">
                 <div className="font-extrabold text-ink">Ekspor Salinan JSON Lengkap</div>
                 <p className="text-ink-muted text-[11px]">
-                  Mencakup seluruh 408 kapabilitas riset arsitektur, profil 6 bank, dan jejak riwayat audit.
+                  Mencakup seluruh {researchItems.length} kapabilitas riset arsitektur, profil {banks.length} bank, dan jejak riwayat audit.
                 </p>
                 <button
                   onClick={exportDataJSON}
@@ -348,7 +349,7 @@ export const AdminCMSView: React.FC = () => {
               <div className="bg-surface-raised p-4 rounded-xl border border-line space-y-3">
                 <div className="font-extrabold text-ink">Ekspor Matriks CSV (Excel)</div>
                 <p className="text-ink-muted text-[11px]">
-                  Unduh tabel 408 kapabilitas x 6 bank lengkap dengan status, evaluasi, dan tautan bukti riset.
+                  Unduh tabel {researchItems.length} kapabilitas x {banks.length} bank lengkap dengan status, evaluasi, dan tautan bukti riset.
                 </p>
                 <button
                   onClick={exportResearchMatrixCSV}
@@ -540,11 +541,11 @@ export const AdminCMSView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-ink-muted leading-relaxed font-normal">
-                  Seluruh 408 kapabilitas arsitektur memiliki status bukti evaluasi yang jelas (Terverifikasi, Inferensi, Belum) di seluruh 6 bank.
+                  Seluruh {researchItems.length} kapabilitas arsitektur memiliki status bukti evaluasi yang jelas (Terverifikasi, Inferensi, Belum) di seluruh {banks.length} bank.
                 </p>
                 <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold flex items-center space-x-1.5 pt-1">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <span>2,448 sel evaluasi siap dikomparasikan.</span>
+                  <span>{(researchItems.length * (banks.length || 6)).toLocaleString()} sel evaluasi siap dikomparasikan.</span>
                 </div>
               </div>
 
@@ -588,7 +589,7 @@ export const AdminCMSView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-ink-muted leading-relaxed font-normal">
-                  Matriks analitik komprehensif 408 kapabilitas siap digunakan untuk evaluasi arsitektur teknologi & komparasi 6 bank secara real-time.
+                  Matriks analitik komprehensif {researchItems.length} kapabilitas siap digunakan untuk evaluasi arsitektur teknologi & komparasi {banks.length} bank secara real-time.
                 </p>
                 <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold flex items-center space-x-1.5 pt-1">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />

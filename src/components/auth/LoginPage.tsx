@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
-import { Eye, EyeOff, AlertCircle, ArrowRight, Lock, Mail, ShieldCheck, Moon, Sun } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle, ArrowRight, Lock, Mail, ShieldCheck, Moon, Sun, RefreshCw } from 'lucide-react';
 import { BankLogo } from '../common/BankLogo';
 
 const PEERS = ['mandiri', 'bca', 'bni', 'btn', 'bsi'];
 
 export const LoginPage: React.FC = () => {
-  const { login, theme, toggleTheme } = useApp();
+  const { login, theme, toggleTheme, researchItems, banks, isSyncing, syncStatus } = useApp();
+
+  const totalCapabilities = researchItems.length || 408;
+  const totalDomains = useMemo(() => {
+    const set = new Set(researchItems.map(i => i.domain).filter(Boolean));
+    return set.size || 13;
+  }, [researchItems]);
+  const totalBanks = banks.length || 6;
+  const peerBanks = useMemo(() => {
+    const peers = banks
+      .filter(b => b.id !== 'bank-bri')
+      .map(b => b.singkatan.toLowerCase());
+    return peers.length > 0 ? peers : PEERS;
+  }, [banks]);
 
   const [email, setEmail] = useState('admin@intel.com');
   const [password, setPassword] = useState('admin123');
@@ -75,36 +88,57 @@ export const LoginPage: React.FC = () => {
                 Benchmark Arsitektur Teknologi Perbankan Nasional
               </h1>
               <p className="text-sm sm:text-[15px] text-muted leading-relaxed font-normal">
-                Platform intelijen komparatif berbasis bukti empiris terverifikasi. Memetakan kesiapan, adopsi, dan keunggulan teknologi Bank BRI terhadap Himbara dan BCA di 13 domain arsitektur strategis.
+                Platform intelijen komparatif berbasis bukti empiris terverifikasi. Memetakan kesiapan, adopsi, dan keunggulan teknologi Bank BRI terhadap Himbara dan BCA di {totalDomains} domain arsitektur strategis.
               </p>
             </div>
 
             {/* Metrik Solid dengan High Contrast */}
             <div className="grid grid-cols-3 gap-4 pt-2 max-w-lg border-t border-line">
-              <div className="p-3.5 rounded-xl bg-surface border border-line shadow-card">
-                <div className="text-2xl sm:text-3xl font-black font-mono text-ink tracking-tight">408</div>
+              <div className="p-3.5 rounded-xl bg-surface border border-line shadow-card transition-all hover:border-line-strong">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl sm:text-3xl font-black font-mono text-ink tracking-tight">
+                    {totalCapabilities}
+                  </span>
+                  {isSyncing && (
+                    <span title="Menyinkronkan data live Google Sheets...">
+                      <RefreshCw className="w-3.5 h-3.5 text-accent animate-spin" />
+                    </span>
+                  )}
+                </div>
                 <div className="text-xs font-medium text-muted mt-0.5">Kapabilitas</div>
               </div>
-              <div className="p-3.5 rounded-xl bg-surface border border-line shadow-card">
-                <div className="text-2xl sm:text-3xl font-black font-mono text-ink tracking-tight">13</div>
+              <div className="p-3.5 rounded-xl bg-surface border border-line shadow-card transition-all hover:border-line-strong">
+                <div className="text-2xl sm:text-3xl font-black font-mono text-ink tracking-tight">
+                  {totalDomains}
+                </div>
                 <div className="text-xs font-medium text-muted mt-0.5">Domain Arsitektur</div>
               </div>
-              <div className="p-3.5 rounded-xl bg-surface border border-line shadow-card">
-                <div className="text-2xl sm:text-3xl font-black font-mono text-ink tracking-tight">6</div>
+              <div className="p-3.5 rounded-xl bg-surface border border-line shadow-card transition-all hover:border-line-strong">
+                <div className="text-2xl sm:text-3xl font-black font-mono text-ink tracking-tight">
+                  {totalBanks}
+                </div>
                 <div className="text-xs font-medium text-muted mt-0.5">Bank Pembanding</div>
               </div>
             </div>
 
             {/* Logo Bank Pembanding */}
             <div className="pt-1 space-y-2.5">
-              <span className="text-xs text-muted font-semibold tracking-wide uppercase">
-                Lanskap 6 Bank Nasional
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted font-semibold tracking-wide uppercase">
+                  Lanskap {totalBanks} Bank Nasional
+                </span>
+                {syncStatus?.last_sync_time && (
+                  <span className="text-[11px] text-muted flex items-center gap-1.5 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span>Terhubung Google Sheets</span>
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="p-2.5 rounded-xl bg-surface border-2 border-accent shadow-sm" title="Bank BRI (Fokus)">
                   <BankLogo bankCode="bri" size={26} />
                 </div>
-                {PEERS.map(p => (
+                {peerBanks.map(p => (
                   <div 
                     key={p} 
                     className="p-2.5 rounded-xl bg-surface border border-line hover:border-line-strong transition-colors shadow-xs"
