@@ -152,13 +152,13 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
     <div className="space-y-5">
       {/* KPI Stats Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-        <div className="glass-panel top-hairline p-4 rounded-2xl border border-line shadow-card hover:shadow-card-hover transition-all">
+        <div className="bg-surface p-4 rounded-2xl border border-line shadow-card hover:shadow-card-hover transition-all">
           <div className="text-[10px] font-extrabold uppercase tracking-wider text-ink-muted">Total Temuan Kapabilitas</div>
           <div className="text-2xl font-black text-ink mt-0.5 tracking-tight font-heading">{stats.total}</div>
           <div className="text-[10px] text-ink-muted font-medium">13 Domain Arsitektur</div>
         </div>
 
-        <div className="glass-panel top-hairline p-4 rounded-2xl border border-emerald-300/60 dark:border-emerald-800/60 shadow-card hover:shadow-card-hover transition-all bg-emerald-50/30 dark:bg-emerald-950/20">
+        <div className="bg-emerald-50/80 dark:bg-emerald-950/40 p-4 rounded-2xl border border-emerald-300 dark:border-emerald-800 shadow-card hover:shadow-card-hover transition-all">
           <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center space-x-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Terverifikasi</span>
@@ -167,7 +167,7 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
           <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold">dari {stats.totalCells} sel evaluasi</div>
         </div>
 
-        <div className="glass-panel top-hairline p-4 rounded-2xl border border-amber-300/60 dark:border-amber-800/60 shadow-card hover:shadow-card-hover transition-all bg-amber-50/30 dark:bg-amber-950/20">
+        <div className="bg-amber-50/80 dark:bg-amber-950/40 p-4 rounded-2xl border border-amber-300 dark:border-amber-800 shadow-card hover:shadow-card-hover transition-all">
           <div className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-300 flex items-center space-x-1.5">
             <span className="w-2 h-2 rounded-full bg-amber-500"></span>
             <span>Inferensi Industri</span>
@@ -176,7 +176,7 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
           <div className="text-[10px] text-amber-700 dark:text-amber-400 font-semibold">Sinyal media & publikasi</div>
         </div>
 
-        <div className="glass-panel top-hairline p-4 rounded-2xl border border-rose-300/60 dark:border-rose-900/60 shadow-card hover:shadow-card-hover transition-all bg-rose-50/30 dark:bg-rose-950/20">
+        <div className="bg-rose-50/80 dark:bg-rose-950/40 p-4 rounded-2xl border border-rose-300 dark:border-rose-900 shadow-card hover:shadow-card-hover transition-all">
           <div className="text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:text-rose-300 flex items-center space-x-1.5">
             <span className="w-2 h-2 rounded-full bg-rose-500"></span>
             <span>Belum Terdata</span>
@@ -187,7 +187,7 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
       </div>
 
       {/* Filter and Control Bar */}
-      <div className="glass-panel top-hairline p-4 rounded-2xl border border-line shadow-card space-y-3">
+      <div className="bg-surface p-4 rounded-2xl border border-line shadow-card space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           {/* Search Box */}
           <div className="md:col-span-4 relative">
@@ -317,11 +317,11 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
       </div>
 
       {/* Main Admin Data Table */}
-      <div className="glass-panel top-hairline rounded-3xl border border-line shadow-card overflow-hidden">
+      <div className="bg-surface rounded-2xl border border-line shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-surface-raised/90 backdrop-blur-md border-b border-line text-ink font-extrabold sticky top-0 z-20">
+              <tr className="bg-surface-raised border-b border-line text-ink font-extrabold sticky top-0 z-20">
                 <th className="py-3.5 px-3 w-12 text-center border-r border-line shrink-0">No</th>
                 <th className="py-3.5 px-3 w-16 text-center border-r border-line shrink-0">WS</th>
                 <th className="py-3.5 px-3 w-44 min-w-[150px] max-w-[180px] border-r border-line">Domain & Kategori</th>

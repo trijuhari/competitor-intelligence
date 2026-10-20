@@ -187,16 +187,15 @@ export const DashboardOverview: React.FC = () => {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Executive Hero Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-950/40 via-surface/90 to-surface/95 border border-line p-6 lg:p-8 shadow-card top-hairline">
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-2xl bg-surface border border-line p-6 lg:p-8 shadow-card">
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent/15 text-accent border border-accent/25 shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent/10 text-accent border border-accent/25 shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 Live Architecture Intelligence
               </span>
-              <span className="text-2xs font-mono text-subtle px-2 py-0.5 rounded-md bg-sunken border border-line">
+              <span className="text-2xs font-mono text-muted px-2 py-0.5 rounded-md bg-sunken border border-line font-bold">
                 v1.0 Ready
               </span>
             </div>
@@ -236,12 +235,12 @@ export const DashboardOverview: React.FC = () => {
         {/* Card 1: Total Capabilities */}
         <div 
           onClick={() => navigate('/analyst/matrix')}
-          className="group relative p-5 rounded-2xl bg-surface/90 backdrop-blur-md border border-line hover:border-accent/40 shadow-card hover:shadow-card-hover transition-all duration-200 cursor-pointer flex flex-col justify-between top-hairline"
+          className="group relative p-5 rounded-2xl bg-surface border border-line hover:border-accent shadow-card hover:shadow-card-hover transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold tracking-wider uppercase text-subtle">Total Kapabilitas</span>
-              <span className="p-2 rounded-xl bg-blue-500/10 text-accent group-hover:scale-110 transition-transform">
+              <span className="p-2 rounded-xl bg-accent/10 text-accent group-hover:scale-110 transition-transform">
                 <Database className="w-4 h-4" />
               </span>
             </div>
@@ -249,8 +248,8 @@ export const DashboardOverview: React.FC = () => {
               {totalCapabilities}
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-line/60 flex items-center justify-between text-xs">
-            <span className="text-muted">13 Domain · 4 Pilar WS</span>
+          <div className="mt-4 pt-3 border-t border-line flex items-center justify-between text-xs">
+            <span className="text-muted font-medium">13 Domain · 4 Pilar WS</span>
             <span className="text-accent font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
               Lihat tabel <ArrowRight className="w-3 h-3" />
             </span>
@@ -260,12 +259,12 @@ export const DashboardOverview: React.FC = () => {
         {/* Card 2: BRI Verified Maturity */}
         <div 
           onClick={() => navigate('/analyst/banks')}
-          className="group relative p-5 rounded-2xl bg-gradient-to-b from-blue-500/10 via-surface/90 to-surface/95 backdrop-blur-md border border-blue-500/30 hover:border-blue-500/50 shadow-card hover:shadow-glow-blue transition-all duration-200 cursor-pointer flex flex-col justify-between top-hairline"
+          className="group relative p-5 rounded-2xl bg-surface border-2 border-accent shadow-card hover:shadow-card-hover transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold tracking-wider uppercase text-accent">Maturitas BRI</span>
-              <span className="p-2 rounded-xl bg-blue-500/15 text-accent group-hover:scale-110 transition-transform">
+              <span className="p-2 rounded-xl bg-accent/15 text-accent group-hover:scale-110 transition-transform">
                 <TrendingUp className="w-4 h-4" />
               </span>
             </div>
@@ -273,12 +272,12 @@ export const DashboardOverview: React.FC = () => {
               <span className="text-3xl lg:text-4xl font-extrabold num tracking-tight text-accent">
                 {briData?.verifiedPct || 0}%
               </span>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                 +{Math.max(0, (briData?.verifiedPct || 0) - industryVerifiedPct)}% vs Industri
               </span>
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-line/60 flex items-center justify-between text-xs text-muted">
+          <div className="mt-4 pt-3 border-t border-line flex items-center justify-between text-xs text-muted font-medium">
             <span>{briData?.verifiedCount || 0} Terverifikasi</span>
             <span className="text-subtle font-mono">Avg: {industryVerifiedPct}%</span>
           </div>
@@ -287,27 +286,27 @@ export const DashboardOverview: React.FC = () => {
         {/* Card 3: Architecture Gaps */}
         <div 
           onClick={() => navigate('/analyst/gap-analysis')}
-          className="group relative p-5 rounded-2xl bg-surface/90 backdrop-blur-md border border-line hover:border-amber-500/40 shadow-card hover:shadow-glow-amber transition-all duration-200 cursor-pointer flex flex-col justify-between top-hairline"
+          className="group relative p-5 rounded-2xl bg-surface border border-line hover:border-amber-500 shadow-card hover:shadow-card-hover transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400">
+              <span className="text-xs font-bold tracking-wider uppercase text-amber-800 dark:text-amber-300">
                 Celah Arsitektur (Gaps)
               </span>
-              <span className="p-2 rounded-xl bg-amber-500/10 text-amber-500 group-hover:scale-110 transition-transform">
+              <span className="p-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
                 <AlertTriangle className="w-4 h-4" />
               </span>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl lg:text-4xl font-extrabold num tracking-tight text-amber-600 dark:text-amber-400">
+              <span className="text-3xl lg:text-4xl font-extrabold num tracking-tight text-amber-800 dark:text-amber-300">
                 {competitorGaps.length}
               </span>
               <span className="text-xs text-muted font-medium">Kapabilitas</span>
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-line/60 flex items-center justify-between text-xs">
-            <span className="text-muted">Kompetitor unggul</span>
-            <span className="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+          <div className="mt-4 pt-3 border-t border-line flex items-center justify-between text-xs">
+            <span className="text-muted font-medium">Kompetitor unggul</span>
+            <span className="text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
               Telaah celah <ArrowRight className="w-3 h-3" />
             </span>
           </div>
@@ -316,27 +315,27 @@ export const DashboardOverview: React.FC = () => {
         {/* Card 4: BRI Exclusive Moats */}
         <div 
           onClick={() => setTriageTab('moats')}
-          className="group relative p-5 rounded-2xl bg-surface/90 backdrop-blur-md border border-line hover:border-emerald-500/40 shadow-card hover:shadow-glow-emerald transition-all duration-200 cursor-pointer flex flex-col justify-between top-hairline"
+          className="group relative p-5 rounded-2xl bg-surface border border-line hover:border-emerald-500 shadow-card hover:shadow-card-hover transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400">
+              <span className="text-xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-300">
                 Keunggulan Eksklusif BRI
               </span>
-              <span className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform">
+              <span className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
                 <Award className="w-4 h-4" />
               </span>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl lg:text-4xl font-extrabold num tracking-tight text-emerald-600 dark:text-emerald-400">
+              <span className="text-3xl lg:text-4xl font-extrabold num tracking-tight text-emerald-800 dark:text-emerald-300">
                 {briLeadingCaps.length}
               </span>
               <span className="text-xs text-muted font-medium">Moats Eksklusif</span>
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-line/60 flex items-center justify-between text-xs">
-            <span className="text-muted">Hanya di BRI</span>
-            <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+          <div className="mt-4 pt-3 border-t border-line flex items-center justify-between text-xs">
+            <span className="text-muted font-medium">Hanya di BRI</span>
+            <span className="text-emerald-800 dark:text-emerald-300 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
               Lihat moats <ArrowRight className="w-3 h-3" />
             </span>
           </div>
@@ -348,7 +347,7 @@ export const DashboardOverview: React.FC = () => {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-bold text-ink tracking-tight">Lanskap 6 Bank Nasional</h2>
-            <p className="text-xs text-muted">Perbandingan adopsi kapabilitas teknologi perbankan antar institusi.</p>
+            <p className="text-xs text-muted font-medium">Perbandingan adopsi kapabilitas teknologi perbankan antar institusi.</p>
           </div>
           <Button variant="ghost" size="sm" onClick={() => navigate('/analyst/banks')} className="text-accent font-semibold">
             <span>Profil Lengkap</span>
@@ -365,10 +364,10 @@ export const DashboardOverview: React.FC = () => {
                 navigate('/analyst/banks');
               }}
               className={cn(
-                'group relative p-4 rounded-xl border backdrop-blur-md transition-all duration-200 cursor-pointer flex flex-col justify-between top-hairline',
+                'group relative p-4 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col justify-between shadow-card',
                 b.isFocus 
-                  ? 'bg-gradient-to-b from-blue-500/15 via-surface/90 to-surface/95 border-blue-500/40 shadow-glow-blue hover:border-blue-500' 
-                  : 'bg-surface/90 border-line hover:border-line-strong hover:shadow-card-hover hover:-translate-y-0.5'
+                  ? 'bg-surface border-2 border-accent hover:shadow-card-hover hover:-translate-y-0.5' 
+                  : 'bg-surface border-line hover:border-line-strong hover:shadow-card-hover hover:-translate-y-0.5'
               )}
             >
               <div>
@@ -656,7 +655,7 @@ export const DashboardOverview: React.FC = () => {
             {triageItems.slice(0, 6).map((item, idx) => (
               <div 
                 key={idx}
-                className="group p-3.5 rounded-xl border border-line bg-surface/90 hover:border-accent/40 hover:bg-sunken/40 transition-all duration-150 flex flex-col gap-2 cursor-pointer shadow-xs"
+                className="group p-3.5 rounded-xl border border-line bg-surface hover:border-accent hover:bg-sunken/40 transition-all duration-150 flex flex-col gap-2 cursor-pointer shadow-xs"
                 onClick={() => {
                   setSelectedResearchCell({ capId: item.id, bankCode: 'bri' });
                 }}
@@ -714,7 +713,7 @@ export const DashboardOverview: React.FC = () => {
               <div 
                 key={key} 
                 onClick={() => navigate('/analyst/matrix')}
-                className="group relative p-5 rounded-2xl border border-line bg-surface/90 hover:border-accent/40 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between top-hairline"
+                className="group relative p-5 rounded-2xl border border-line bg-surface hover:border-accent hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between shadow-card"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">

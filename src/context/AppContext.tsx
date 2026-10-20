@@ -381,11 +381,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return { success: true };
       }
     } catch (err: any) {
-      // Local fallback in case server offline
+      // Local fallback in case server offline (Admin only)
       const localMatch = [
         { id: 'usr-1', nama: 'Admin', email: 'admin@intel.com', role: 'Admin' as UserRole, password: 'admin123' },
-        { id: 'usr-2', nama: 'Siti Rahmawati (Tech Analyst)', email: 'analyst@intel.com', role: 'Admin' as UserRole, password: 'analyst123' },
-        { id: 'usr-3', nama: 'Budi Hartono (Executive Director)', email: 'executive@intel.com', role: 'Admin' as UserRole, password: 'exec123' },
         { id: 'usr-1', nama: 'Admin', email: 'admin@admin.com', role: 'Admin' as UserRole, password: 'admin123' }
       ].find(u => u.email.toLowerCase() === trimmedEmail.toLowerCase() && u.password === pass);
 

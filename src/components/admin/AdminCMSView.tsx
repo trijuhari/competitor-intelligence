@@ -102,10 +102,7 @@ export const AdminCMSView: React.FC = () => {
       />
 
       {/* Hero Control Bar */}
-      <div className="glass-panel top-hairline p-6 rounded-3xl border border-line shadow-card relative overflow-hidden">
-        {/* Ambient background glow */}
-        <div className="absolute top-0 right-0 w-96 h-48 bg-gradient-to-bl from-blue-500/10 via-indigo-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-
+      <div className="bg-surface p-6 rounded-2xl border border-line shadow-card relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
           <div className="space-y-1.5 max-w-2xl">
             <div className="flex items-center gap-2">
@@ -226,7 +223,7 @@ export const AdminCMSView: React.FC = () => {
       {activeAdminSubtab === 'sync' && (
         <div className="space-y-6">
           {/* Google Sheets Live Hub Card */}
-          <div className="glass-panel top-hairline p-6 rounded-3xl border border-line shadow-card space-y-6">
+          <div className="bg-surface p-6 rounded-2xl border border-line shadow-card space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-line">
               <div className="flex items-center space-x-3.5">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-glow-emerald">
@@ -267,7 +264,7 @@ export const AdminCMSView: React.FC = () => {
 
             {/* Spreadsheet Info Details Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="glass-panel p-4 rounded-2xl border border-line space-y-1.5">
+              <div className="bg-surface-raised p-4 rounded-xl border border-line space-y-1.5">
                 <div className="text-[11px] font-bold text-ink-muted uppercase tracking-wider">
                   Target Google Sheet URL
                 </div>
@@ -280,7 +277,7 @@ export const AdminCMSView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="glass-panel p-4 rounded-2xl border border-line space-y-1.5">
+              <div className="bg-surface-raised p-4 rounded-xl border border-line space-y-1.5">
                 <div className="text-[11px] font-bold text-ink-muted uppercase tracking-wider">
                   Total Kapabilitas Terekstrak
                 </div>
@@ -292,7 +289,7 @@ export const AdminCMSView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="glass-panel p-4 rounded-2xl border border-line space-y-1.5">
+              <div className="bg-surface-raised p-4 rounded-xl border border-line space-y-1.5">
                 <div className="text-[11px] font-bold text-ink-muted uppercase tracking-wider">
                   Status Sinkronisasi Terakhir
                 </div>
@@ -308,7 +305,7 @@ export const AdminCMSView: React.FC = () => {
           </div>
 
           {/* Data Backup & Migration Hub */}
-          <div className="glass-panel top-hairline p-6 rounded-3xl border border-line shadow-card space-y-5">
+          <div className="bg-surface p-6 rounded-2xl border border-line shadow-card space-y-5">
             <div className="border-b border-line pb-3.5">
               <h3 className="text-base font-extrabold text-ink tracking-tight flex items-center gap-2">
                 <Database className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -320,7 +317,7 @@ export const AdminCMSView: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-              <div className="glass-panel p-4 rounded-2xl border border-line space-y-3">
+              <div className="bg-surface-raised p-4 rounded-xl border border-line space-y-3">
                 <div className="font-extrabold text-ink">Ekspor Salinan JSON Lengkap</div>
                 <p className="text-ink-muted text-[11px]">
                   Mencakup seluruh 408 kapabilitas riset arsitektur, profil 6 bank, dan jejak riwayat audit.
@@ -334,7 +331,7 @@ export const AdminCMSView: React.FC = () => {
                 </button>
               </div>
 
-              <div className="glass-panel p-4 rounded-2xl border border-line space-y-3">
+              <div className="bg-surface-raised p-4 rounded-xl border border-line space-y-3">
                 <div className="font-extrabold text-ink">Impor Salinan JSON</div>
                 <p className="text-ink-muted text-[11px]">
                   Pulihkan data dari file backup JSON sebelumnya secara aman ke dalam penyimpanan SQLite.
@@ -348,7 +345,7 @@ export const AdminCMSView: React.FC = () => {
                 </button>
               </div>
 
-              <div className="glass-panel p-4 rounded-2xl border border-line space-y-3">
+              <div className="bg-surface-raised p-4 rounded-xl border border-line space-y-3">
                 <div className="font-extrabold text-ink">Ekspor Matriks CSV (Excel)</div>
                 <p className="text-ink-muted text-[11px]">
                   Unduh tabel 408 kapabilitas x 6 bank lengkap dengan status, evaluasi, dan tautan bukti riset.
@@ -400,30 +397,30 @@ export const AdminCMSView: React.FC = () => {
         <div className="space-y-6">
           {/* Quick Stat Overview for Audit Logs */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-            <div className="glass-panel top-hairline p-4 rounded-2xl border border-line shadow-card">
+            <div className="bg-surface p-4 rounded-xl border border-line shadow-card">
               <div className="text-[10px] font-bold text-ink-muted uppercase tracking-wider">Total Log</div>
               <div className="text-2xl font-black text-ink mt-1 font-heading">{auditLogs.length}</div>
               <div className="text-[10px] text-ink-muted">Aktivitas tercatat</div>
             </div>
 
-            <div className="glass-panel top-hairline p-4 rounded-2xl border border-blue-200/60 dark:border-blue-800/60 shadow-card">
-              <div className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">CREATE</div>
+            <div className="bg-blue-50/80 dark:bg-blue-950/40 p-4 rounded-xl border border-blue-200 dark:border-blue-800 shadow-card">
+              <div className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider">CREATE</div>
               <div className="text-2xl font-black text-blue-700 dark:text-blue-300 mt-1 font-heading">
                 {auditLogs.filter(l => l.aksi === 'CREATE').length}
               </div>
               <div className="text-[10px] text-ink-muted">Entitas dibuat</div>
             </div>
 
-            <div className="glass-panel top-hairline p-4 rounded-2xl border border-amber-200/60 dark:border-amber-800/60 shadow-card">
-              <div className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">UPDATE</div>
+            <div className="bg-amber-50/80 dark:bg-amber-950/40 p-4 rounded-xl border border-amber-200 dark:border-amber-800 shadow-card">
+              <div className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">UPDATE</div>
               <div className="text-2xl font-black text-amber-700 dark:text-amber-300 mt-1 font-heading">
                 {auditLogs.filter(l => l.aksi === 'UPDATE').length}
               </div>
               <div className="text-[10px] text-ink-muted">Perubahan data</div>
             </div>
 
-            <div className="glass-panel top-hairline p-4 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 shadow-card">
-              <div className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">DELETE</div>
+            <div className="bg-rose-50/80 dark:bg-rose-950/40 p-4 rounded-xl border border-rose-200 dark:border-rose-900 shadow-card">
+              <div className="text-[10px] font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider">DELETE</div>
               <div className="text-2xl font-black text-rose-700 dark:text-rose-300 mt-1 font-heading">
                 {auditLogs.filter(l => l.aksi === 'DELETE').length}
               </div>
@@ -432,7 +429,7 @@ export const AdminCMSView: React.FC = () => {
           </div>
 
           {/* Audit Log Table & Filters */}
-          <div className="glass-panel top-hairline rounded-3xl border border-line shadow-card overflow-hidden">
+          <div className="bg-surface rounded-2xl border border-line shadow-card overflow-hidden">
             <div className="p-5 bg-surface-raised/80 border-b border-line flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div>
                 <span className="text-sm font-extrabold text-ink tracking-tight font-heading">
@@ -523,7 +520,7 @@ export const AdminCMSView: React.FC = () => {
       {/* ======================================================= */}
       {activeAdminSubtab === 'checklist' && (
         <div className="space-y-6">
-          <div className="glass-panel top-hairline p-6 rounded-3xl border border-line shadow-card space-y-5">
+          <div className="bg-surface p-6 rounded-2xl border border-line shadow-card space-y-5">
             <div>
               <h3 className="text-base font-extrabold text-ink tracking-tight flex items-center space-x-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -535,7 +532,7 @@ export const AdminCMSView: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div className="glass-panel p-5 rounded-2xl border border-line space-y-2.5">
+              <div className="bg-surface-raised p-5 rounded-xl border border-line space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-ink">1. Validitas & Tautan Bukti Riset</span>
                   <span className="px-2.5 py-0.5 rounded-full font-bold text-[10px] bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
@@ -551,7 +548,7 @@ export const AdminCMSView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="glass-panel p-5 rounded-2xl border border-line space-y-2.5">
+              <div className="bg-surface-raised p-5 rounded-xl border border-line space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-ink">2. Standarisasi 4 Workshop & 13 Domain</span>
                   <span className="px-2.5 py-0.5 rounded-full font-bold text-[10px] bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
@@ -567,7 +564,7 @@ export const AdminCMSView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="glass-panel p-5 rounded-2xl border border-line space-y-2.5">
+              <div className="bg-surface-raised p-5 rounded-xl border border-line space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-ink">3. Tata Kelola & Integritas Keamanan Data</span>
                   <span className="px-2.5 py-0.5 rounded-full font-bold text-[10px] bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
@@ -583,7 +580,7 @@ export const AdminCMSView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="glass-panel p-5 rounded-2xl border border-line space-y-2.5">
+              <div className="bg-surface-raised p-5 rounded-xl border border-line space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-ink">4. Kesiapan Matriks Analitik & Benchmark Eksekutif</span>
                   <span className="px-2.5 py-0.5 rounded-full font-bold text-[10px] bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">

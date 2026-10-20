@@ -46,7 +46,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ onClose, className }) =>
   };
 
   return (
-    <aside className={cn('flex flex-col h-full w-64 bg-surface/95 backdrop-blur-xl border-r border-line select-none z-40', className)}>
+    <aside className={cn('flex flex-col h-full w-64 bg-surface border-r border-line select-none z-40', className)}>
       {/* Brand & Collapse Header */}
       <div className="h-14 flex items-center justify-between gap-3 px-4 border-b border-line shrink-0">
         <button onClick={() => go('/executive/dashboard')} className="flex items-center gap-3 min-w-0 flex-1 text-left group">
@@ -81,7 +81,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ onClose, className }) =>
       <nav className="flex-1 overflow-y-auto scrollbar-none px-3 py-3.5 space-y-6">
         {NAV_GROUPS.map(group => (
           <div key={group.id} className="space-y-1">
-            <div className="px-2.5 pb-1 text-[11px] font-bold tracking-wider uppercase text-subtle/80">
+            <div className="px-2.5 pb-1 text-[11px] font-extrabold tracking-wider uppercase text-subtle">
               {group.label}
             </div>
             <ul className="space-y-0.5">
@@ -97,12 +97,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ onClose, className }) =>
                       className={cn(
                         'group relative w-full flex items-center gap-3 h-9 px-2.5 rounded-lg text-[13px] font-medium transition-all duration-150',
                         active
-                          ? 'bg-gradient-to-r from-accent/15 via-accent/10 to-transparent text-accent font-semibold shadow-xs'
-                          : 'text-muted hover:text-ink hover:bg-sunken/80'
+                          ? 'bg-accent/10 text-accent font-bold border border-accent/20'
+                          : 'text-muted hover:text-ink hover:bg-sunken'
                       )}
                     >
                       {active && (
-                        <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-accent shadow-[0_0_8px_rgba(2,132,199,0.8)]" />
+                        <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-accent" />
                       )}
                       <Icon className={cn(
                         'w-4 h-4 shrink-0 transition-transform duration-150 group-hover:scale-110',
@@ -127,7 +127,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ onClose, className }) =>
       </nav>
 
       {/* Live Data Telemetry Strip */}
-      <div className="px-3.5 py-2.5 border-t border-line/80 bg-sunken/40 flex items-center justify-between gap-2 text-xs">
+      <div className="px-3.5 py-2.5 border-t border-line bg-sunken/60 flex items-center justify-between gap-2 text-xs">
         <span className="flex items-center gap-2 text-muted min-w-0">
           <span className="relative flex h-2 w-2 shrink-0">
             {isDbConnected && (

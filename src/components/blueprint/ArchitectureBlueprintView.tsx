@@ -359,11 +359,11 @@ export const ArchitectureBlueprintView: React.FC = () => {
 
         {/* Bank Selection Switchers - Strictly 1 Line Horizontal */}
         <div 
-          className="flex flex-row items-center gap-2 sm:gap-2.5 bg-surface/95 backdrop-blur-xl p-2 rounded-2xl border border-line shadow-card shrink-0 flex-nowrap whitespace-nowrap overflow-x-auto"
+          className="flex flex-row items-center gap-2 sm:gap-2.5 bg-surface p-2 rounded-2xl border border-line shadow-card shrink-0 flex-nowrap whitespace-nowrap overflow-x-auto"
           style={{ flexWrap: 'nowrap' }}
         >
           {/* Bank 1 Selector */}
-          <div className="flex items-center gap-2 bg-sunken/80 px-2.5 py-1.5 rounded-xl border border-line shadow-2xs shrink-0">
+          <div className="flex items-center gap-2 bg-sunken px-2.5 py-1.5 rounded-xl border border-line shadow-xs shrink-0">
             <BankLogo bankCode={bankA.slug} size={24} className="shrink-0" />
             <span className="text-subtle font-extrabold text-[10px] uppercase tracking-wider shrink-0">Bank 1:</span>
             <select
@@ -385,13 +385,13 @@ export const ArchitectureBlueprintView: React.FC = () => {
             onClick={handleSwapBanks}
             title="Tukar Posisi Bank 1 & 2"
             aria-label="Tukar Posisi Bank"
-            className="w-8 h-8 rounded-xl bg-sunken hover:bg-accent text-muted hover:text-white flex items-center justify-center transition-all shrink-0 shadow-2xs cursor-pointer active:scale-95"
+            className="w-8 h-8 rounded-xl bg-sunken hover:bg-accent text-muted hover:text-white flex items-center justify-center transition-all shrink-0 shadow-xs cursor-pointer active:scale-95"
           >
             <ArrowLeftRight className="w-3.5 h-3.5" />
           </button>
 
           {/* Bank 2 Selector */}
-          <div className="flex items-center gap-2 bg-sunken/80 px-2.5 py-1.5 rounded-xl border border-line shadow-2xs shrink-0">
+          <div className="flex items-center gap-2 bg-sunken px-2.5 py-1.5 rounded-xl border border-line shadow-xs shrink-0">
             <BankLogo bankCode={bankB.slug} size={24} className="shrink-0" />
             <span className="text-subtle font-extrabold text-[10px] uppercase tracking-wider shrink-0">Bank 2:</span>
             <select
@@ -410,7 +410,7 @@ export const ArchitectureBlueprintView: React.FC = () => {
       </div>
 
       {/* Control Bar: Mode Toggle, Layer Filters & Search */}
-      <div className="bg-surface/90 backdrop-blur-md p-3.5 rounded-2xl border border-line shadow-card flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="bg-surface p-3.5 rounded-2xl border border-line shadow-card flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Mode Selector */}
         <div className="flex items-center bg-sunken/80 p-1 rounded-xl w-full md:w-auto border border-line/60">
           <button
@@ -495,33 +495,33 @@ export const ArchitectureBlueprintView: React.FC = () => {
 
       {/* Blueprint Summary Ribbon */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-        <div className="p-4 rounded-xl bg-surface/90 border border-line shadow-card top-hairline">
+        <div className="p-4 rounded-xl bg-surface border border-line shadow-card">
           <div className="text-2xs font-bold tracking-wider uppercase text-subtle">Total Blok Arsitektur</div>
           <div className="text-2xl font-extrabold text-ink mt-0.5">{stats.total} Komponen Kunci</div>
           <div className="text-xs text-subtle mt-0.5">Mencakup 5 Layer Utama</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25 shadow-card top-hairline flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 shadow-card flex items-center justify-between">
           <div>
-            <div className="text-2xs font-bold tracking-wider uppercase text-accent">Keunggulan {bankA.label}</div>
-            <div className="text-2xl font-extrabold text-accent mt-0.5">{stats.aAdvantage} Blok</div>
+            <div className="text-2xs font-bold tracking-wider uppercase text-blue-700 dark:text-blue-300">Keunggulan {bankA.label}</div>
+            <div className="text-2xl font-extrabold text-blue-700 dark:text-blue-200 mt-0.5">{stats.aAdvantage} Blok</div>
             <div className="text-xs text-muted mt-0.5">Terverifikasi di {bankA.label} saja</div>
           </div>
           <BankLogo bankCode={bankA.slug} size={32} className="shrink-0" />
         </div>
 
-        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 shadow-card top-hairline flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 shadow-card flex items-center justify-between">
           <div>
-            <div className="text-2xs font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400">Keunggulan {bankB.label}</div>
-            <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 mt-0.5">{stats.bAdvantage} Blok</div>
+            <div className="text-2xs font-bold tracking-wider uppercase text-amber-700 dark:text-amber-300">Keunggulan {bankB.label}</div>
+            <div className="text-2xl font-extrabold text-amber-700 dark:text-amber-200 mt-0.5">{stats.bAdvantage} Blok</div>
             <div className="text-xs text-muted mt-0.5">Celah arsitektur bagi {bankA.label}</div>
           </div>
           <BankLogo bankCode={bankB.slug} size={32} className="shrink-0" />
         </div>
 
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/25 shadow-card top-hairline">
-          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400">Paritas Bersama</div>
-          <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">{stats.parityCount} Blok</div>
+        <div className="p-4 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 shadow-card">
+          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-700 dark:text-emerald-300">Paritas Bersama</div>
+          <div className="text-2xl font-extrabold text-emerald-700 dark:text-emerald-200 mt-0.5">{stats.parityCount} Blok</div>
           <div className="text-xs text-muted mt-0.5">Keduanya Terverifikasi Setara</div>
         </div>
       </div>
@@ -538,30 +538,30 @@ export const ArchitectureBlueprintView: React.FC = () => {
           return (
             <div key={layer.id} className="relative">
               {/* Layer Container Card */}
-              <div className={`rounded-3xl border ${layer.borderColor} bg-surface/95 backdrop-blur-md shadow-card overflow-hidden transition-all duration-200 top-hairline`}>
+              <div className={`rounded-2xl border ${layer.borderColor} bg-surface shadow-card overflow-hidden transition-all duration-200`}>
                 {/* Layer Header Banner */}
-                <div className={`px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r ${layer.color} text-white flex flex-col md:flex-row md:items-center justify-between gap-2`}>
+                <div className={`px-5 py-3.5 border-b border-line bg-gradient-to-r ${layer.color} text-white flex flex-col md:flex-row md:items-center justify-between gap-2`}>
                   <div className="flex items-center space-x-3">
-                    <span className="w-7 h-7 rounded-lg bg-white/20 backdrop-blur-xs flex items-center justify-center font-black text-xs">
+                    <span className="w-7 h-7 rounded-lg bg-black/20 flex items-center justify-center font-black text-xs">
                       L{layer.id}
                     </span>
-                    <LayerIcon className="w-5 h-5 text-white/90" />
+                    <LayerIcon className="w-5 h-5 text-white/95" />
                     <div>
-                      <h3 className="font-black text-base tracking-tight leading-tight">{layer.name}</h3>
-                      <p className="text-xs text-white/80 font-medium">{layer.subname}</p>
+                      <h3 className="font-extrabold text-base tracking-tight leading-tight">{layer.name}</h3>
+                      <p className="text-xs text-white/90 font-medium">{layer.subname}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-black/20 px-2.5 py-1 rounded-full">
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-black/25 px-2.5 py-1 rounded-full text-white">
                       {layerBlocks.length} Komponen
                     </span>
                   </div>
                 </div>
 
                 {/* Layer Description Bar */}
-                <div className="px-5 py-2 bg-slate-50/70 dark:bg-slate-850/50 border-b border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                <div className="px-5 py-2 bg-sunken/60 border-b border-line text-[11px] text-muted font-medium flex items-center justify-between">
                   <span>{layer.description}</span>
-                  <span className="font-mono text-[10px] text-slate-400">Layer {layer.id} of 5</span>
+                  <span className="font-mono text-[10px] text-muted font-bold">Layer {layer.id} of 5</span>
                 </div>
 
                 {/* Blocks Grid */}
@@ -596,7 +596,7 @@ export const ArchitectureBlueprintView: React.FC = () => {
                                 <h4 className="font-black text-xs text-slate-900 dark:text-white leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
                                   {config.title}
                                 </h4>
-                                <span className="text-[10px] text-slate-400 font-medium">{config.domain}</span>
+                                <span className="text-[10px] text-muted font-bold">{config.domain}</span>
                               </div>
                             </div>
 
@@ -743,10 +743,10 @@ export const ArchitectureBlueprintView: React.FC = () => {
 
       {/* Slide-out Inspection Modal */}
       {inspectedBlock && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 animate-in fade-in duration-150">
+          <div className="bg-surface border border-line rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between z-10">
+            <div className="sticky top-0 bg-surface px-6 py-4 border-b border-line flex items-center justify-between z-10">
               <div className="flex items-center space-x-3">
                 <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
                   <Layers className="w-4 h-4" />

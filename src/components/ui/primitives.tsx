@@ -44,7 +44,7 @@ export const Stat: React.FC<{
     <Comp
       onClick={onClick}
       className={cn(
-        'group relative text-left p-4 rounded-xl bg-surface/90 backdrop-blur-md border border-line top-hairline flex flex-col justify-between min-w-0 shadow-card transition-all duration-200',
+        'group relative text-left p-4 rounded-xl bg-surface border border-line flex flex-col justify-between min-w-0 shadow-card transition-all duration-200',
         onClick && 'cursor-pointer hover:border-line-strong hover:shadow-card-hover hover:-translate-y-0.5 active:scale-[0.99]',
         className
       )}
@@ -86,7 +86,7 @@ export function SegmentedControl<T extends string>({
   className?: string;
 }) {
   return (
-    <div className={cn('inline-flex p-1 rounded-xl bg-sunken/80 border border-line backdrop-blur-sm gap-0.5', className)}>
+    <div className={cn('inline-flex p-1 rounded-xl bg-sunken border border-line gap-0.5', className)}>
       {options.map(o => {
         const active = value === o.value;
         return (
@@ -97,7 +97,7 @@ export function SegmentedControl<T extends string>({
             className={cn(
               'h-7 px-3 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-150 num flex items-center gap-1.5',
               active 
-                ? 'bg-surface text-ink shadow-sm border border-line/60 shadow-black/5' 
+                ? 'bg-surface text-ink shadow-sm border border-line font-bold' 
                 : 'text-muted hover:text-ink hover:bg-surface/50'
             )}
           >
@@ -105,7 +105,7 @@ export function SegmentedControl<T extends string>({
             {o.count !== undefined && (
               <span className={cn(
                 'text-[10px] px-1.5 py-0.2 rounded-full font-mono',
-                active ? 'bg-accent/15 text-accent' : 'bg-sunken text-subtle'
+                active ? 'bg-accent/15 text-accent font-bold' : 'bg-sunken text-subtle'
               )}>
                 {o.count}
               </span>
@@ -120,7 +120,7 @@ export function SegmentedControl<T extends string>({
 /* ---------------- Input / Select ---------------- */
 
 const fieldBase =
-  'h-9 rounded-lg border border-line bg-surface/90 text-[13px] text-ink placeholder:text-subtle focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all duration-150 shadow-subtle';
+  'h-9 rounded-lg border border-line bg-surface text-[13px] text-ink placeholder:text-subtle focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all duration-150 shadow-xs';
 
 export const Input = React.forwardRef<
   HTMLInputElement,
@@ -187,7 +187,7 @@ export const Menu: React.FC<{
       {open && (
         <div
           className={cn(
-            'absolute z-50 min-w-[210px] bg-surface/95 backdrop-blur-xl border border-line rounded-xl shadow-pop p-1.5 animate-fade-in',
+            'absolute z-50 min-w-[210px] bg-surface border border-line rounded-xl shadow-pop p-1.5 animate-fade-in',
             align === 'right' ? 'right-0' : 'left-0',
             side === 'bottom' ? 'top-full mt-1.5' : 'bottom-full mb-1.5',
             className

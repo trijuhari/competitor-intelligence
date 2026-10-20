@@ -83,13 +83,13 @@ export const ResearchDetailModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 animate-fade-in">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/50 flex items-center justify-center p-3 sm:p-5 animate-fade-in">
       <div 
-        className="bg-surface border border-line rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden text-ink animate-fade-in top-hairline"
+        className="bg-surface border border-line rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden text-ink animate-fade-in"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-6 bg-sunken/60 border-b border-line flex items-start justify-between gap-4">
+        <div className="p-6 bg-sunken border-b border-line flex items-start justify-between gap-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-xs font-mono flex-wrap">
               <span className="px-2.5 py-0.5 rounded-full bg-accent text-white font-extrabold text-[10px]">

@@ -157,37 +157,37 @@ export const MatrixView: React.FC = () => {
 
       {/* KPI Statistics Ribbon (4 Dynamic Metric Cards) */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-        <div className="p-4 rounded-xl bg-surface/90 border border-line shadow-card top-hairline">
+        <div className="p-4 rounded-xl bg-surface border border-line shadow-card">
           <div className="text-2xs font-bold tracking-wider uppercase text-subtle mb-1">Total Kapabilitas</div>
           <div className="text-2xl lg:text-3xl font-extrabold num text-ink">{stats.total}</div>
-          <div className="text-xs text-subtle mt-1">{stats.totalCells.toLocaleString()} titik evaluasi total</div>
+          <div className="text-xs text-muted font-medium mt-1">{stats.totalCells.toLocaleString()} titik evaluasi total</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/25 shadow-card top-hairline">
-          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 mb-1 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
+        <div className="p-4 rounded-xl bg-surface border-2 border-emerald-500/40 shadow-card">
+          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-300 mb-1 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
             Terverifikasi
           </div>
-          <div className="text-2xl lg:text-3xl font-extrabold num text-emerald-600 dark:text-emerald-400">{stats.verifiedCount}</div>
-          <div className="text-xs text-muted mt-1">{stats.verifiedPct}% seluruh titik sel</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-emerald-800 dark:text-emerald-300">{stats.verifiedCount}</div>
+          <div className="text-xs text-muted font-medium mt-1">{stats.verifiedPct}% seluruh titik sel</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/25 shadow-card top-hairline">
-          <div className="text-2xs font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400 mb-1 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
+        <div className="p-4 rounded-xl bg-surface border-2 border-amber-500/40 shadow-card">
+          <div className="text-2xs font-bold tracking-wider uppercase text-amber-800 dark:text-amber-300 mb-1 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
             Inferensi Industri
           </div>
-          <div className="text-2xl lg:text-3xl font-extrabold num text-amber-600 dark:text-amber-400">{stats.inferenceCount}</div>
-          <div className="text-xs text-muted mt-1">{stats.inferencePct}% sinyal publik terindikasi</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-amber-800 dark:text-amber-300">{stats.inferenceCount}</div>
+          <div className="text-xs text-muted font-medium mt-1">{stats.inferencePct}% sinyal publik terindikasi</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-surface/90 border border-line shadow-card top-hairline">
+        <div className="p-4 rounded-xl bg-surface border border-line shadow-card">
           <div className="text-2xs font-bold tracking-wider uppercase text-subtle mb-1 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-slate-400" />
             Belum Terdata
           </div>
           <div className="text-2xl lg:text-3xl font-extrabold num text-ink">{stats.belumCount}</div>
-          <div className="text-xs text-subtle mt-1">{stats.belumPct}% belum ada data publik</div>
+          <div className="text-xs text-muted font-medium mt-1">{stats.belumPct}% belum ada data publik</div>
         </div>
       </div>
 
@@ -335,11 +335,11 @@ export const MatrixView: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[13px] border-collapse">
             <thead>
-              <tr className="border-b border-line bg-sunken/80 text-xs text-muted">
+              <tr className="border-b border-line bg-sunken text-xs text-muted">
                 <th className="py-3 px-3 w-12 text-center font-bold">No</th>
                 <th className="py-3 px-2 w-14 text-center font-bold">Pilar</th>
                 <th className="py-3 px-4 w-48 font-bold">Domain &amp; Kategori</th>
-                <th className="py-3 px-4 min-w-[220px] font-bold sticky left-0 bg-sunken/95 backdrop-blur-md z-20 shadow-xs">
+                <th className="py-3 px-4 min-w-[220px] font-bold sticky left-0 bg-sunken z-20 border-r border-line text-ink">
                   Kapabilitas / Sistem
                 </th>
                 {BANK_SLUGS.map(b => (
@@ -347,7 +347,7 @@ export const MatrixView: React.FC = () => {
                     key={b.key}
                     className={cn(
                       'py-3 px-3 text-center min-w-[180px] max-w-[220px] font-bold',
-                      b.isFocus && 'bg-accent/15 text-accent border-x border-accent/25 shadow-xs'
+                      b.isFocus && 'bg-accent/10 text-accent border-x border-accent/25'
                     )}
                   >
                     <div className="inline-flex items-center justify-center gap-2">
@@ -364,7 +364,7 @@ export const MatrixView: React.FC = () => {
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-line/60">
+            <tbody className="divide-y divide-line">
               {paginatedResearchItems.length === 0 ? (
                 <tr>
                   <td colSpan={4 + BANK_SLUGS.length} className="py-16 text-center text-subtle text-xs">
@@ -377,25 +377,25 @@ export const MatrixView: React.FC = () => {
                 </tr>
               ) : (
                 paginatedResearchItems.map(item => (
-                  <tr key={item.id} className="hover:bg-sunken/30 transition-colors group">
-                    <td className="py-3 px-3 text-center num text-subtle text-xs align-top font-mono">
+                  <tr key={item.id} className="hover:bg-sunken/40 transition-colors group">
+                    <td className="py-3 px-3 text-center num text-muted text-xs align-top font-mono font-bold">
                       {item.no}
                     </td>
 
                     <td className="py-3 px-2 text-center align-top">
-                      <span className="px-2 py-0.5 rounded-md text-2xs font-mono font-semibold bg-sunken border border-line text-muted">
+                      <span className="px-2 py-0.5 rounded-md text-2xs font-mono font-bold bg-sunken border border-line text-ink">
                         {item.workshop}
                       </span>
                     </td>
 
                     <td className="py-3 px-4 align-top">
-                      <div className="font-semibold text-ink leading-snug">{item.domain}</div>
-                      <div className="text-2xs text-subtle mt-0.5 leading-snug">{item.kategori}</div>
+                      <div className="font-bold text-ink leading-snug">{item.domain}</div>
+                      <div className="text-2xs text-muted font-medium mt-0.5 leading-snug">{item.kategori}</div>
                     </td>
 
-                    <td className="py-3 px-4 font-semibold text-ink align-top sticky left-0 bg-surface/95 backdrop-blur-md group-hover:bg-sunken/40 transition-colors z-10 border-r border-line/40">
+                    <td className="py-3 px-4 font-bold text-ink align-top sticky left-0 bg-surface group-hover:bg-sunken/80 transition-colors z-10 border-r border-line">
                       <div className="leading-snug">{item.kapabilitas}</div>
-                      <div className="text-[11px] text-subtle mt-0.5 num font-mono">ID: {item.id}</div>
+                      <div className="text-[11px] text-muted mt-0.5 num font-mono">ID: {item.id}</div>
                     </td>
 
                     {/* 6 Bank Cells */}
@@ -419,19 +419,19 @@ export const MatrixView: React.FC = () => {
                           key={b.key}
                           className={cn(
                             'py-1.5 px-2 align-top min-w-[180px] max-w-[220px]',
-                            b.isFocus && 'bg-accent/5 border-x border-accent/15'
+                            b.isFocus && 'bg-accent/5 border-x border-accent/20'
                           )}
                         >
                           <button
                             type="button"
                             onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: b.key })}
                             className={cn(
-                              'group/cell w-full text-left p-2.5 rounded-xl border text-xs transition-all duration-150 flex flex-col justify-between min-h-[72px]',
+                              'group/cell w-full text-left p-2.5 rounded-xl border text-xs transition-all duration-150 flex flex-col justify-between min-h-[72px] shadow-xs',
                               isVerified 
-                                ? 'bg-surface/95 hover:border-emerald-500/50 hover:shadow-glow-emerald border-line/80' 
+                                ? 'bg-surface hover:border-emerald-500 hover:shadow-sm border-line' 
                                 : isInference
-                                ? 'bg-surface/95 hover:border-amber-500/50 hover:shadow-glow-amber border-line/80'
-                                : 'bg-surface/50 hover:bg-surface border-line/50 text-subtle hover:border-line'
+                                ? 'bg-surface hover:border-amber-500 hover:shadow-sm border-line'
+                                : 'bg-sunken/30 hover:bg-surface border-line/70 text-subtle hover:border-line'
                             )}
                             title={`Klik untuk melihat detail & bukti sumber (${b.label} - ${detail.status})`}
                           >

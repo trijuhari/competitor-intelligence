@@ -136,10 +136,10 @@ export const BankProfilesView: React.FC = () => {
               key={bank.id}
               onClick={() => setSelectedBankId(bank.id)}
               className={cn(
-                'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-150 border whitespace-nowrap shadow-2xs',
+                'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-150 border whitespace-nowrap shadow-xs',
                 isSelected
-                  ? 'bg-gradient-to-r from-blue-600 to-sky-500 text-white border-transparent shadow-md shadow-blue-500/25 scale-[1.02]'
-                  : 'bg-surface/90 border-line text-muted hover:text-ink hover:bg-sunken/80'
+                  ? 'bg-accent text-white border-accent shadow-sm scale-[1.02]'
+                  : 'bg-surface border-line text-muted hover:text-ink hover:bg-sunken'
               )}
             >
               <BankLogo bankCode={bank.singkatan} size={20} />
@@ -155,10 +155,10 @@ export const BankProfilesView: React.FC = () => {
       </div>
 
       {/* Selected Bank Profile Header Card */}
-      <div className="relative overflow-hidden rounded-2xl bg-surface/90 backdrop-blur-xl border border-line p-6 shadow-card top-hairline">
+      <div className="relative overflow-hidden rounded-2xl bg-surface border border-line p-6 shadow-card">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 rounded-2xl border border-line bg-surface/90 shadow-sm shrink-0">
+            <div className="p-3 rounded-2xl border border-line bg-surface shadow-xs shrink-0">
               <BankLogo bankCode={currentBank.singkatan} size={54} />
             </div>
             <div className="space-y-1">
@@ -216,7 +216,7 @@ export const BankProfilesView: React.FC = () => {
           const pct = Math.round((stats.verified / (stats.total || 1)) * 100);
 
           return (
-            <Card key={key} className="p-4 space-y-2.5 top-hairline">
+            <Card key={key} className="p-4 space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="px-2 py-0.5 rounded-md text-2xs font-mono font-semibold bg-sunken border border-line text-muted">
                   {key}

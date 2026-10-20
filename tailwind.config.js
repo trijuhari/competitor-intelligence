@@ -30,14 +30,14 @@ export default {
       },
       boxShadow: {
         'subtle': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-        'card': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-        'card-hover': '0 10px 25px -5px rgb(0 0 0 / 0.15), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.25)',
-        'glow-blue': '0 0 25px -3px rgba(14, 165, 233, 0.35)',
-        'glow-emerald': '0 0 25px -3px rgba(16, 185, 129, 0.35)',
-        'glow-amber': '0 0 25px -3px rgba(245, 158, 11, 0.35)',
-        'glow-purple': '0 0 25px -3px rgba(168, 85, 247, 0.35)',
-        'pop': '0 16px 36px -8px rgb(0 0 0 / 0.35), 0 0 0 1px hsl(var(--line))',
+        'card': '0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08)',
+        'card-hover': '0 8px 20px -4px rgba(15, 23, 42, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.06)',
+        'glass': '0 4px 16px 0 rgba(15, 23, 42, 0.1)',
+        'glow-blue': '0 4px 14px -2px rgba(2, 132, 199, 0.25)',
+        'glow-emerald': '0 4px 14px -2px rgba(16, 185, 129, 0.25)',
+        'glow-amber': '0 4px 14px -2px rgba(245, 158, 11, 0.25)',
+        'glow-purple': '0 4px 14px -2px rgba(168, 85, 247, 0.25)',
+        'pop': '0 12px 28px -6px rgba(15, 23, 42, 0.2), 0 0 0 1px hsl(var(--line))',
       },
       colors: {
         // Semantic design tokens (see src/index.css)

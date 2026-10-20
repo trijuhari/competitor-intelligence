@@ -147,28 +147,28 @@ export const GapAnalysisView: React.FC = () => {
         <div
           onClick={() => setActiveTabState('gaps')}
           className={cn(
-            'group relative p-5 rounded-2xl border transition-all duration-200 cursor-pointer top-hairline flex flex-col justify-between',
+            'group relative p-5 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between shadow-card',
             activeTab === 'gaps'
-              ? 'bg-amber-500/10 border-amber-500/40 shadow-glow-amber'
-              : 'bg-surface/90 border-line hover:border-line-strong hover:shadow-card-hover'
+              ? 'bg-surface border-2 border-amber-500 shadow-md'
+              : 'bg-surface border-line hover:border-amber-500/60 hover:shadow-card-hover'
           )}
         >
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+            <span className="text-xs font-bold tracking-wider uppercase text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
               <AlertTriangle className="w-4 h-4" />
               Celah untuk BRI (Gaps)
             </span>
             <span className={cn(
               'px-2 py-0.5 rounded-full text-2xs font-bold font-mono',
-              activeTab === 'gaps' ? 'bg-amber-500 text-white' : 'bg-sunken text-subtle'
+              activeTab === 'gaps' ? 'bg-amber-500 text-white' : 'bg-sunken text-muted'
             )}>
               {gapsList.length} Celah
             </span>
           </div>
-          <div className="text-3xl lg:text-4xl font-extrabold num text-amber-600 dark:text-amber-400">
+          <div className="text-3xl lg:text-4xl font-extrabold num text-amber-800 dark:text-amber-300">
             {gapsList.length}
           </div>
-          <div className="mt-4 pt-3 border-t border-line/60 text-xs text-muted">
+          <div className="mt-4 pt-3 border-t border-line text-xs text-muted font-medium">
             Kompetitor terverifikasi, BRI belum terkonfirmasi
           </div>
         </div>
@@ -177,28 +177,28 @@ export const GapAnalysisView: React.FC = () => {
         <div
           onClick={() => setActiveTabState('advantages')}
           className={cn(
-            'group relative p-5 rounded-2xl border transition-all duration-200 cursor-pointer top-hairline flex flex-col justify-between',
+            'group relative p-5 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between shadow-card',
             activeTab === 'advantages'
-              ? 'bg-emerald-500/10 border-emerald-500/40 shadow-glow-emerald'
-              : 'bg-surface/90 border-line hover:border-line-strong hover:shadow-card-hover'
+              ? 'bg-surface border-2 border-emerald-500 shadow-md'
+              : 'bg-surface border-line hover:border-emerald-500/60 hover:shadow-card-hover'
           )}
         >
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+            <span className="text-xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
               <Award className="w-4 h-4" />
               Keunggulan Eksklusif BRI
             </span>
             <span className={cn(
               'px-2 py-0.5 rounded-full text-2xs font-bold font-mono',
-              activeTab === 'advantages' ? 'bg-emerald-500 text-white' : 'bg-sunken text-subtle'
+              activeTab === 'advantages' ? 'bg-emerald-500 text-white' : 'bg-sunken text-muted'
             )}>
               {advantagesList.length} Moats
             </span>
           </div>
-          <div className="text-3xl lg:text-4xl font-extrabold num text-emerald-600 dark:text-emerald-400">
+          <div className="text-3xl lg:text-4xl font-extrabold num text-emerald-800 dark:text-emerald-300">
             {advantagesList.length}
           </div>
-          <div className="mt-4 pt-3 border-t border-line/60 text-xs text-muted">
+          <div className="mt-4 pt-3 border-t border-line text-xs text-muted font-medium">
             Hanya terverifikasi di Bank BRI (Moats)
           </div>
         </div>
@@ -207,10 +207,10 @@ export const GapAnalysisView: React.FC = () => {
         <div
           onClick={() => setActiveTabState('consensus')}
           className={cn(
-            'group relative p-5 rounded-2xl border transition-all duration-200 cursor-pointer top-hairline flex flex-col justify-between',
+            'group relative p-5 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between shadow-card',
             activeTab === 'consensus'
-              ? 'bg-blue-500/10 border-blue-500/40 shadow-glow-blue'
-              : 'bg-surface/90 border-line hover:border-line-strong hover:shadow-card-hover'
+              ? 'bg-surface border-2 border-accent shadow-md'
+              : 'bg-surface border-line hover:border-accent/60 hover:shadow-card-hover'
           )}
         >
           <div className="flex items-center justify-between mb-3">
@@ -389,7 +389,7 @@ export const GapAnalysisView: React.FC = () => {
                                 key={vIdx}
                                 type="button"
                                 onClick={() => setSelectedResearchCell({ capId: item.id, bankCode: vc.bank.slug })}
-                                className="w-full text-left p-2 rounded-xl border border-line/80 bg-surface/90 hover:border-emerald-500/50 hover:shadow-glow-emerald text-ink flex items-center justify-between text-xs transition-all duration-150"
+                                className="w-full text-left p-2 rounded-xl border border-line bg-surface hover:border-emerald-500 hover:shadow-sm text-ink flex items-center justify-between text-xs transition-all duration-150"
                               >
                                 <div className="flex items-center gap-2 min-w-0">
                                   <BankLogo bankCode={vc.bank.slug} size={18} />

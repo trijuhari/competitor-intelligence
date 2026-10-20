@@ -164,8 +164,8 @@ function createResponse(data, statusCode) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/90 dark:border-slate-800 w-full max-w-3xl overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/50 flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-surface rounded-2xl shadow-2xl border border-line w-full max-w-3xl overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-150">
         
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 p-5 sm:p-6 text-white relative">
@@ -177,7 +177,7 @@ function createResponse(data, statusCode) {
           </button>
 
           <div className="flex items-center space-x-3 mb-2">
-            <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center border border-white/25 shadow-inner">
+            <div className="w-10 h-10 rounded-2xl bg-black/20 flex items-center justify-center border border-white/25 shadow-sm">
               <FileSpreadsheet className="w-6 h-6 text-emerald-200" />
             </div>
             <div>

@@ -11,11 +11,11 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 text-white shadow-md shadow-blue-500/25 hover:shadow-blue-500/40 hover:brightness-105 border border-white/20 active:scale-[0.98]',
-  secondary: 'bg-surface/90 backdrop-blur-sm text-ink border border-line hover:border-line-strong hover:bg-surface-elevated shadow-subtle active:scale-[0.98]',
+  primary: 'bg-accent text-white shadow-sm hover:bg-accent/90 border border-accent font-semibold active:scale-[0.98]',
+  secondary: 'bg-surface text-ink border border-line hover:border-line-strong hover:bg-sunken shadow-sm active:scale-[0.98]',
   soft: 'bg-accent/10 text-accent border border-accent/20 hover:bg-accent/20 active:scale-[0.98]',
   outline: 'bg-transparent text-ink border border-line hover:border-accent hover:text-accent active:scale-[0.98]',
-  ghost: 'text-muted hover:text-ink hover:bg-sunken/80 border border-transparent active:scale-[0.98]',
+  ghost: 'text-muted hover:text-ink hover:bg-sunken border border-transparent active:scale-[0.98]',
   danger: 'bg-danger/10 text-danger hover:bg-danger/20 border border-danger/25 active:scale-[0.98]',
 };
 

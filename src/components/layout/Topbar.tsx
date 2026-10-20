@@ -22,7 +22,7 @@ export const Topbar: React.FC<{ onOpenSidebar: () => void }> = ({ onOpenSidebar 
   const { group, item } = findActiveNav(currentPath);
 
   return (
-    <header className="sticky top-0 z-30 h-14 bg-surface/85 backdrop-blur-xl border-b border-line/80 transition-colors">
+    <header className="sticky top-0 z-30 h-14 bg-surface border-b border-line shadow-xs transition-colors">
       <div className="h-full w-full px-4 lg:px-8 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           {/* Mobile drawer button */}
@@ -52,14 +52,14 @@ export const Topbar: React.FC<{ onOpenSidebar: () => void }> = ({ onOpenSidebar 
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px] min-w-0">
             <span className="text-subtle font-medium">{group.label}</span>
             <ChevronRight className="w-3.5 h-3.5 text-line-strong shrink-0" />
-            <span className="text-ink font-semibold truncate bg-accent/10 px-2 py-0.5 rounded-md text-accent">
+            <span className="text-ink font-semibold truncate bg-accent/10 px-2 py-0.5 rounded-md text-accent border border-accent/20">
               {item.label}
             </span>
           </nav>
         </div>
 
         {/* Center pill: Global Context Indicator (hidden on small screens) */}
-        <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-sunken/60 border border-line text-xs font-medium text-muted">
+        <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-sunken border border-line text-xs font-semibold text-muted">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
           <span>408 Kapabilitas Arsitektur</span>
           <span className="text-subtle">·</span>

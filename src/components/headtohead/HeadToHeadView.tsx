@@ -159,10 +159,10 @@ export const HeadToHeadView: React.FC = () => {
       />
 
       {/* Comparison Matchup Battlecard */}
-      <div className="relative overflow-hidden rounded-2xl bg-surface/90 backdrop-blur-xl border border-line p-5 sm:p-6 shadow-card top-hairline">
+      <div className="relative overflow-hidden rounded-2xl bg-surface border border-line p-5 sm:p-6 shadow-card">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Bank 1 Panel */}
-          <div className="w-full md:flex-1 p-4 rounded-xl border border-blue-500/30 bg-gradient-to-r from-blue-500/10 via-surface/90 to-surface shadow-xs">
+          <div className="w-full md:flex-1 p-4 rounded-xl border-2 border-accent bg-surface shadow-xs">
             <div className="flex items-center gap-3.5">
               <BankLogo bankCode={bankA.slug} size={42} />
               <div className="min-w-0 flex-1">
@@ -185,7 +185,7 @@ export const HeadToHeadView: React.FC = () => {
                   )}
                 </div>
                 <div className="text-xs text-muted mt-1 flex items-center gap-2 font-mono">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">{totalVerifiedA} Verified</span>
+                  <span className="text-emerald-800 dark:text-emerald-300 font-bold">{totalVerifiedA} Verified</span>
                   <span className="text-subtle">·</span>
                   <span className="text-accent font-semibold">{onlyAVerifiedCount} Moats</span>
                 </div>
@@ -204,7 +204,7 @@ export const HeadToHeadView: React.FC = () => {
                 setBankBSlug(temp);
               }}
               title="Tukar posisi perbandingan bank"
-              className="w-10 h-10 rounded-full border border-line hover:border-accent shadow-md hover:rotate-180 transition-all duration-300"
+              className="w-10 h-10 rounded-full border border-line hover:border-accent shadow-xs hover:rotate-180 transition-all duration-300"
             >
               <ArrowLeftRight className="w-4 h-4 text-accent" />
             </Button>
@@ -214,7 +214,7 @@ export const HeadToHeadView: React.FC = () => {
           </div>
 
           {/* Bank 2 Panel */}
-          <div className="w-full md:flex-1 p-4 rounded-xl border border-line bg-surface/90 shadow-xs">
+          <div className="w-full md:flex-1 p-4 rounded-xl border border-line bg-surface shadow-xs">
             <div className="flex items-center gap-3.5">
               <BankLogo bankCode={bankB.slug} size={42} />
               <div className="min-w-0 flex-1">
@@ -237,9 +237,9 @@ export const HeadToHeadView: React.FC = () => {
                   )}
                 </div>
                 <div className="text-xs text-muted mt-1 flex items-center gap-2 font-mono">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">{totalVerifiedB} Verified</span>
+                  <span className="text-emerald-800 dark:text-emerald-300 font-bold">{totalVerifiedB} Verified</span>
                   <span className="text-subtle">·</span>
-                  <span className="text-amber-600 dark:text-amber-400 font-semibold">{onlyBVerifiedCount} Moats</span>
+                  <span className="text-amber-800 dark:text-amber-300 font-semibold">{onlyBVerifiedCount} Moats</span>
                 </div>
               </div>
             </div>
@@ -249,37 +249,37 @@ export const HeadToHeadView: React.FC = () => {
 
       {/* Summary Stat Cards (4 Dynamic Cards) */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-        <div className="p-4 rounded-xl bg-surface/90 border border-line shadow-card top-hairline">
+        <div className="p-4 rounded-xl bg-surface border border-line shadow-card">
           <div className="text-2xs font-bold tracking-wider uppercase text-subtle mb-1">Total Kapabilitas</div>
           <div className="text-2xl lg:text-3xl font-extrabold num text-ink">{researchItems.length}</div>
-          <div className="text-xs text-subtle mt-1">13 domain arsitektur</div>
+          <div className="text-xs text-muted font-medium mt-1">13 domain arsitektur</div>
         </div>
 
         <div 
           onClick={() => setComparisonFilter('only-a')}
-          className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25 shadow-card top-hairline cursor-pointer hover:border-blue-500/40 transition-colors"
+          className="p-4 rounded-xl bg-surface border-2 border-accent shadow-card cursor-pointer hover:border-accent/80 transition-colors"
         >
           <div className="text-2xs font-bold tracking-wider uppercase text-accent mb-1">Keunggulan {bankA.label}</div>
           <div className="text-2xl lg:text-3xl font-extrabold num text-accent">{onlyAVerifiedCount}</div>
-          <div className="text-xs text-muted mt-1">Terverifikasi di {bankA.label} saja</div>
+          <div className="text-xs text-muted font-medium mt-1">Terverifikasi di {bankA.label} saja</div>
         </div>
 
         <div 
           onClick={() => setComparisonFilter('only-b')}
-          className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 shadow-card top-hairline cursor-pointer hover:border-amber-500/40 transition-colors"
+          className="p-4 rounded-xl bg-surface border-2 border-amber-500/40 shadow-card cursor-pointer hover:border-amber-500 transition-colors"
         >
-          <div className="text-2xs font-bold tracking-wider uppercase text-amber-600 dark:text-amber-400 mb-1">Keunggulan {bankB.label}</div>
-          <div className="text-2xl lg:text-3xl font-extrabold num text-amber-600 dark:text-amber-400">{onlyBVerifiedCount}</div>
-          <div className="text-xs text-muted mt-1">Celah arsitektur bagi {bankA.label}</div>
+          <div className="text-2xs font-bold tracking-wider uppercase text-amber-800 dark:text-amber-300 mb-1">Keunggulan {bankB.label}</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-amber-800 dark:text-amber-300">{onlyBVerifiedCount}</div>
+          <div className="text-xs text-muted font-medium mt-1">Celah arsitektur bagi {bankA.label}</div>
         </div>
 
         <div 
           onClick={() => setComparisonFilter('both-verified')}
-          className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/25 shadow-card top-hairline cursor-pointer hover:border-emerald-500/40 transition-colors"
+          className="p-4 rounded-xl bg-surface border-2 border-emerald-500/40 shadow-card cursor-pointer hover:border-emerald-500 transition-colors"
         >
-          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 mb-1">Keduanya Terverifikasi</div>
-          <div className="text-2xl lg:text-3xl font-extrabold num text-emerald-600 dark:text-emerald-400">{bothVerifiedCount}</div>
-          <div className="text-xs text-muted mt-1">Standar paritas bersama</div>
+          <div className="text-2xs font-bold tracking-wider uppercase text-emerald-800 dark:text-emerald-300 mb-1">Keduanya Terverifikasi</div>
+          <div className="text-2xl lg:text-3xl font-extrabold num text-emerald-800 dark:text-emerald-300">{bothVerifiedCount}</div>
+          <div className="text-xs text-muted font-medium mt-1">Standar paritas bersama</div>
         </div>
       </div>
 

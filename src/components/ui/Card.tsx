@@ -11,15 +11,14 @@ export const Card: React.FC<CardProps> = ({
   className, 
   hover = false, 
   interactive = false,
-  hairline = true,
+  hairline: _hairline,
   ...props 
 }) => (
   <div 
     className={cn(
-      'bg-surface/90 backdrop-blur-md border border-line rounded-xl shadow-card transition-all duration-200',
-      hairline && 'top-hairline',
+      'bg-surface border border-line rounded-xl shadow-card transition-all duration-200',
       hover && 'hover:border-line-strong hover:shadow-card-hover hover:-translate-y-0.5',
-      interactive && 'cursor-pointer hover:border-accent/40 hover:shadow-glow-blue hover:-translate-y-0.5 active:scale-[0.99]',
+      interactive && 'cursor-pointer hover:border-accent hover:shadow-card-hover hover:-translate-y-0.5 active:scale-[0.99]',
       className
     )} 
     {...props} 
@@ -41,10 +40,10 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   badge,
   className 
 }) => (
-  <div className={cn('flex items-start justify-between gap-4 px-5 py-3.5 border-b border-line/80', className)}>
+  <div className={cn('flex items-start justify-between gap-4 px-5 py-3.5 border-b border-line', className)}>
     <div className="min-w-0 flex-1">
       <div className="flex items-center gap-2">
-        <h2 className="text-sm font-semibold text-ink tracking-tight">{title}</h2>
+        <h2 className="text-sm font-bold text-ink tracking-tight">{title}</h2>
         {badge}
       </div>
       {description && <p className="text-xs text-muted mt-0.5 leading-relaxed">{description}</p>}

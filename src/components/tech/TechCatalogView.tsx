@@ -220,7 +220,7 @@ export const TechCatalogView: React.FC = () => {
         {paginatedItems.map(item => (
           <div 
             key={item.id} 
-            className="group p-5 rounded-2xl bg-surface/90 backdrop-blur-md border border-line hover:border-accent/40 hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between space-y-4 top-hairline"
+            className="group p-5 rounded-2xl bg-surface border border-line hover:border-accent hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between space-y-4 shadow-card"
           >
             <div>
               <div className="flex items-center justify-between mb-2.5">

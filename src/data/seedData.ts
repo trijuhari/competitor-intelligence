@@ -4829,22 +4829,6 @@ export const INITIAL_USERS: User[] = [
     "role": "Admin",
     "avatar": "👨‍💼",
     "password": "admin123"
-  },
-  {
-    "id": "usr-2",
-    "nama": "Siti Rahmawati (Tech Analyst)",
-    "email": "analyst@intel.com",
-    "role": "Admin",
-    "avatar": "👩‍💻",
-    "password": "analyst123"
-  },
-  {
-    "id": "usr-3",
-    "nama": "Budi Hartono (Executive Director)",
-    "email": "executive@intel.com",
-    "role": "Admin",
-    "avatar": "👔",
-    "password": "exec123"
   }
 ];
 
