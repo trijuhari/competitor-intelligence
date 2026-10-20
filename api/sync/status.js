@@ -17,7 +17,7 @@ export default function handler(req, res) {
     last_sync_time: new Date().toISOString(),
     last_sync_status: 'Siap (Vercel Serverless Sync)',
     last_sync_summary: 'Cloud Sync Vercel Siap',
-    totalCapabilities: 408,
-    totalEntries: 2448
+    totalCapabilities: 409,
+    totalEntries: 2454
   });
 }

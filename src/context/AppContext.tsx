@@ -281,8 +281,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       last_sync_time: '',
       last_sync_status: 'Siap (Auto-Sync Aktif)',
       last_sync_summary: '',
-      totalCapabilities: 408,
-      totalEntries: 2448
+      totalCapabilities: 409,
+      totalEntries: 2454
     };
   });
 
