@@ -57,7 +57,7 @@ export const BankProfilesView: React.FC = () => {
     };
 
     const caps = researchItems.map(item => {
-      const detail = item.banks[bankSlug] || {
+      const detail = (item.banks && item.banks[bankSlug]) || {
         bankCode: currentBank.singkatan,
         merk: '-',
         link: '',

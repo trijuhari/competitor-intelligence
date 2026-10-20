@@ -42,7 +42,7 @@ export const ResearchDetailModal: React.FC = () => {
   const item = researchItems.find(r => r.id === selectedResearchCell.capId);
   if (!item) return null;
 
-  const currentBankDetail: BankCapabilityDetail = item.banks[activeBankSlug] || {
+  const currentBankDetail: BankCapabilityDetail = (item.banks && item.banks[activeBankSlug]) || {
     bankCode: activeBankSlug.toUpperCase(),
     merk: '-',
     link: '',
@@ -51,7 +51,9 @@ export const ResearchDetailModal: React.FC = () => {
     status: 'Belum'
   };
 
-  const currentBankObj = banks.find(b => b.singkatan.toLowerCase() === activeBankSlug.toLowerCase());
+  const currentBankObj = banks.find(
+    b => b.slug?.toLowerCase() === activeBankSlug.toLowerCase() || b.singkatan?.toLowerCase() === activeBankSlug.toLowerCase()
+  );
 
   const canEdit = true; // Admin role has full editing rights
 

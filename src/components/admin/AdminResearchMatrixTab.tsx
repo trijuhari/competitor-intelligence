@@ -107,7 +107,7 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
       if (categoryFilter !== 'all' && item.kategori !== categoryFilter) return false;
 
       if (statusFilter !== 'all') {
-        const hasStatus = Object.values(item.banks).some(b => b.status === statusFilter);
+        const hasStatus = Object.values(item.banks || {}).some(b => b.status === statusFilter);
         if (!hasStatus) return false;
       }
 
@@ -116,7 +116,7 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
         const matchCap = item.kapabilitas.toLowerCase().includes(q);
         const matchDomain = item.domain.toLowerCase().includes(q);
         const matchKategori = item.kategori.toLowerCase().includes(q);
-        const matchBanks = Object.values(item.banks).some(b => 
+        const matchBanks = Object.values(item.banks || {}).some(b => 
           b.merk?.toLowerCase().includes(q) || b.link?.toLowerCase().includes(q) || b.pic?.toLowerCase().includes(q)
         );
         if (!matchCap && !matchDomain && !matchKategori && !matchBanks) return false;

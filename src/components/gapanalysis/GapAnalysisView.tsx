@@ -46,12 +46,12 @@ export const GapAnalysisView: React.FC = () => {
     const consensus: any[] = [];
 
     researchItems.forEach(item => {
-      const bri = item.banks.bri || { merk: '-', status: 'Belum', link: '', pic: 'Admin' };
+      const bri = (item.banks && item.banks.bri) || { merk: '-', status: 'Belum', link: '', pic: 'Admin' };
       const isBriVerified = bri.status === 'Terverifikasi';
 
       const verifiedCompetitors: any[] = [];
       COMPETITORS.forEach(comp => {
-        const cDetail = item.banks[comp.slug];
+        const cDetail = item.banks?.[comp.slug];
         if (cDetail && cDetail.status === 'Terverifikasi') {
           verifiedCompetitors.push({
             bank: comp,

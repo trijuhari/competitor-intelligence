@@ -147,16 +147,12 @@ export const initDatabase = async () => {
     // column already exists
   }
 
-  // Ensure default users exist with passwords (All Admin role)
+  // Ensure only default Admin user exists
   await run(`
+    DELETE FROM users WHERE id IN ('usr-2', 'usr-3') OR email IN ('analyst@intel.com', 'executive@intel.com', 'analyst@bri.co.id', 'executive@bri.co.id');
     INSERT OR REPLACE INTO users (id, nama, email, role, avatar, password)
-    VALUES 
-      ('usr-1', 'Admin', 'admin@intel.com', 'Admin', '', 'admin123'),
-      ('usr-2', 'Siti Rahmawati (Tech Analyst)', 'analyst@intel.com', 'Admin', '', 'analyst123'),
-      ('usr-3', 'Budi Hartono (Executive Director)', 'executive@intel.com', 'Admin', '', 'exec123');
+    VALUES ('usr-1', 'Admin', 'admin@intel.com', 'Admin', '', 'admin123');
     UPDATE users SET email = 'admin@intel.com' WHERE email = 'admin@bri.co.id';
-    UPDATE users SET email = 'analyst@intel.com' WHERE email = 'analyst@bri.co.id';
-    UPDATE users SET email = 'executive@intel.com', nama = 'Budi Hartono (Executive Director)', password = 'exec123' WHERE email = 'executive@bri.co.id';
     UPDATE users SET role = 'Admin';
   `);
 

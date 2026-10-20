@@ -48,7 +48,7 @@ export const TechCatalogView: React.FC = () => {
       if (selectedCategory !== 'all' && item.kategori !== selectedCategory) return false;
 
       if (selectedBankFilter !== 'all') {
-        const bDetail = item.banks[selectedBankFilter];
+        const bDetail = item.banks?.[selectedBankFilter];
         if (!bDetail || bDetail.status === 'Belum') return false;
       }
 
@@ -57,7 +57,7 @@ export const TechCatalogView: React.FC = () => {
         const matchCap = item.kapabilitas.toLowerCase().includes(q);
         const matchDomain = item.domain.toLowerCase().includes(q);
         const matchKat = item.kategori.toLowerCase().includes(q);
-        const matchMerk = Object.values(item.banks).some(b => 
+        const matchMerk = Object.values(item.banks || {}).some(b => 
           b.merk?.toLowerCase().includes(q)
         );
         if (!matchCap && !matchDomain && !matchKat && !matchMerk) return false;

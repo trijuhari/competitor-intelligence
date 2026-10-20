@@ -692,7 +692,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const exportDataJSON = () => {
     const payload = {
-      version: '1.0',
+      version: '2.0',
       exportedAt: new Date().toISOString(),
       banks,
       categories,
@@ -700,7 +700,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       findings,
       evidences,
       interviews,
-      auditLogs
+      auditLogs,
+      researchItems
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -716,20 +717,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const data = JSON.parse(jsonStr);
       if (data.technologies && Array.isArray(data.technologies)) {
         setTechnologies(data.technologies);
+        localStorage.setItem(`${STORAGE_KEY}_tech`, JSON.stringify(data.technologies));
       }
       if (data.findings && Array.isArray(data.findings)) {
         setFindings(data.findings);
+        localStorage.setItem(`${STORAGE_KEY}_findings`, JSON.stringify(data.findings));
       }
       if (data.evidences && Array.isArray(data.evidences)) {
         setEvidences(data.evidences);
+        localStorage.setItem(`${STORAGE_KEY}_evidences`, JSON.stringify(data.evidences));
       }
       if (data.interviews && Array.isArray(data.interviews)) {
         setInterviews(data.interviews);
+        localStorage.setItem(`${STORAGE_KEY}_interviews`, JSON.stringify(data.interviews));
       }
-      addAuditLog('IMPORT', 'Finding', 'Mengimpor dataset eksternal');
+      if (data.researchItems && Array.isArray(data.researchItems)) {
+        setResearchItems(data.researchItems);
+        localStorage.setItem(RESEARCH_STORAGE_KEY, JSON.stringify(data.researchItems));
+      }
+      addAuditLog('IMPORT', 'Finding', 'Mengimpor dataset eksternal (termasuk matriks riset kapabilitas)');
       return true;
     } catch (e) {
-      console.error(e);
+      console.error('Import JSON failed:', e);
       return false;
     }
   };
@@ -823,7 +832,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const addResearchCapability = async (data: Omit<ResearchItem, 'id' | 'no'>) => {
-    const nextNo = researchItems.length > 0 ? Math.max(...researchItems.map(r => r.no)) + 1 : 1;
+    const validNos = researchItems.map(r => Number(r.no)).filter(n => !isNaN(n));
+    const nextNo = validNos.length > 0 ? Math.max(...validNos) + 1 : 1;
     const newId = `cap-${nextNo}`;
     
     const defaultBanks: Record<string, BankCapabilityDetail> = {
@@ -933,6 +943,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setEvidences(INITIAL_EVIDENCES);
     setInterviews(INITIAL_INTERVIEWS);
     setAuditLogs(INITIAL_AUDIT_LOGS);
+    setResearchItems(researchMatrixData as unknown as ResearchItem[]);
+    localStorage.removeItem(RESEARCH_STORAGE_KEY);
     localStorage.removeItem(`${STORAGE_KEY}_tech`);
     localStorage.removeItem(`${STORAGE_KEY}_findings`);
     localStorage.removeItem(`${STORAGE_KEY}_evidences`);

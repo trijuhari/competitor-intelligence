@@ -107,7 +107,7 @@ export const DashboardOverview: React.FC = () => {
       let hasCompetitorVerified = false;
 
       bStats.forEach(bStat => {
-        const detail = item.banks[bStat.slug];
+        const detail = item.banks?.[bStat.slug];
         const status = detail?.status || 'Belum';
 
         if (status === 'Terverifikasi') {

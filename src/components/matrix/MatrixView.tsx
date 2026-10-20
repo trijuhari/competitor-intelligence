@@ -62,7 +62,7 @@ export const MatrixView: React.FC = () => {
 
     researchItems.forEach(item => {
       BANK_SLUGS.forEach(b => {
-        const detail = item.banks[b.key];
+        const detail = item.banks?.[b.key];
         if (detail?.status === 'Terverifikasi') verifiedCount++;
         else if (detail?.status === 'Inferensi') inferenceCount++;
         else belumCount++;
@@ -89,7 +89,7 @@ export const MatrixView: React.FC = () => {
       if (categoryFilter !== 'all' && item.kategori !== categoryFilter) return false;
 
       if (statusFilter !== 'all') {
-        const hasStatus = Object.values(item.banks).some(b => b.status === statusFilter);
+        const hasStatus = Object.values(item.banks || {}).some(b => b.status === statusFilter);
         if (!hasStatus) return false;
       }
 
@@ -98,7 +98,7 @@ export const MatrixView: React.FC = () => {
         const matchCap = item.kapabilitas.toLowerCase().includes(q);
         const matchDomain = item.domain.toLowerCase().includes(q);
         const matchKategori = item.kategori.toLowerCase().includes(q);
-        const matchMerk = Object.values(item.banks).some(b => 
+        const matchMerk = Object.values(item.banks || {}).some(b => 
           b.merk?.toLowerCase().includes(q) || b.link?.toLowerCase().includes(q)
         );
         if (!matchCap && !matchDomain && !matchKategori && !matchMerk) return false;
