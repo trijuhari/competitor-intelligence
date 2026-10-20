@@ -13,13 +13,19 @@ export const Topbar: React.FC<{ onOpenSidebar: () => void }> = ({ onOpenSidebar 
     exportDataJSON, 
     exportResearchMatrixCSV, 
     researchItems, 
+    banks,
     theme, 
     toggleTheme,
     isSidebarOpen,
     toggleSidebar
   } = useApp();
 
-  const { group, item } = findActiveNav(currentPath);
+  const { group, item } = React.useMemo(() => findActiveNav(currentPath), [currentPath]);
+
+  const domainCount = React.useMemo(() => {
+    const set = new Set(researchItems.map(i => i.domain).filter(Boolean));
+    return set.size || 13;
+  }, [researchItems]);
 
   return (
     <header className="sticky top-0 z-30 h-14 bg-surface border-b border-line shadow-xs transition-colors">
@@ -61,11 +67,11 @@ export const Topbar: React.FC<{ onOpenSidebar: () => void }> = ({ onOpenSidebar 
         {/* Center pill: Global Context Indicator (hidden on small screens) */}
         <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-sunken border border-line text-xs font-semibold text-muted">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          <span>408 Kapabilitas Arsitektur</span>
+          <span>{researchItems.length} Kapabilitas Arsitektur</span>
           <span className="text-subtle">·</span>
-          <span>13 Domain</span>
+          <span>{domainCount} Domain</span>
           <span className="text-subtle">·</span>
-          <span>6 Bank Benchmark</span>
+          <span>{banks?.length || 6} Bank Benchmark</span>
         </div>
 
         {/* Actions */}
