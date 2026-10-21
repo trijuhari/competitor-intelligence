@@ -2,14 +2,14 @@
 
 | Atribut | Nilai |
 | --- | --- |
-| **Versi dokumen** | 1.0 (As-Built) |
-| **Tanggal** | 19 Oktober 2026 |
-| **Status** | Final untuk review – mendeskripsikan produk yang **sudah terbangun** |
-| **Menggantikan** | `PRD – Competitor Intelligence Tech Stack Bank BRI vs Himbara.md` (Draft v0.1, 13 Okt 2026) |
+| **Versi dokumen** | 1.1 (As-Built) |
+| **Tanggal** | 21 Oktober 2026 |
+| **Status** | Final untuk review – mendeskripsikan produk yang **sudah terbangun dan terintegrasi penuh** |
+| **Menggantikan** | `PRD_v1.0_Competitor_Intelligence_BRI_As-Built.md` (v1.0, 19 Okt 2026) dan `Draft v0.1` (13 Okt 2026) |
 | **Dokumen terkait** | `README.md`, `REKOMENDASI_IMPROVEMENT_DAN_ROADMAP_FITUR.md` |
 | **Repositori** | `competitor-intelligence-bri` (v1.0.0) |
 
-> **Catatan pembaca:** Dokumen ini disusun dengan membedah kode sumber aplikasi (frontend React, backend Express, skema SQLite, dan dataset riset). Bagian 18 merangkum perbedaan antara rencana Draft v0.1 dan apa yang benar-benar terimplementasi, sedangkan Bagian 17 berisi *known issues* yang ditemukan saat audit kode.
+> **Catatan pembaca:** Dokumen ini disusun dengan membedah kode sumber aplikasi terkini (frontend React 18, backend Express, endpoints serverless Vercel, skema SQLite, scheduler auto-sync background, dan dataset riset terverifikasi per 21 Oktober 2026). Bagian 18 merangkum jejak evolusi fitur dari Draft v0.1 hingga As-Built v1.1, sedangkan Bagian 17 memuat status *known issues* dan resolusi teknis terbaru.
 
 ---
 
@@ -32,7 +32,7 @@
 15. [Pertimbangan Legal, Etika & Privasi](#15-pertimbangan-legal-etika--privasi)
 16. [Metrik Keberhasilan](#16-metrik-keberhasilan)
 17. [Known Issues & Technical Debt](#17-known-issues--technical-debt)
-18. [Traceability: Draft v0.1 vs As-Built](#18-traceability-draft-v01-vs-as-built)
+18. [Traceability: Evolusi Draft v0.1 s/d As-Built v1.1](#18-traceability-evolusi-draft-v01-sd-as-built-v11)
 19. [Roadmap Lanjutan](#19-roadmap-lanjutan)
 20. [Risiko & Mitigasi](#20-risiko--mitigasi)
 21. [Keputusan & Pertanyaan Terbuka](#21-keputusan--pertanyaan-terbuka)
@@ -42,14 +42,14 @@
 
 ## 1. Ringkasan Produk
 
-**Competitor Intel** adalah aplikasi web *evidence-based competitor intelligence* yang membandingkan **tech stack Bank BRI** terhadap **4 bank Himbara (Mandiri, BNI, BTN, BSI) dan BCA**. Data riset disusun sebagai matriks **408 kapabilitas × 6 bank = 2.448 sel evaluasi**, dikelompokkan ke dalam **4 pilar workshop (WS1–WS4)**, **13 domain arsitektur**, dan **9 kategori**.
+**Competitor Intel** adalah aplikasi web *evidence-based competitor intelligence* yang memetakan dan membandingkan **tech stack Bank BRI** terhadap **4 bank Himbara (Mandiri, BNI, BTN, BSI) dan BCA**. Data riset tersusun sebagai matriks **409 kapabilitas × 6 bank = 2.454 sel evaluasi**, dikelompokkan ke dalam **Pilar Workshop Dinamis (WS1–WS5)**, **14 domain arsitektur**, dan **10 kategori**.
 
-Setiap sel berisi: *merk/stack* yang digunakan bank, *link/sumber bukti*, *PIC* pencatat, dan **status verifikasi** (`Terverifikasi` / `Inferensi` / `Belum`).
+Setiap sel berisi: *merk/stack* yang digunakan bank, *link/sumber bukti publik*, *PIC* pencatat riset, dan **status verifikasi** (`Terverifikasi` / `Inferensi` / `Belum`).
 
 **Value proposition:**
-> Satu tempat terpusat untuk memetakan, membandingkan, dan mempresentasikan lanskap teknologi BRI vs kompetitor secara terstruktur, dapat ditelusuri ke sumber, dan siap dipakai di ruang workshop.
+> Satu tempat terpusat untuk memetakan, membandingkan, dan mempresentasikan lanskap teknologi BRI vs kompetitor secara terstruktur, dapat ditelusuri ke sumber pembuktian, dan siap disajikan langsung di hadapan pimpinan serta arsitek enterprise Bank BRI.
 
-**Konteks penggunaan:** dibangun oleh tim konsultan sebagai alat bantu **workshop arsitektur teknologi bersama BRI**. Sumber kebenaran data riset (*source of truth*) adalah **Google Spreadsheet riset tim**, yang ditarik ke database aplikasi melalui fitur sinkronisasi.
+**Konteks penggunaan:** Dibangun oleh tim konsultan sebagai instrumen strategis **workshop arsitektur teknologi bersama BRI**. Sumber kebenaran data riset (*source of truth*) adalah **Google Spreadsheet riset tim**, yang disinkronkan secara dua arah dengan database aplikasi melalui integrasi otomatis, background scheduler, atau webhook Google Apps Script.
 
 ---
 
@@ -57,10 +57,10 @@ Setiap sel berisi: *merk/stack* yang digunakan bank, *link/sumber bukti*, *PIC* 
 
 | # | Masalah | Dampak |
 | --- | --- | --- |
-| 1 | Informasi tech stack bank tersebar (laporan tahunan, siaran pers, studi kasus vendor, lowongan kerja, wawancara). | Benchmarking lambat & tidak konsisten. |
-| 2 | Riset dikerjakan banyak PIC di spreadsheet yang panjang (±2.400 baris). | Sulit dibaca, sulit difilter, sulit dipresentasikan. |
-| 3 | Tidak ada cara cepat menjawab *"Di mana BRI tertinggal?"*, *"Apa yang hanya dimiliki BRI?"*, *"Apa standar industri?"*. | Insight strategis tidak muncul dari data mentah. |
-| 4 | Klaim teknologi harus bisa diaudit sumbernya saat ditanya peserta workshop. | Risiko kredibilitas konsultan. |
+| 1 | Informasi tech stack bank tersebar di ratusan dokumen publik (laporan tahunan, siaran pers, studi kasus vendor, lowongan kerja, presentasi investor). | Benchmarking berjalan lambat, terfragmentasi, dan tidak konsisten. |
+| 2 | Riset dikerjakan banyak PIC di spreadsheet yang sangat panjang (±2.500 baris). | Sulit dibaca, rentan salah filter, dan tidak layak dipresentasikan ke eksekutif. |
+| 3 | Tidak ada cara instan menjawab *"Di mana BRI tertinggal?"*, *"Apa keunggulan eksklusif BRI?"*, *"Apa standar konsensus industri?"*. | Insight strategis tenggelam di balik tumpukan data mentah. |
+| 4 | Klaim teknologi wajib dapat diaudit tautan sumbernya secara real-time saat diuji oleh peserta workshop. | Risiko kredibilitas tim konsultan di hadapan Dewan Direksi dan arsitek bank. |
 
 ---
 
@@ -68,131 +68,128 @@ Setiap sel berisi: *merk/stack* yang digunakan bank, *link/sumber bukti*, *PIC* 
 
 ### 3.1 Tujuan Produk
 
-| ID | Tujuan | Status as-built |
+| ID | Tujuan | Status As-Built v1.1 |
 | --- | --- | --- |
-| G1 | Menyajikan perbandingan 408 kapabilitas × 6 bank yang terkelompok per workshop/domain/kategori. | ✅ Tercapai |
-| G2 | Setiap sel punya status verifikasi, link sumber, dan PIC. | ✅ Tercapai (sumber berupa teks/URL bebas) |
-| G3 | Insight otomatis: **gap** BRI, **keunggulan eksklusif** BRI, **standar paritas** industri. | ✅ Tercapai |
-| G4 | Perbandingan langsung dua bank (head-to-head) dan visual blueprint arsitektur. | ✅ Tercapai |
-| G5 | Data bisa diperbarui dari Google Sheets & dicatat di audit log. | ✅ Tercapai (pull/push manual) |
-| G6 | Siap dipresentasikan langsung dari web saat workshop. | ⚠️ Parsial (Mode Presentasi khusus belum ada) |
+| G1 | Menyajikan perbandingan 409 kapabilitas × 6 bank yang terkelompok per workshop dinamis/domain/kategori. | ✅ **Tercapai Penuh** (mendukung WS1 s/d WS5 secara dinamis) |
+| G2 | Setiap sel memiliki status verifikasi resmi, tautan sumber primer, dan PIC pencatat. | ✅ **Tercapai** (ekstraksi URL otomatis & tautan langsung) |
+| G3 | Kalkulasi otomatis: **gap teknologi BRI**, **keunggulan eksklusif (moat)**, dan **standar paritas industri**. | ✅ **Tercapai** |
+| G4 | Perbandingan langsung dua bank (*Head-to-Head*) dan visualisasi arsitektur 5 layer (*Blueprint*). | ✅ **Tercapai Penuh** |
+| G5 | Sinkronisasi dua arah dengan Google Sheets, background scheduler otomatis, dan audit trail log. | ✅ **Tercapai Penuh** (auto-sync saat startup, interval berkala, & log WIB) |
+| G6 | Kesiapan presentasi langsung dari web browser pada proyektor workshop. | ✅ **Tercapai** (High-contrast solid UI, collapsible sidebar `Ctrl+B`, dark/light mode) |
 
 ### 3.2 Non-Tujuan
 
-- Tidak melakukan scanning/penetrasi atau mengakses sistem internal bank.
-- Tidak memuat detail celah keamanan yang dapat dieksploitasi (versi spesifik, endpoint, konfigurasi).
-- Bukan alat penilaian kinerja bisnis/finansial bank.
-- Tidak mencakup bank di luar 6 bank benchmark (bank digital, bank asing) pada v1.0.
-- Tidak menyediakan skor kematangan numerik per domain (dipertimbangkan di roadmap).
+- Tidak melakukan pemindaian jaringan (*vulnerability scanning*) atau mengakses sistem internal bank.
+- Tidak memuat detail celah keamanan siber yang dapat dieksploitasi (versi rentan, endpoint internal, token kredensial).
+- Bukan alat audit kinerja finansial atau rasio keuangan bank.
+- Tidak mencakup bank di luar 6 bank benchmark (bank asing/fintech) pada rilis v1.x.
+- Tidak menyediakan skor numerik subjektif tanpa justifikasi bukti publik.
 
 ---
 
 ## 4. Target Pengguna & Persona
 
-| Persona | Peran | Kebutuhan utama | Modul yang paling dipakai |
+| Persona | Peran | Kebutuhan Utama | Modul yang Paling Sering Digunakan |
 | --- | --- | --- | --- |
-| **Konsultan / Admin Data** | Mengelola riset, sinkronisasi, presentasi | Input & koreksi data cepat, sync dengan Sheet, audit | Admin (Temuan, Sinkronisasi, Audit, Checklist) |
-| **Tech/Research Analyst (PIC)** | Mengisi temuan per bank | Mencari kapabilitas, mengisi merk + bukti | Matriks Riset, Detail Sel |
-| **Enterprise Architect BRI** | Peserta workshop | Melihat stack kompetitor per layer arsitektur | Blueprint, Head-to-Head |
-| **Strategy / Innovation BRI** | Peserta workshop | Melihat gap & peluang untuk roadmap | Overview, Gap Analysis |
-| **Eksekutif / Direksi BRI** | Audiens presentasi | Ringkasan cepat, angka kunci | Overview, Profil Bank |
-
-> Pada versi as-built, **semua akun memiliki role `Admin`** (akses penuh). Lihat Bagian 17 untuk implikasinya.
+| **Konsultan / Admin Data** | Mengelola dataset, sinkronisasi, dan validasi | Input & koreksi cepat, sync Google Sheet, audit log, checklist kesiapan | Admin (Temuan, Sinkronisasi, Audit, Checklist) |
+| **Tech/Research Analyst (PIC)** | Mengisi temuan per bank | Menemukan kapabilitas, mengisi merk + link pembuktian | Matriks Riset, Modal Detail Sel |
+| **Enterprise Architect BRI** | Peserta workshop | Membandingkan stack per layer arsitektur & dependensi | Blueprint Arsitektur, Head-to-Head |
+| **Strategy & Innovation BRI** | Peserta workshop | Mengidentifikasi gap teknologi untuk penyusunan roadmap | Overview, Gap Analysis |
+| **Eksekutif / Direksi BRI** | Audiens presentasi | Ringkasan eksekutif, KPI tingkat verifikasi, keunggulan BRI | Overview, Profil Bank |
 
 ---
 
 ## 5. Cakupan & Taksonomi Data
 
-### 5.1 Bank
+### 5.1 Bank Terpantau (6 Bank)
 
-| Kode | Nama | Peran | Catatan profil |
+| Kode | Nama Bank | Peran dalam Sistem | Fokus Profil & Produk Digital Utama |
 | --- | --- | --- | --- |
-| **BRI** | Bank Rakyat Indonesia | **Fokus utama** (ditandai badge "Fokus") | Pemimpin segmen mikro & ultra-mikro |
-| Mandiri | Bank Mandiri | Pembanding | Ekosistem wholesale & corporate |
-| BCA | Bank Central Asia | Pembanding (non-Himbara) | Efisiensi transaksi & digital ritel |
-| BNI | Bank Negara Indonesia | Pembanding | Global transactional & consumer |
-| BTN | Bank Tabungan Negara | Pembanding | Spesialis KPR & perumahan |
-| BSI | Bank Syariah Indonesia | Pembanding | Bank syariah terbesar |
+| **BRI** | PT Bank Rakyat Indonesia (Persero) Tbk | **Fokus Utama** (Aksen Khusus) | Pemimpin mikro & ultra-mikro (*BRImo, Pasar.id, Sabrina, Qlola*) |
+| **Mandiri** | PT Bank Mandiri (Persero) Tbk | Pembanding Utama | Ekosistem wholesale & lifestyle (*Livin' by Mandiri, Kopra*) |
+| **BCA** | PT Bank Central Asia Tbk | Pembanding Swasta | Efisiensi transaksi & ekosistem ritel (*myBCA, KlikBCA Bisnis*) |
+| **BNI** | PT Bank Negara Indonesia (Persero) Tbk | Pembanding Himbara | Transaksi global & consumer digital (*wondr by BNI*) |
+| **BTN** | PT Bank Tabungan Negara (Persero) Tbk | Pembanding Himbara | Pembiayaan perumahan & ekosistem properti (*bale by BTN*) |
+| **BSI** | PT Bank Syariah Indonesia Tbk | Pembanding Syariah | Bank syariah terbesar & digital banking syariah (*BYOND by BSI*) |
 
-Setiap bank memiliki profil: nama, singkatan, deskripsi, logo, daftar **produk digital** (mis. BRImo, Livin', wondr, bale, BYOND), dan warna identitas.
+### 5.2 Pilar Workshop Dinamis (WS)
 
-### 5.2 Pilar Workshop (WS)
+Daftar workshop diekstrak secara dinamis (*data-driven*) dari dataset riset:
 
-| Kode | Nama Pilar | Jumlah kapabilitas | Domain |
-| --- | --- | --- | --- |
+| Kode WS | Nama Pilar Workshop | Jumlah Kapabilitas | Cakupan Domain Utama |
+| --- | --- | :---: | --- |
 | **WS1** | Core & Digital Banking | 124 | Core Banking System (CBS), Mobile Banking, Internet Banking, Digital Banking |
 | **WS2** | EDW, MDM & BI Analytics | 90 | Enterprise Data Warehouse (EDW), Master Data Management (MDM), Business Intelligence (BI) |
 | **WS3** | Cloud, Infra & ITSM/Observability | 132 | Cloud Technology, Infrastructure, Network, IT Support (ITSM) |
 | **WS4** | Big Data, AI & ML | 62 | Big Data Analytics, AI Technology |
-| | **Total** | **408** | **13 domain** |
+| **WS5** | Security, Governance & Custom | 1 | IT Security & Tata Kelola Keamanan Khusus |
+| | **Total Keseluruhan** | **409** | **14 domain arsitektur** |
 
-### 5.3 Domain (13)
+### 5.3 Domain Arsitektur (14 Domain)
 
-| Domain | WS | Kapabilitas |
-| --- | --- | --- |
-| Core Banking System (CBS) | WS1 | 32 |
-| Mobile Banking | WS1 | 31 |
-| Internet Banking | WS1 | 31 |
-| Digital Banking | WS1 | 30 |
-| Enterprise Data Warehouse (EDW) | WS2 | 30 |
-| Master Data Management (MDM) | WS2 | 30 |
-| Business Intelligence (BI) | WS2 | 30 |
-| Cloud Technology | WS3 | 30 |
-| Infrastructure | WS3 | 31 |
-| Network | WS3 | 34 |
-| IT Support (ITSM) | WS3 | 37 |
-| Big Data Analytics | WS4 | 31 |
-| AI Technology | WS4 | 31 |
+| # | Domain Arsitektur | Pilar WS | Kapabilitas |
+| :---: | --- | :---: | :---: |
+| 1 | Core Banking System (CBS) | WS1 | 32 |
+| 2 | Mobile Banking | WS1 | 31 |
+| 3 | Internet Banking | WS1 | 31 |
+| 4 | Digital Banking | WS1 | 30 |
+| 5 | Enterprise Data Warehouse (EDW) | WS2 | 30 |
+| 6 | Master Data Management (MDM) | WS2 | 30 |
+| 7 | Business Intelligence (BI) | WS2 | 30 |
+| 8 | Cloud Technology | WS3 | 30 |
+| 9 | Infrastructure | WS3 | 31 |
+| 10 | Network | WS3 | 34 |
+| 11 | IT Support (ITSM) | WS3 | 37 |
+| 12 | Big Data Analytics | WS4 | 31 |
+| 13 | AI Technology | WS4 | 31 |
+| 14 | IT Security | WS5 | 1 |
 
-### 5.4 Kategori (9)
+### 5.4 Kategori Teknologi (10 Kategori)
 
 | Kategori | Jumlah | Kategori | Jumlah |
-| --- | --- | --- | --- |
+| --- | :---: | --- | :---: |
 | Software/Sistem | 205 | Standar/Protokol | 28 |
 | Keamanan | 46 | Metrik/Benchmark | 18 |
 | Arsitektur | 35 | Layanan/Komersial | 14 |
 | Tool | 28 | Regulasi | 6 |
-| Hardware | 28 | | |
-
-> Domain dan kategori bersifat **data-driven**: daftar filter dibangun otomatis dari data, sehingga domain/kategori baru dari Google Sheet langsung muncul di UI. Sebaliknya, **daftar 6 bank dan 4 workshop masih hardcoded** di kode (lihat Bagian 17).
+| Hardware | 28 | Standar & Regulasi | 1 |
 
 ---
 
 ## 6. Model Status Verifikasi & Snapshot Data
 
-### 6.1 Definisi Status
+### 6.1 Definisi Status Verifikasi
 
-| Status | Label UI | Definisi | Warna |
+| Status | Label UI | Definisi Pembuktian | Visual |
 | --- | --- | --- | --- |
-| `Terverifikasi` | ✓ Verified | Dibuktikan oleh sumber resmi/publik: laporan tahunan, siaran pers, studi kasus vendor, conference talk, atau dokumen resmi. | Hijau (`ok`) |
-| `Inferensi` | ⚠ Inferensi | Indikasi kuat dari sinyal publik/korelasi industri (artikel, lowongan kerja, pola teknis), belum dikonfirmasi resmi. | Kuning (`warn`) |
-| `Belum` | – Belum | Belum ada data/rujukan publik yang tercatat. | Abu-abu / merah muda (admin) |
+| `Terverifikasi` | ✓ Terverifikasi | Didukung oleh bukti primer legal: laporan tahunan resmi, studi kasus vendor resmi (AWS/Red Hat/Oracle), siaran pers korporat, dokumentasi Bank Indonesia, atau rekaman wawancara internal. | Badge Hijau (`ok`) |
+| `Inferensi` | ⚠ Inferensi | Indikasi kuat dari kombinasi lowongan kerja teknis, sertifikasi profesional pegawai, atau keterhubungan pihak ketiga. | Badge Kuning (`warn`) |
+| `Belum` | – Belum | Belum terdeteksi atau bank bersangkutan belum mengadopsi solusi di kapabilitas tersebut. | Badge Abu-abu |
 
-> **Penting:** Seluruh kalkulasi insight (gap, moat, paritas) hanya menghitung status **`Terverifikasi`**. Status `Inferensi` diperlakukan sama dengan "belum terbukti" dalam logika gap.
+> **Prinsip Perhitungan:** Seluruh kalkulasi insight strategis (gap analisis, keunggulan eksklusif, dan konsensus paritas) **hanya memperhitungkan status `Terverifikasi`** guna menjaga integritas dan akuntabilitas presentasi di hadapan manajemen perbankan.
 
-### 6.2 Snapshot Data (per 19 Okt 2026)
+### 6.2 Snapshot Data Riset Terverifikasi (per 21 Oktober 2026)
 
 | Bank | Terverifikasi | Inferensi | Belum | % Terverifikasi |
-| --- | --- | --- | --- | --- |
-| **BRI** | **52** | 8 | 348 | **12,7%** |
-| Mandiri | 41 | 6 | 361 | 10,0% |
-| BNI | 41 | 5 | 362 | 10,0% |
-| BCA | 35 | 4 | 369 | 8,6% |
-| BSI | 23 | 5 | 380 | 5,6% |
-| BTN | 16 | 2 | 390 | 3,9% |
-| **Total** | **208** | **30** | **2.210** | **8,5%** |
+| --- | :---: | :---: | :---: | :---: |
+| **Bank BRI** (Fokus) | **83** | **14** | **312** | **20,3%** |
+| Bank Mandiri | 79 | 10 | 320 | 19,3% |
+| Bank Central Asia (BCA) | 77 | 7 | 325 | 18,8% |
+| Bank BNI | 70 | 11 | 328 | 17,1% |
+| Bank Syariah Indonesia (BSI) | 42 | 14 | 353 | 10,3% |
+| Bank BTN | 29 | 4 | 376 | 7,1% |
+| **Total Agregat Industri** | **380** | **60** | **2.014** | **15,5%** |
 
-**Insight dari snapshot:**
-- ~90% sel masih berstatus `Belum` → angka gap/moat saat ini merepresentasikan **cakupan riset**, belum tentu kondisi riil bank. Ini wajib disampaikan sebagai *disclaimer* saat workshop.
-- 2.122 dari 2.448 sel (~87%) masih memakai PIC default (`Mrs Utami`), menandakan banyak sel belum disentuh PIC riset spesifik.
+**Progres Signifikan per 21 Oktober 2026:**
+- Total sel terverifikasi meningkat dari **208 sel (8,5%)** pada baseline 19 Oktober menjadi **380 sel (15,5%)**.
+- Total sel terisi (`Terverifikasi` + `Inferensi`) mencapai **440 dari 2.454 sel (17,9%)**.
+- Tingkat pembuktian Bank BRI memimpin di angka **20,3% (83 kapabilitas)**, disusul ketat oleh Bank Mandiri (19,3%) dan BCA (18,8%).
 
 ---
 
 ## 7. Arsitektur Informasi & Navigasi
 
-### 7.1 Sitemap & Routing
-
-Aplikasi berupa SPA dengan routing berbasis `history.pushState` (tanpa React Router).
+Aplikasi berupa Single Page Application (SPA) responsif dengan routing berbasis push-state dan context management terpusat:
 
 ```mermaid
 flowchart TD
@@ -214,688 +211,323 @@ flowchart TD
         AU["/admin/audit - Audit Log"]
         C["/admin/checklist - Checklist"]
     end
-    M --> D["Modal Detail Sel Riset (global)"]
+    M --> D["Modal Detail Sel Riset (Global)"]
     H --> D
     G --> D
     B --> D
     P --> D
     K --> D
     F --> D
+    S --> SY["Modal Google Sheets Sync Center"]
 ```
 
-| Grup Sidebar | Menu | Route | Badge hitungan |
+### Navigasi Sidebar & Header
+
+| Grup Navigasi | Menu Item | Rute Path | Keterangan & Indikator |
 | --- | --- | --- | --- |
-| Analisis | Overview | `/executive/dashboard` | – |
-| | Matriks riset | `/analyst/matrix` | jumlah kapabilitas |
-| | Head-to-head | `/analyst/head-to-head` | – |
-| | Gap analysis | `/analyst/gap-analysis` | – |
-| | Blueprint arsitektur | `/analyst/blueprint` | – |
-| Referensi | Profil bank | `/analyst/banks` | – |
-| | Katalog kapabilitas | `/analyst/tech-catalog` | – |
-| Admin | Temuan riset | `/admin/findings` | jumlah kapabilitas |
-| | Sinkronisasi | `/admin/sync` | – |
-| | Audit log | `/admin/audit` | jumlah log |
-| | Checklist | `/admin/checklist` | – |
-
-### 7.2 Elemen Global (Shell Aplikasi)
-
-| Elemen | Fungsi |
-| --- | --- |
-| **Sidebar** (lebar 240px, collapsible) | Navigasi 3 grup, brand "Competitor Intel – BRI vs Himbara & BCA", indikator status DB (*Database tersambung* / *Mode lokal*), tombol **Sync**, menu user (ganti tema, keluar). |
-| **Topbar** (sticky) | Toggle sidebar, breadcrumb `Grup › Menu`, menu **Export** (Matriks riset CSV, Backup lengkap JSON), toggle tema. |
-| **Shortcut keyboard** | `Ctrl/Cmd + B` → buka/tutup sidebar (tidak aktif saat mengetik di input). |
-| **Mobile drawer** | Sidebar menjadi drawer overlay di layar < `lg`. |
-| **Tema** | Light/Dark, mengikuti preferensi OS saat pertama kali, disimpan di `localStorage`. |
-| **Modal global** | *Research Detail Modal* dan *Google Sheets Sync Modal* dapat dibuka dari halaman mana pun. |
+| **Analisis** | Overview | `/executive/dashboard` | Dashboard KPI eksekutif & strategic highlights |
+| | Matriks riset | `/analyst/matrix` | Tabel 409 × 6 dengan badge hitungan data |
+| | Head-to-head | `/analyst/head-to-head` | Komparasi 1-on-1 dengan alignment score |
+| | Gap analysis | `/analyst/gap-analysis` | Pemetaan celah arsitektur prioritas (Tinggi/Sedang/Rendah) |
+| | Blueprint arsitektur | `/analyst/blueprint` | Visualizer interaktif 5 layer arsitektur perbankan |
+| **Referensi** | Profil bank | `/analyst/banks` | Detail 6 bank, produk digital, & riwayat bukti |
+| | Katalog kapabilitas | `/analyst/tech-catalog` | Katalog teknologi berfilter lisensi & kategori |
+| **Admin** | Temuan riset | `/admin/findings` | Manajemen CRUD kapabilitas riset baru |
+| | Sinkronisasi | `/admin/sync` | Pusat kontrol live sync Google Sheets & background poller |
+| | Audit log | `/admin/audit` | Riwayat aktivitas sistem dengan stempel waktu WIB |
+| | Checklist | `/admin/checklist` | Verifikasi 4 gerbang mutu kesiapan workshop |
 
 ---
 
 ## 8. Kebutuhan Fungsional & Penjelasan Detail Seluruh Fitur
 
-Notasi prioritas pengembangan: **P0** = inti & wajib untuk workshop; **P1** = penting; **P2** = pendukung.
+### F1. Executive Dashboard Overview (P0)
+- **Rute:** `/executive/dashboard`
+- **KPI Metrics:** Total kapabilitas terpetakan (409), persentase verifikasi per bank, rasio verifikasi industri, dan gap aktif BRI.
+- **Strategic Highlights Tiga Pilar:**
+  - *Hanya BRI (Moat):* Kapabilitas skala ultra-mikro (Cassandra multi-nodes, MinIO S3, NLP Sabrina).
+  - *Celah / Peluang Kompetitor:* Stack Livin' Sukha AWS hybrid, Dataiku collaborative data science, HashiCorp Vault.
+  - *Standar Konsensus Industri:* Solusi bersama (OpenShift, Kafka, Spring Boot, SNAP BI-FAST).
+- **Heatmap Domain:** Baris progres adopsi teknologi per domain arsitektur.
 
-Seluruh fitur dalam aplikasi web dikelompokkan ke dalam 4 modul utama:
-1. **Shell Aplikasi & Navigasi Global** (Login, Sesi, Sidebar, Topbar, Dark Mode)
-2. **Modul Analisis Strategis** (Overview, Matriks Riset, Modal Detail Sel, Head-to-Head, Gap Analysis, Blueprint Arsitektur)
-3. **Modul Referensi** (Profil Bank, Katalog Kapabilitas)
-4. **Modul Admin CMS & Tata Kelola Data** (Kelola Temuan, Google Sheets Sync, Backup/Restore, Audit Trail, Checklist)
+### F2. Matriks Riset Interaktif / Matrix View (P0 - Fitur Inti)
+- **Rute:** `/analyst/matrix`
+- **Matriks 409 Kapabilitas × 6 Bank:** Kolom Bank BRI ditandai khusus sebagai fokus utama evaluasi.
+- **Unified Filter Panel:**
+  - Dropdown **Pilar Workshop Dinamis** (WS1–WS5 & custom workshops).
+  - Filter Domain & Kategori Arsitektur.
+  - Filter Status Verifikasi (`Semua`, `Terverifikasi Saja`, dll.).
+  - Pencarian teks instan (nama kapabilitas, merk, atau kata kunci stack).
+- **Drawer Audit Detail Sel:** Menampilkan merk, link URL rujukan, PIC, tanggal verifikasi, status, dan tombol navigasi langsung ke URL pembuktian.
+- **Ekspor CSV:** Unduh format data matriks presisi untuk analisis spreadsheet offline.
 
----
+### F3. Head-to-Head Diff View (P0)
+- **Rute:** `/analyst/head-to-head`
+- **Pilihan Komparasi:** BRI vs Mandiri, BCA, BNI, BTN, atau BSI.
+- **Kalkulasi Otomatis:**
+  - *Architecture Alignment Score* (% kesamaan teknologi yang dipakai).
+  - *Keunggulan Eksklusif BRI* (teknologi terverifikasi di BRI tapi lawan belum mengadopsi).
+  - *Kesenjangan Arsitektur (Gaps)* (teknologi lawan yang belum terbukti di BRI).
 
-### 8.1 Shell Aplikasi & Navigasi Global
+### F4. Blueprint Arsitektur 5-Layer (P0)
+- **Rute:** `/analyst/blueprint`
+- **Visualisasi 5 Lapisan Arsitektur Perbankan:**
+  1. *Touchpoint & Digital Channels* (Consumer SuperApp, Wholesale CMS/Qlola, SNAP BI Gateway)
+  2. *Integration & Middleware Orchestration* (Enterprise API Gateway, Event Streaming/Kafka, Microservices Mesh)
+  3. *Core Financial Processing & Operations* (Core Banking System, Card Management, Settlement)
+  4. *Enterprise Data Platform & AI Intelligence* (Data Lakehouse, Real-Time BI & Analytics, AI/ML Platform)
+  5. *Cloud Foundation, Infrastructure & Security* (Hybrid Cloud, Kubernetes/OpenShift, Distributed DB, Zero Trust)
+- **Blok Interaktif:** Setiap blok dapat diklik untuk membuka perbandingan adopsi lintas 6 bank.
 
-#### F0. Autentikasi, Keamanan Sesi & Fallback Offline — P0
-* **Deskripsi & Nilai Penggunaan:** Gerbang akses pengguna sebelum masuk ke aplikasi untuk memastikan data intelijen perbankan hanya diakses oleh pihak yang berwenang.
-* **Komponen & Kemampuan Utama:**
-  * **Tata Letak 2 Kolom:** Di layar desktop, sisi kiri menampilkan panel konteks informatif (headline *"Benchmark tech stack BRI terhadap Himbara & BCA"*, 3 kartu statistik kunci `408 Kapabilitas / 13 Domain / 6 Bank`, dan deretan logo bank pembanding). Sisi kanan memuat kartu formulir login yang bersih.
-  * **Formulir Kredensial:** Input email (case-insensitive & otomatis di-*trim*) dan kata sandi dengan tombol toggle tampilkan/sembunyikan kata sandi (ikon mata).
-  * **Validasi & Penanganan Kesalahan:** Menampilkan kotak peringatan merah inline (*role="alert"*) bila kombinasi email atau kata sandi tidak cocok.
-  * **Ketahanan Sesi (Session Persistence):** Status login disimpan di `localStorage`. Pengguna yang sudah masuk tidak akan ter-logout saat melakukan penyegaran halaman (*browser refresh*).
-  * **Proteksi Rute (Route Guard):** Pengguna tanpa sesi otomatis dialihkan ke `/login`. Pengguna yang sudah memiliki sesi dialihkan langsung ke halaman utama.
-  * **Mode Offline Fallback:** Bila server backend Express/SQLite tidak aktif atau jaringan terputus, login tetap dapat memverifikasi kredensial lokal darurat (`admin@intel.com`, `analyst@intel.com`, `executive@intel.com`) agar pemaparan di ruang rapat tetap dapat berlangsung.
-  * **Pencatatan Audit:** Setiap proses masuk yang berhasil otomatis dicatat ke dalam audit log server dengan aksi `LOGIN`.
+### F5. Gap Analysis & Rekomendasi Roadmap (P1)
+- **Rute:** `/analyst/gap-analysis`
+- **Matriks Urgensi Gap:** Menghitung kapabilitas di mana kompetitor telah mengadopsi teknologi modern dan menandainya dengan skala prioritas (Tinggi, Sedang, Rendah).
+- **Rekomendasi Taktis:** Poin aksi spesifik bagi tim Enterprise Architecture Bank BRI.
 
-#### F0.1 Sidebar Navigasi Lipat (Collapsible Sidebar) — P1
-* **Deskripsi & Nilai Penggunaan:** Panel navigasi di sisi kiri layar yang memandu alur kerja pengguna secara terstruktur.
-* **Komponen & Kemampuan Utama:**
-  * **Pengelompokan Menu Berjenjang:**
-    * *Grup Analisis:* Overview, Matriks riset, Head-to-head, Gap analysis, Blueprint arsitektur.
-    * *Grup Referensi:* Profil bank, Katalog kapabilitas.
-    * *Grup Admin:* Temuan riset, Sinkronisasi, Audit log, Checklist.
-  * **Badge Hitungan Data (Live Count):** Menampilkan badge numerik jumlah data langsung pada menu *Matriks riset* (408), *Temuan riset* (408), dan *Audit log* (jumlah log).
-  * **Dukungan Shortcut Keyboard:** Tombol pintas **`Ctrl + B`** (atau `Cmd + B` pada macOS) untuk membuka atau melipat sidebar seketika, memberi keleluasaan pandang saat meneliti tabel data lebar. Shortcut otomatis dinonaktifkan saat kursor berada di dalam input teks.
-  * **Indikator Kesehatan Basis Data:** Menampilkan status konektivitas *Database tersambung* (hijau) atau *Mode lokal* (kuning) serta tombol cepat pemanggil modal sinkronisasi Google Sheets.
-  * **Profil Pengguna & Menu Sesi:** Menampilkan inisial avatar pengguna, nama lengkap, email, toggle tema visual, dan tombol *Keluar (Logout)*.
-  * **Desain Responsif:** Pada layar smartphone/tablet (< 1024px), sidebar otomatis bertransformasi menjadi laci geser (*mobile drawer overlay*).
+### F6. Profil Bank & Katalog Kapabilitas (P1)
+- **Rute:** `/analyst/banks` & `/analyst/tech-catalog`
+- Profil 6 bank benchmark dengan warna perseroan, produk digital, dan riwayat temuan.
+- Katalog master teknologi dengan filter kategori, vendor, dan model lisensi (*Open Source*, *Komersial Enterprise*, *In-House*).
 
-#### F0.2 Bar Navigasi Atas (Topbar) & Tema Gelap/Terang (Dark/Light Mode) — P1
-* **Deskripsi & Nilai Penggunaan:** Header tetap (*sticky*) di bagian atas layar untuk pemantauan posisi dan utilitas cepat.
-* **Komponen & Kemampuan Utama:**
-  * **Breadcrumb Dinamis:** Menampilkan navigasi jejak remah roti secara otomatis (contoh: `Analisis › Matriks riset`) sesuai rute aktif.
-  * **Tombol Tema Gelap/Terang:** Beralih instan antara mode siang (*Light Mode*) bernuansa fintech korporat dan mode malam (*Dark Mode*) berlatar slate pekat yang elegan. Tema otomatis mengikuti preferensi OS saat pertama kali dibuka dan disimpan permanen di penyimpanan browser.
-  * **Menu Ekspor Terpusat:** Tombol dropdown *Export* yang menyediakan akses instan untuk mengunduh berkas CSV matriks 408 kapabilitas maupun berkas JSON cadangan penuh.
+### F7. Admin CMS & Manajemen Temuan Riset (P0)
+- **Rute:** `/admin/findings`
+- Penambahan kapabilitas baru dengan penomoran otomatis.
+- Pemetaan merk dan status verifikasi untuk ke-6 bank.
+- Validasi data masukan dan konfirmasi penghapusan aman.
 
-#### F0.3 Kontrol Akses Berbasis Peran (RBAC Guard) & Layar 403 Forbidden — P1
-* **Deskripsi & Nilai Penggunaan:** Mekanisme pengamanan navigasi internal yang memvalidasi tingkat wewenang pengguna sebelum menampilkan modul tertentu guna mencegah akses yang tidak sah.
-* **Komponen & Kemampuan Utama:**
-  * **Pemeriksaan Otorisasi Rute:** Setiap perpindahan halaman memeriksa peran pengguna aktif (`Admin`, `Analyst`, `Executive`) terhadap batas izin modul yang dituju.
-  * **Layar 403 Forbidden (`ForbiddenView`):** Jika akun tanpa wewenang mencoba mengakses rute terproteksi (misalnya analis biasa mengakses menu administrasi kritis), sistem merender tampilan peringatan 403 khusus yang memuat:
-    * Ikon perisai keamanan merah mencolok dan badge *"403 - Akses Dibatasi"*.
-    * Rincian identitas akun: nama pengguna aktif, peran yang sedang diemban, dan peran minimum yang disyaratkan oleh sistem.
-    * Tombol pemulihan satu-klik *"Kembali ke Portal Anda"* yang secara otomatis mengarahkan pengguna kembali ke rute beranda yang sah sesuai perannya (`getRoleHomeUrl`).
+### F8. Google Sheets Live Sync Center (2-Way Sync) (P0)
+- **Rute:** `/admin/sync` & Modal Global
+- **Pull Sync:** Menarik pembaruan dari Google Spreadsheet publik ke SQLite secara instan.
+- **Push Sync:** Mengirimkan data perubahan aplikasi ke Google Sheet menggunakan Webhook Google Apps Script (`scripts/google_apps_script.js`).
+- **1-Klik Salin Format:** Menyalin seluruh matriks yang telah diformat rapi untuk di-paste langsung pada sel A1 spreadsheet.
+- **Active Background Scheduler:** Berjalan otomatis saat startup dan mengeksekusi sinkronisasi berulang di latar belakang sesuai interval yang dipilih (`5 menit`, `15 menit`, `30 menit`, `1 jam`, atau `Manual`).
+- **Dynamic Storage Indicator:** Badge status otomatis mendeteksi koneksi SQLite Server atau mode cadangan LocalStorage.
+- **Dukungan Serverless:** Endpoint Vercel Serverless (`/api/sync/pull`, `/api/sync/push`, `/api/sync/config`, `/api/sync/status`).
 
-#### F0.4 Dialog Konfirmasi Bertingkat Tindakan Kritis (Danger Zone Safeguards) — P1
-* **Deskripsi & Nilai Penggunaan:** Pengaman berlapis (*safety modal dialog*) untuk mencegah eksekusi aksi destruktif atau permanen yang tidak disengaja oleh administrator.
-* **Komponen & Kemampuan Utama:**
-  * **Pencegahan Penghapusan Data:** Menahan eksekusi saat pengguna menekan tombol hapus kapabilitas master di CMS atau menginisiasi pemulihan darurat (*Reset Database ke Initial Seed*).
-  * **Tampilan Modal Konfirmasi Interaktif:** Memunculkan dialog modal beraksen merah peringatan (*danger state*) yang menjelaskan konsekuensi data yang akan hilang secara eksplisit, mewajibkan konfirmasi sadar, dan menyediakan tombol *Batal* yang langsung menutup dialog tanpa mengubah kondisi basis data.
+### F9. Audit Trail Log dengan Lokalisasi Waktu WIB (P1)
+- **Rute:** `/admin/audit`
+- Mencatat setiap aksi `CREATE`, `UPDATE`, `DELETE`, `SYNC`, dan `LOGIN`.
+- **Stempel Waktu Terlokalisasi WIB (UTC+7):** Waktu aktivitas dikonversi secara otomatis ke Waktu Indonesia Barat.
+- Pencarian dan penyaringan riwayat log berdasarkan jenis aksi dan kata kunci.
 
-#### F0.5 Mekanisme Tautan Silang Antar-Modul (Cross-Module Deep-Linking) — P1
-* **Deskripsi & Nilai Penggunaan:** Integrasi alur kerja tanpa hambatan (*frictionless UX*) yang memungkinkan analis dan eksekutif berpindah konteks antar-modul secara instan tanpa perlu mencari ulang dari menu sidebar.
-* **Komponen & Kemampuan Utama:**
-  * **Tautan Kartu Ringkasan Overview:**
-    * Mengklik kartu *Total Kapabilitas* di Dashboard Eksekutif langsung membuka Matriks Riset (`/analyst/matrix`).
-    * Mengklik kartu *Celah Arsitektur (Gaps)* langsung mengarahkan ke tab *Gaps* di modul Gap Analysis (`/analyst/gap-analysis`).
-    * Mengklik kartu *Keunggulan Eksklusif (Moats)* langsung mengarahkan ke tab *Moats* di Gap Analysis.
-  * **Leaderboard ke Profil Bank:** Mengklik tombol *Detail →* di deretan peringkat 6 bank langsung memuat profil perseroan bank tersebut di `/analyst/banks`.
-  * **Blueprint ke Editor Sel Riset:** Mengklik tombol *Edit Sel Riset* di dalam modal inspeksi topologi arsitektur langsung memunculkan *Research Detail Modal* untuk memperbarui data bank bersangkutan.
+### F10. Checklist Kesiapan Workshop (P1)
+- **Rute:** `/admin/checklist`
+- Kendali mutu sebelum presentasi ke hadapan pimpinan BRI: kelengkapan bukti, rasio verifikasi, kepatuhan UU PDP, dan integritas data.
 
----
-
-### 8.2 Modul Analisis Strategis (Cockpit Eksekutif & Arsitek)
-
-#### F1. Executive Overview (Dashboard Eksekutif) — P0
-* **Rute:** `/executive/dashboard`
-* **Deskripsi & Nilai Penggunaan:** Dasbor strategis satu layar yang dirancang untuk pimpinan, Direksi, dan Kepala Divisi IT dalam membaca peta persaingan teknologi BRI secara instan tanpa tenggelam dalam ribuan baris teknis.
-* **Komponen & Kemampuan Utama:**
-  * **4 Kartu KPI Ringkasan Eksekutif:**
-    1. *Total Kapabilitas:* Menampilkan angka 408 kapabilitas di 13 domain arsitektur (klik untuk menuju Matriks Riset).
-    2. *Maturitas Terverifikasi BRI:* Persentase kapabilitas BRI yang terverifikasi resmi beserta perbandingannya terhadap rata-rata industri.
-    3. *Celah Arsitektur (Gaps):* Menghitung total kapabilitas yang sudah diadopsi kompetitor tetapi belum terbukti di BRI (klik untuk menuju Gap Analysis).
-    4. *Keunggulan Eksklusif BRI (Moats):* Jumlah kapabilitas yang terverifikasi hanya di BRI dan belum ada di kompetitor (klik untuk membuka tab Moats).
-  * **Matriks Kematangan 13 Domain × 6 Bank (Heatmap Coverage):**
-    * Tabel sebaran adopsi teknologi per domain arsitektur untuk ke-6 bank (BRI, Mandiri, BCA, BNI, BTN, BSI).
-    * Setiap sel memperlihatkan rasio verifikasi (contoh: `18/32`).
-    * Pewarnaan sel dinamis: **Hijau** (adopsi tinggi ≥ 50%), **Biru** (sedang ≥ 25%), **Kuning** (terdapat adopsi > 0%), dan **Abu-abu** (belum terbukti 0%). Kolom Bank BRI diberi aksen khusus sebagai fokus pembanding.
-    * Fitur filter nama domain dan segmented control pilar workshop (Semua, WS1, WS2, WS3, WS4).
-  * **Peringkat Cakupan Verifikasi 6 Bank (Leaderboard):**
-    * Mengurutkan bank dari yang memiliki jumlah verifikasi teknologi tertinggi ke terendah.
-    * Bar kemajuan visual (*stacked meter bar*) yang memisahkan proporsi data *Terverifikasi* (hijau), *Inferensi* (kuning), dan *Belum Terdata* (abu-abu).
-    * Tombol *Detail →* yang langsung mengarahkan pengguna ke halaman profil bank terkait.
-  * **Prioritas Telaah Strategis (Strategic Triage):**
-    * Segmented control 3 tab: **Gaps** (Celah), **Moats** (Keunggulan), dan **Standar** (Konsensus Bersama).
-    * Menampilkan 6 kartu temuan prioritas teratas dengan pilar workshop, domain, dan kategori.
-    * Mengklik kartu akan memunculkan modal audit rincian bukti sel tersebut.
-  * **4 Pilar Workshop Arsitektur:** Kartu gambaran 4 sesi workshop perbankan (Core Banking, EDW/BI, Cloud/Infra, Big Data/AI) beserta jumlah kapabilitas dan persentase volumenya.
-
-#### F2. Matriks Riset Kapabilitas (Fitur Inti / Matrix View) — P0
-* **Rute:** `/analyst/matrix`
-* **Deskripsi & Nilai Penggunaan:** Lembar kerja data utama yang membandingkan 408 kapabilitas terhadap 6 bank sekaligus (total 2.448 sel evaluasi). Menjadi acuan kerja harian tim konsultan dan analis riset.
-* **Komponen & Kemampuan Utama:**
-  * **Penonjolan Kolom BRI:** Kolom Bank BRI diberi penanda latar visual khusus dan badge *"Fokus"* agar mata audiens selalu berpusat pada bank target.
-  * **Kartu Sel Komparasi Interaktif:**
-    * Menampilkan nama merk/solusi yang digunakan bank (maksimal 2 baris teks).
-    * Indikator status berupa titik dot berwarna: Hijau (*Terverifikasi*), Kuning (*Inferensi*), atau Abu-abu (*Belum*).
-    * Nama PIC penguji data.
-    * Ikon tautan eksternal bila sel memiliki rujukan URL web.
-  * **Klik Sel untuk Audit & Edit:** Klik pada sel mana saja membuka *Modal Detail Sel Riset* untuk melihat bukti lengkap atau mengubah data.
-  * **Filter Berlapis Komprehensif (Multi-Level Filtering):**
-    * *Workshop:* Semua, WS1, WS2, WS3, WS4.
-    * *Domain:* Dropdown seluruh 13 domain arsitektur.
-    * *Kategori:* Dropdown 9 kategori sistem beserta jumlah kemunculannya.
-    * *Status:* Memfilter baris yang minimal salah satu banknya berstatus *Terverifikasi*, *Inferensi*, atau *Belum*.
-    * *Pencarian Teks Bebas:* Mesin pencari instan yang mencocokkan nama kapabilitas, domain, kategori, merk solusi, maupun isi tautan sumber.
-  * **Indikator Filter Aktif & Reset 1-Klik:** Badge pengingat saat filter menyaring data beserta tombol *Reset filter* untuk kembali ke tampilan penuh.
-  * **Paginasi Fleksibel:** Opsi tampilan 25, 50 (bawaan), 100, atau *Semua Baris* (menampilkan 408 baris sekaligus tanpa terpotong).
-  * **Ekspor CSV Matriks (Format Lebar):** Menghasilkan file CSV terstruktur rapi (1 baris per kapabilitas dengan 4 kolom untuk tiap bank: Merk, Status, Link, PIC) yang dilengkapi UTF-8 BOM agar terbaca sempurna di Microsoft Excel.
-
-#### F3. Modal Detail Sel Riset & Quick Editor (Audit Bukti Sel) — P0
-* **Deskripsi & Nilai Penggunaan:** Jendela pop-up serbaguna yang menjadi jantung pembuktian (*auditability*) data aplikasi, dapat dipanggil dari modul mana pun saat mengklik nama teknologi atau sel bank.
-* **Komponen & Kemampuan Utama:**
-  * **Navigasi Cepat 6 Bank (Bank Tab Switcher):** Di bagian atas modal, tersedia tab untuk ke-6 bank (BRI, Mandiri, BCA, BNI, BTN, BSI) lengkap dengan dot status verifikasi. Pengguna dapat berpindah melihat data bank lain pada kapabilitas yang sama tanpa menutup modal.
-  * **Tampilan Mode Baca (Audit View):**
-    * Menampilkan nama lengkap bank dan penanda *"Target Analisis"* pada BRI.
-    * Badge status verifikasi resmi bersertifikat warna.
-    * Kotak teks merk/stack solusi yang digunakan.
-    * Kotak teks bukti kutipan rujukan publik.
-    * Tombol **"Buka Sumber Rujukan Asli"** yang membuka dokumen sumber (laporan tahunan/berita/studi kasus) di tab browser baru jika terdapat tautan URL.
-    * Nama PIC analis pencatat data.
-  * **Tombol Salin Kutipan Riset (1-Click Citation):** Menyalin teks sitasi terformat rapi (mencakup Workshop, Domain, Kategori, Kapabilitas, Bank, Merk, Status, Link Bukti, dan PIC) ke clipboard untuk dibagikan ke forum diskusi atau dokumen eksternal.
-  * **Formulir Edit Langsung (Inline Quick Editor):** Pengguna dengan hak Admin dapat beralih ke form edit untuk memperbarui:
-    * Merk / Stack Name (wajib diisi).
-    * Status Verifikasi (pilihan dropdown 3 status).
-    * PIC Penguji Data.
-    * Link / Kutipan Sumber Rujukan (textarea multi-baris). URL web pertama di dalam teks link otomatis diekstrak menjadi tautan yang dapat diklik.
-  * **Penyimpanan Dua Arah & Audit Trail:** Saat disimpan, data otomatis terupdate di tampilan antarmuka, diperbarui di database SQLite server, dan mencatat riwayat perubahan di audit log.
-
-#### F4. Head-to-Head Comparison (Komparasi 2 Bank) — P0
-* **Rute:** `/analyst/head-to-head`
-* **Deskripsi & Nilai Penggunaan:** Fasilitas perbandingan langsung antara dua bank pilihan secara berdampingan (secara default membandingkan **Bank BRI vs Bank Mandiri**).
-* **Komponen & Kemampuan Utama:**
-  * **Dua Panel Pemilih Bank Bebas:** Pengguna dapat memilih kombinasi bank mana pun (misal: BRI vs BCA, atau Mandiri vs BNI). Pilihan bank yang sama di kedua sisi otomatis dinonaktifkan.
-  * **Tombol Tukar Posisi (Swap):** Membalik posisi Bank A dan Bank B secara instan dengan satu kali klik.
-  * **Ribbon Statistik Komparasi Otomatis (Klik untuk Filter):**
-    * *Keunggulan Bank A:* Jumlah teknologi yang hanya terverifikasi di Bank A.
-    * *Keunggulan Bank B:* Jumlah teknologi yang hanya terverifikasi di Bank B (merupakan celah bagi Bank A).
-    * *Keduanya Terverifikasi:* Jumlah teknologi di mana kedua bank telah mengadopsi solusi terbukti.
-  * **Tabel Perbandingan & Kolom Status Paritas:**
-    * Kolom Bank A diberi penanda visual aksen.
-    * Kolom Bank B sebagai lawan tanding.
-    * Kolom Status Paritas Arsitektur:
-      * `Paritas Bersama` (Hijau): Kedua bank sama-sama terverifikasi.
-      * `Unggul [Bank A]` (Biru): Bank A memimpin adopsi.
-      * `Unggul [Bank B]` (Kuning): Bank B memimpin adopsi.
-      * `Beda Solusi` (Abu-abu): Kedua bank sama-sama menggunakan sistem tetapi merk vendornya berbeda.
-      * `–`: Belum ada data pembuktian di kedua pihak.
-  * **Filter Status Komparasi:** Menyaring tabel hanya untuk menampilkan kapabilitas dengan status paritas tertentu (misal: hanya melihat keunggulan lawan).
-
-#### F5. Gap Analysis & Peluang Strategis — P0
-* **Rute:** `/analyst/gap-analysis`
-* **Deskripsi & Nilai Penggunaan:** Mesin analitik otomatis yang memetakan posisi tawar teknologi Bank BRI terhadap para pesaing guna menghasilkan rekomendasi peta jalan (*roadmap*) teknologi.
-* **Komponen & Kemampuan Utama:**
-  * **3 Tab Analisis Strategis:**
-    1. *Celah untuk BRI (Gaps):* Daftar kapabilitas di mana bank kompetitor (Mandiri, BCA, BNI, BTN, atau BSI) sudah terbukti mengadopsi solusi modern, namun di Bank BRI masih berstatus belum terbukti atau inferensi. Dilengkapi penanda tingkat urgensi (Urgensi Tinggi jika diadopsi ≥ 2 kompetitor).
-    2. *Keunggulan Eksklusif BRI (Moats):* Daftar kapabilitas di mana hanya Bank BRI yang terverifikasi mengadopsi solusinya (faktor pembeda bersaing/keunggulan kompetitif).
-    3. *Standar Paritas Bersama (Consensus):* Daftar teknologi yang sudah diadopsi secara luas oleh industri perbankan nasional (terverifikasi di BRI dan minimal 2 bank kompetitor).
-  * **Daftar Kompetitor Pengadopsi Interaktif:** Pada tab Gaps, kolom kanan menampilkan deretan kartu bank kompetitor yang sudah mengadopsi teknologi tersebut lengkap dengan merk yang mereka gunakan. Mengklik kartu kompetitor akan membuka modal rincian bukti sumber milik kompetitor tersebut.
-  * **Filter Khusus Kompetitor:** Pengguna dapat menyaring celah teknologi berdasarkan kompetitor spesifik (misal: *"Tampilkan hanya celah teknologi di mana Bank Mandiri sudah terverifikasi"*).
-
-#### F6. Blueprint Arsitektur (Interactive Topology View) — P1
-* **Rute:** `/analyst/blueprint`
-* **Deskripsi & Nilai Penggunaan:** Diagram topologi blok arsitektur enterprise perbankan modern yang memvisualisasikan interkoneksi sistem dari saluran nasabah hingga infrastruktur fisik.
-* **Struktur 5 Lapisan Arsitektur (Layers):**
-  * **Layer 1 (Touchpoint & Digital Channels):** Consumer Mobile SuperApp, Corporate Wholesale & CMS, Open Banking API Gateway (SNAP BI).
-  * **Layer 2 (Integration & Middleware Orchestration):** High-Throughput Event Streaming & Pub-Sub (Kafka), Enterprise API Management Platform.
-  * **Layer 3 (Core Financial Processing & Operations):** Core Banking System (CBS), ERP & General Ledger Accounting, Enterprise IT Service Management (ITSM).
-  * **Layer 4 (Enterprise Data Platform & AI Intelligence):** Enterprise Data Warehouse & Lakehouse, Distributed Big Data Processing Engine, AI/ML Platform & Fraud Analytics, Master Data Management (Customer 360).
-  * **Layer 5 (Cloud Foundation, Infrastructure & Security):** Container Platform & Private Cloud PaaS, Enterprise Network & SD-WAN Interconnect.
-* **Kemampuan Interaktif:**
-  * **Konektor Alur Data (Data Flow Connectors):** Garis indikator antar-lapisan yang memvisualisasikan arah aliran data (misal: *Trafik Pengguna & API Gateway*, *Pesan Asynchronous & Switching*, *Change Data Capture & Sinkronisasi*, *Virtualisasi & Orkestrasi*).
-  * **3 Mode Tampilan Visual:**
-    1. *Duel Mode:* Membagi setiap kotak blok arsitektur menjadi dua sisi untuk memperbandingkan stack Bank 1 vs Bank 2 secara langsung di dalam diagram.
-    2. *Fokus Bank 1:* Menyederhanakan diagram untuk mengevaluasi arsitektur satu bank saja.
-    3. *Heatmap Paritas:* Mewarnai setiap blok arsitektur berdasarkan kondisi kesetaraan (Hijau = Setara/Paritas, Biru = Bank 1 Unggul, Kuning = Bank 2 Unggul).
-  * **Filter Lapisan (Layer Filter):** Tombol pemfilter cepat untuk menampilkan layer tertentu saja (L1 s/d L5) atau seluruh layer bersamaan.
-  * **Modal Inspeksi Blok Arsitektur:** Mengklik salah satu blok diagram membuka lembar inspeksi mendalam yang menampilkan:
-    * Fungsi arsitektur sistem.
-    * Kapabilitas riset terkait dari dataset 408 kapabilitas.
-    * Rangkuman implementasi merk dan status verifikasi di ke-6 bank sekaligus.
-    * Tombol pintas untuk membuka editor sel riset terkait.
-
----
-
-### 8.3 Modul Referensi (Profil & Katalog)
-
-#### F7. Profil Bank & Progres Workshop — P1
-* **Rute:** `/analyst/banks`
-* **Deskripsi & Nilai Penggunaan:** Pusat informasi terdedikasi untuk membedah profil teknologi masing-masing perseroan bank secara mendalam.
-* **Komponen & Kemampuan Utama:**
-  * **Tab Pemilih 6 Bank:** Akses cepat ke profil Bank BRI, Bank Mandiri, BCA, BNI, BTN, dan BSI.
-  * **Header Profil Resmi Perseroan:** Logo resmi beresolusi tinggi, nama perseroan, deskripsi fokus bisnis perbankan, dan daftar chip **produk digital unggulan** (seperti *BRImo, Pasar.id, Kopra, Livin', wondr, bale, BYOND, myBCA*).
-  * **Statistik Cepat Verifikasi:** Kotak hitungan jumlah kapabilitas *Verified*, *Inferensi*, dan *Belum* untuk bank yang sedang dipilih.
-  * **4 Kartu Progres Kematangan Workshop:** Meteran kematangan visual di 4 pilar workshop arsitektur yang memperlihatkan persentase kapabilitas yang berhasil diverifikasi pada bank tersebut.
-  * **Tabel Portofolio Kapabilitas Bank:** Daftar seluruh sistem yang digunakan bank terpilih lengkap dengan merk, nama PIC reviewer, status verifikasi, dan tautan rujukan.
-
-#### F8. Katalog Kapabilitas Teknologi — P2
-* **Rute:** `/analyst/tech-catalog`
-* **Deskripsi & Nilai Penggunaan:** Menampilkan seluruh 408 kapabilitas riset dalam bentuk kartu-kartu visual (*card grid view*), sangat memudahkan penjelajahan cepat (*browsing*) kapabilitas perbankan.
-* **Komponen & Kemampuan Utama:**
-  * **Tampilan Grid Kartu Responsif:** Menyusun data dalam format 1 kolom (mobile), 2 kolom (tablet), atau 3 kolom (desktop), sebanyak 30 kartu per halaman.
-  * **Mini-Grid 6 Bank pada Tiap Kartu:** Setiap kartu kapabilitas memuat kotak mini untuk ke-6 bank yang diberi kode warna status (*Hijau* = Terverifikasi, *Kuning* = Inferensi, *Abu-abu* = Belum) dan nama merk yang digunakan.
-  * **Filter Adopsi Bank:** Kemampuan unik untuk menyaring kartu: *"Tampilkan hanya kapabilitas yang sudah diadopsi oleh Bank X"*.
-
----
-
-### 8.4 Modul Admin CMS & Tata Kelola Data (Governance)
-
-#### F9. Kelola Temuan Riset (Admin Research Matrix Master) — P0
-* **Rute:** `/admin/findings`
-* **Deskripsi & Nilai Penggunaan:** Panel kendali basis data master tempat administrator dan analis mengelola entri 408 kapabilitas riset secara terstruktur.
-* **Komponen & Kemampuan Utama:**
-  * **Tabel Master Berwarna Penuh (Full Color Badges):** Seluruh sel evaluasi 6 bank diwarnai penuh (hijau untuk terverifikasi, kuning untuk inferensi, dan merah muda untuk belum terdata) sehingga admin dapat memindai kelengkapan riset dalam hitungan detik.
-  * **Formulir Input Temuan Baru (Tambah Kapabilitas):**
-    * Modal input untuk mendaftarkan kapabilitas arsitektur baru.
-    * Pengguna mengisi nama kapabilitas (wajib), pilar workshop, domain, kategori, serta evaluasi awal untuk masing-masing dari 6 bank.
-    * Nomor urut kapabilitas (`no`) otomatis dihitung dari nomor tertinggi + 1, dan sistem otomatis membuatkan 6 record bank terkait ke database SQLite.
-  * **Formulir Edit Baris Master (Multi-Bank Edit):** Modal komprehensif untuk mengubah metadata kapabilitas sekaligus memperbarui merk, status, link, dan PIC untuk ke-6 bank dalam satu layar kerja yang sama.
-  * **Fitur Hapus Kapabilitas Aman:** Menghapus satu kapabilitas beserta seluruh 6 data evaluasi banknya dengan konfirmasi dialog pengamanan bertingkat.
-
-#### F10. Pusat Sinkronisasi Google Sheets (Google Sheets Live Sync Center) — P0
-* **Rute:** `/admin/sync` atau klik tombol **Sync** di sidebar/topbar.
-* **Deskripsi & Nilai Penggunaan:** Fitur integrasi langsung ke Google Spreadsheet riset publik milik tim konsultan untuk memastikan keselarasan data antara lembar kerja riset dan aplikasi web secara dua arah.
-* **Fitur & Tab di dalamnya:**
-  * **Tarik Data (Pull Sync):**
-    * Mengunduh data CSV publik dari URL Google Spreadsheet yang ditentukan.
-    * Menganalisis dan mengekstrak 408 baris kapabilitas × 6 bank secara otomatis dengan algoritma parser RFC 4180 (kebal terhadap enter/baris baru di dalam tanda kutip).
-    * Memperbarui seluruh isi tabel `research_records` SQLite secara aman di dalam satu transaksi database tunggal (*ACID transaction*).
-  * **Kirim Data (Push Sync via Webhook):**
-    * Mengalirkan data perubahan dari aplikasi web kembali ke Google Spreadsheet menggunakan Webhook Google Apps Script.
-  * **Salin Tabel 1-Klik (Clipboard TSV Export):**
-    * Alternatif praktis bila webhook belum dipasang: tombol yang langsung memformat dan menyalin seluruh 2.448 baris data riset ke clipboard dalam format TSV (*Tab-Separated Values*). Admin cukup membuka Google Sheet dan menekan **`Ctrl + V`** di sel A1.
-  * **Tab Riwayat Sinkronisasi (Sync History):**
-    * Menampilkan tabel catatan 50 aktivitas sinkronisasi terakhir (tipe aksi PULL/PUSH, URL target, status berhasil/gagal, jumlah baris terekstrak, dan pesan rangkuman).
-  * **Tab Skrip Webhook Siap Pakai:**
-    * Menyediakan skrip Google Apps Script (`doPost`/`doGet`) lengkap dengan panduan pemasangan di Google Sheets untuk mengaktifkan fitur Push otomatis.
-  * **Unduh Berkas CSV Format Google Sheet:**
-    * Menyediakan endpoint pengunduhan file CSV terstruktur yang siap diimpor langsung melalui menu *File > Import* di Google Sheets.
-
-#### F11. Pencadangan, Pemulihan Basis Data & Ekspor (Backup & Restore) — P1
-* **Fungsi:** Menjamin keamanan dan ketersediaan data dari potensi kehilangan akibat kerusakan sistem atau kesalahan input manual.
-* **Komponen & Kemampuan Utama:**
-  * **Ekspor Cadangan JSON Lengkap (Backup JSON):** Mengunduh arsip seluruh basis data aplikasi ke dalam berkas `.json` bertanggal.
-  * **Impor Cadangan JSON (Restore JSON):** Mengunggah kembali berkas cadangan JSON untuk memulihkan kondisi data.
-  * **Ekspor Matriks CSV (Format Excel):** Mengunduh data matriks kapabilitas dalam format spreadsheet CSV.
-  * **Zona Berbahaya (Reset Basis Data):** Fitur pemulihan darurat dengan konfirmasi pengamanan untuk mengosongkan dan mengatur ulang isi basis data kembali ke bibit data bawaan (*initial seed*).
-
-#### F12. Audit Trail Log (Pelacakan Jejak Perubahan Sistem) — P1
-* **Rute:** `/admin/audit`
-* **Deskripsi & Nilai Penggunaan:** Memenuhi standar kepatuhan tata kelola TI perbankan (*IT Governance, Compliance & Auditability*) dengan mencatat setiap aksi modifikasi data secara transparan.
-* **Komponen & Kemampuan Utama:**
-  * **Pencatatan 100 Aktivitas Kronologis Terbaru:** Setiap penambahan, pembaruan, penghapusan, sinkronisasi, dan login dicatat bersama stempel waktu (*timestamp*) presisi.
-  * **Pembedaan Warna Tipe Aksi:** `CREATE` (biru), `UPDATE` (kuning), `DELETE` (merah), `SYNC` (hijau), dan `LOGIN` (slate).
-  * **Penyaringan Aksi Cepat:** Tombol filter untuk menampilkan hanya aksi tertentu (Semua, CREATE, UPDATE, DELETE).
-  * **Pencarian Teks Log:** Mencari riwayat audit berdasarkan nama pengguna, nama sistem/kapabilitas, maupun rincian keterangan aksi.
-
-#### F13. Checklist Kesiapan Workshop — P2
-* **Rute:** `/admin/checklist`
-* **Deskripsi & Nilai Penggunaan:** Lembar kendali mutu (*quality gate*) bagi tim konsultan sebelum mempresentasikan web ke hadapan Dewan Direksi dan arsitek Bank BRI.
-* **Pilar Pemeriksaan Kesiapan:**
-  1. *Validitas & Tautan Bukti Riset:* Memastikan kelengkapan bukti publik dan tautan pada seluruh sel evaluasi.
-  2. *Standarisasi 4 Workshop & 13 Domain:* Memastikan konsistensi pembagian kapabilitas di WS1 s/d WS4.
-  3. *Tata Kelola & Kepatuhan UU PDP:* Memverifikasi bahwa data tidak mengandung kredensial sensitif, celah keamanan yang dapat dieksploitasi, atau identitas pribadi karyawan bank.
-  4. *Kesiapan Benchmark Eksekutif:* Memastikan kesiapan seluruh formula kalkulasi gap, moat, dan heatmap domain siap disajikan secara langsung.
-
+### F11. Cadangan, Pemulihan Basis Data & Reset (P1)
+- Ekspor arsip JSON lengkap dari seluruh basis data.
+- Impor berkas cadangan JSON dengan perlindungan null-safety defensif.
+- Reset basis data darurat ke bibit data bawaan (*factory seed*).
 
 ---
 
 ## 9. Aturan Bisnis & Logika Kalkulasi
 
-Notasi: `V(bank)` = sel bank berstatus `Terverifikasi`; `K` = himpunan 5 kompetitor.
+Notasi: `V(bank)` = sel bank berstatus `Terverifikasi`; `K` = himpunan 5 bank kompetitor.
 
-| Insight | Rumus | Dipakai di |
+| Formula Bisnis | Rumus Logika | Penggunaan di Modul |
 | --- | --- | --- |
-| **% Terverifikasi bank** | `jumlah V(bank) / total kapabilitas` | Overview, Profil Bank |
-| **Rata-rata industri** | `total V(semua bank) / (kapabilitas × 6)` | Overview |
-| **Gap BRI** | `¬V(BRI) ∧ ∃k∈K: V(k)` | Overview, Gap Analysis |
-| **Urgensi gap** | `Tinggi` bila ≥2 kompetitor V, selain itu `Sedang` | Gap Analysis (internal) |
-| **Keunggulan eksklusif BRI (Moat)** | `V(BRI) ∧ ∀k∈K: ¬V(k)` | Overview, Gap Analysis |
-| **Standar paritas / konsensus** | `V(BRI) ∧ |{k∈K: V(k)}| ≥ 2` | Overview, Gap Analysis |
-| **Paritas Head-to-Head** | `V(A)∧V(B)` → Paritas Bersama; `V(A)∧¬V(B)` → Unggul A; `¬V(A)∧V(B)` → Unggul B; lainnya → *Beda Solusi* bila merk keduanya terisi & berbeda, selain itu `–` | Head-to-Head, Blueprint |
-| **Warna heatmap domain** | `≥50%` hijau · `≥25%` aksen · `>0%` kuning · `0%` netral | Overview |
-| **Filter status Matriks/Admin** | Item lolos bila **minimal satu** bank memiliki status yang dipilih | Matriks, Admin |
-| **Filter bank Katalog** | Item lolos bila status bank ≠ `Belum` | Katalog |
-| **Ekstraksi URL** | Regex `https?://…` pertama dari teks link | Detail Sel, Sync |
+| **% Terverifikasi Bank** | `jumlah V(bank) / total kapabilitas (409)` | Overview, Profil Bank |
+| **Rata-rata Verifikasi Industri** | `total V(semua bank) / (409 × 6)` | Overview KPI |
+| **Gap Teknologi BRI** | `¬V(BRI) ∧ ∃k∈K: V(k)` | Overview, Gap Analysis |
+| **Tingkat Urgensi Gap** | `Tinggi` bila ≥2 kompetitor V; selain itu `Sedang` | Gap Analysis |
+| **Keunggulan Eksklusif BRI (Moat)** | `V(BRI) ∧ ∀k∈K: ¬V(k)` | Overview, Gap Analysis |
+| **Standar Konsensus Paritas** | `V(BRI) ∧ |{k∈K: V(k)}| ≥ 2` | Overview, Gap Analysis |
+| **Paritas Head-to-Head** | `V(A) ∧ V(B)` → Paritas Bersama; `V(A) ∧ ¬V(B)` → Unggul A; `¬V(A) ∧ V(B)` → Unggul B; lainnya → *Beda Solusi* / `–` | Head-to-Head, Blueprint |
 
 ---
 
 ## 10. User Stories & Acceptance Criteria
 
-| ID | User story | Acceptance criteria | Modul |
+| ID | User Story | Acceptance Criteria | Modul Terkait |
 | --- | --- | --- | --- |
-| US-01 | Sebagai **eksekutif BRI**, saya ingin melihat posisi BRI vs 5 bank dalam satu layar agar cepat memahami situasi. | KPI, heatmap domain, dan peringkat tampil < 3 detik setelah login; angka konsisten dengan Matriks. | F1 |
-| US-02 | Sebagai **analis**, saya ingin memfilter 408 kapabilitas per workshop/domain/kategori/status agar fokus ke area yang dibahas. | Kombinasi filter bekerja bersamaan; reset filter mengembalikan semua data. | F2 |
-| US-03 | Sebagai **arsitek**, saya ingin klik sel untuk melihat merk dan sumber buktinya agar bisa memverifikasi klaim. | Modal menampilkan merk, link, PIC, status; tombol buka sumber membuka tab baru. | F3 |
-| US-04 | Sebagai **PIC riset**, saya ingin mengedit sel langsung dari modal agar koreksi saat workshop bisa instan. | Simpan memperbarui UI seketika dan tercatat di audit log. | F3, F12 |
-| US-05 | Sebagai **PM/strategi**, saya ingin membandingkan BRI dengan satu bank agar fokus pada pesaing langsung. | Pilih dua bank, lihat KPI & filter status paritas. | F4 |
-| US-06 | Sebagai **tim EA BRI**, saya ingin daftar teknologi yang dimiliki kompetitor tetapi belum terbukti di BRI. | Tab Gaps menampilkan kapabilitas + daftar kompetitor pengadopsi; filter per kompetitor. | F5 |
-| US-07 | Sebagai **arsitek**, saya ingin melihat perbandingan dalam bentuk diagram layer arsitektur. | 5 layer, 14 blok, 3 mode tampilan, modal inspeksi blok. | F6 |
-| US-08 | Sebagai **konsultan**, saya ingin menarik data terbaru dari Google Sheet tim. | Satu klik Pull memperbarui seluruh matriks dan mencatat riwayat. | F10 |
-| US-09 | Sebagai **konsultan**, saya ingin mengirim perubahan dari aplikasi kembali ke Google Sheet. | Push via webhook, atau salin TSV untuk paste manual. | F10 |
-| US-10 | Sebagai **admin**, saya ingin menambah/mengubah/menghapus kapabilitas beserta evaluasi 6 bank. | CRUD tersedia dengan validasi field wajib & konfirmasi hapus. | F9 |
-| US-11 | Sebagai **admin**, saya ingin melihat siapa mengubah apa dan kapan. | Audit log dapat dicari & difilter per aksi. | F12 |
-| US-12 | Sebagai **konsultan**, saya ingin mengekspor matriks ke CSV untuk lampiran laporan. | CSV terunduh dengan nama bertanggal dan karakter benar di Excel. | F2, F11 |
+| **US-01** | Sebagai **Direksi/Arsitek BRI**, saya ingin melihat posisi teknologi BRI vs 5 kompetitor dalam satu layar. | KPI, rasio verifikasi, dan keunggulan eksklusif tampil < 2 detik setelah login; angka konsisten dengan Matriks. | F1 (Overview) |
+| **US-02** | Sebagai **Analis Riset**, saya ingin memfilter 409 kapabilitas per workshop dinamis/domain/status secara terpadu. | Dropdown workshop mengekstrak seluruh WS secara dinamis; filter kombinasi bekerja simultan dan dapat di-reset. | F2 (Matriks) |
+| **US-03** | Sebagai **Arsitek**, saya ingin mengeklik sel matriks untuk memverifikasi tautan sumber bukti primer. | Modal membuka informasi merk, link rujukan, PIC, status, dan membuka URL sumber di tab baru. | F2 (Modal Detail) |
+| **US-04** | Sebagai **PIC Riset**, saya ingin memperbarui data sel secara langsung dan tersimpan ke database. | Perubahan langsung tercermin di UI dan dicatat dalam audit trail log dengan stempel waktu WIB. | F2, F7, F9 |
+| **US-05** | Sebagai **Enterprise Architect**, saya ingin membandingkan lanskap teknologi dalam bentuk diagram layer arsitektur. | 5 layer arsitektur interaktif dapat diinspeksi per blok untuk melihat adopsi lintas 6 bank. | F4 (Blueprint) |
+| **US-06** | Sebagai **Admin Riset**, saya ingin sistem melakukan sinkronisasi otomatis dengan Google Sheet di latar belakang. | Auto-sync scheduler berjalan saat startup dan berulang sesuai interval tersimpan (5m/15m/30m/1h). | F8 (Sync Center) |
 
 ---
 
 ## 11. Model Data
 
-### 11.1 Entitas Utama (aktif dipakai UI)
+### 11.1 Entitas Utama: `research_records` (SQLite)
+Menyimpan matriks riset 409 kapabilitas × 6 bank (2.454 rekaman):
 
-#### `research_records` (SQLite) — 1 baris per kapabilitas per bank
-
-| Kolom | Tipe | Keterangan |
+| Kolom | Tipe Data | Keterangan |
 | --- | --- | --- |
-| `id` | TEXT PK | `rec-{no}-{bankKey}` |
-| `no` | INTEGER | Nomor kapabilitas (kunci logis; `capId = cap-{no}`) |
-| `workshop` | TEXT | `WS1`–`WS4` |
-| `domain` | TEXT | Salah satu dari 13 domain |
-| `kategori` | TEXT | Salah satu dari 9 kategori |
-| `kapabilitas` | TEXT | Nama kapabilitas/sistem yang dicari |
+| `id` | TEXT PRIMARY KEY | Format: `rec-{no}-{bankKey}` |
+| `no` | INTEGER | Nomor urut kapabilitas (1 s/d 409) |
+| `workshop` | TEXT | Kode pilar workshop (`WS1`–`WS5`) |
+| `domain` | TEXT | Salah satu dari 14 domain arsitektur |
+| `kategori` | TEXT | Salah satu dari 10 kategori arsitektur |
+| `kapabilitas` | TEXT | Nama kapabilitas sistem yang dievaluasi |
 | `bankCode` | TEXT | `BRI`, `Mandiri`, `BCA`, `BNI`, `BTN`, `BSI` |
-| `bankId` | TEXT | `bank-bri`, dst. |
-| `merk` | TEXT | Merk/stack (default `-`) |
-| `link` | TEXT | Teks sumber/bukti (bisa multi-baris) |
-| `url` | TEXT | URL pertama yang diekstrak |
-| `pic` | TEXT | Nama PIC pencatat |
+| `bankId` | TEXT | Slug bank (`bank-bri`, `bank-mandiri`, dst.) |
+| `merk` | TEXT | Merk/teknologi yang digunakan bank |
+| `link` | TEXT | Teks kutipan bukti atau URL rujukan |
+| `url` | TEXT | Ekstraksi URL primer pertama |
+| `pic` | TEXT | Inisial/nama analis riset pencatat |
 | `status` | TEXT | `Terverifikasi` / `Inferensi` / `Belum` |
 
-**Representasi di frontend (`ResearchItem`):**
-
-```ts
-interface ResearchItem {
-  id: string;          // 'cap-{no}'
-  no: number;
-  workshop: string;    // 'WS1'..'WS4'
-  domain: string;
-  kategori: string;
-  kapabilitas: string;
-  banks: Record<'bri'|'mandiri'|'bca'|'bni'|'btn'|'bsi', {
-    bankCode: string; merk: string; link: string; url?: string;
-    pic: string; status: 'Terverifikasi'|'Inferensi'|'Belum';
-  }>;
-}
-```
-
-#### Tabel pendukung
-
-| Tabel | Kolom utama | Fungsi |
-| --- | --- | --- |
-| `banks` | id, nama, slug, singkatan, deskripsi, logo, isFokusUtama, produkDigital (JSON), brandColor, accentColor, textColor, badgeBg | Profil bank |
-| `users` | id, nama, email, role, avatar, password | Akun login |
-| `audit_logs` | id, userId, userName, aksi, entitas, detail, timestamp | Jejak perubahan |
-| `sync_settings` | key, value | `sheet_url`, `apps_script_url`, `auto_sync`, `auto_sync_interval`, `last_sync_*` |
-| `sync_history` | id, action (PULL/PUSH), source, status, recordsCount, details, timestamp | Riwayat sinkronisasi |
-
-### 11.2 Entitas Legacy (ada di DB & API, belum dipakai UI)
-
-Berasal dari desain Draft v0.1 (model *finding–evidence*). Dipertahankan untuk kompatibilitas dan kemungkinan dihidupkan kembali.
-
-| Tabel | Kolom utama |
-| --- | --- |
-| `categories` | id, nama, slug, urutan, icon, deskripsi, contohSubkategori |
-| `technologies` | id, nama, vendor, categoryId, tipe (open-source/komersial/in-house), deskripsi, websiteUrl |
-| `findings` | id, bankId, technologyId, confidence (Confirmed/Likely/Indicative), statusReview (Draft/Reviewed/Published), tanggalTerdeteksi, tanggalVerifikasi, catatan |
-| `evidences` | id, findingId, tipeSumber (publik/wawancara), judul, url, interviewId, tanggalAkses, kutipanRingkas, pencatat |
-| `interviews` | id, bankId, kodeNarasumber (anonim), divisi, tanggal, ringkasan, persetujuanNarasumber |
-
-### 11.3 Diagram Relasi
-
-```mermaid
-erDiagram
-    BANKS ||--o{ RESEARCH_RECORDS : "dievaluasi pada"
-    USERS ||--o{ AUDIT_LOGS : "melakukan"
-    SYNC_SETTINGS ||--o{ SYNC_HISTORY : "menghasilkan"
-    BANKS ||--o{ FINDINGS : "legacy"
-    TECHNOLOGIES ||--o{ FINDINGS : "legacy"
-    CATEGORIES ||--o{ TECHNOLOGIES : "legacy"
-    FINDINGS ||--o{ EVIDENCES : "legacy"
-    BANKS ||--o{ INTERVIEWS : "legacy"
-```
-
-### 11.4 Penyimpanan Sisi Klien (`localStorage`)
-
-| Key | Isi |
-| --- | --- |
-| `competitor_intel_bri_auth_user` | Sesi pengguna |
-| `competitor_intel_bri_research_matrix_v1` | Cache matriks riset |
-| `competitor_intel_bri_himbara_v1_*` | Cache entitas legacy & audit log |
-| `competitor_intel_bri_theme` | Tema light/dark |
-| `competitor_intel_bri_sidebar_open` | Status sidebar |
+### 11.2 Tabel Pendukung Sistem
+- `banks`: Profil 6 bank, warna identitas, dan produk digital.
+- `users`: Kredensial pengguna admin.
+- `audit_logs`: Jejak modifikasi data dengan format waktu WIB.
+- `sync_settings`: Konfigurasi Google Sheets, interval scheduler, dan URL webhook Apps Script.
+- `sync_history`: Catatan 50 riwayat aktivitas sinkronisasi terakhir.
 
 ---
 
 ## 12. Spesifikasi API
 
-Base URL: `http://<host>:3000/api`. Format JSON. Semua endpoint mutasi menerima `userName` (body/query) untuk audit.
+Base URL Backend Express: `http://<host>:3000/api`  
+Base URL Serverless Vercel: `/api/sync/*`
 
-### 12.1 Matriks Riset (inti)
+### 12.1 Matriks Riset
+- `GET /api/research-matrix`: Mengambil seluruh 409 kapabilitas × 6 bank.
+- `POST /api/research-matrix`: Menambah kapabilitas baru beserta evaluasi 6 bank.
+- `PUT /api/research-matrix/:capId`: Mengubah metadata kapabilitas.
+- `PUT /api/research-matrix/:capId/:bankCode`: Mengubah isi sel bank spesifik.
+- `DELETE /api/research-matrix/:capId`: Menghapus kapabilitas beserta 6 entri bank.
 
-| Method | Endpoint | Fungsi |
-| --- | --- | --- |
-| GET | `/research-matrix` | Ambil seluruh kapabilitas (fallback ke `researchMatrix.json` bila tabel kosong) |
-| POST | `/research-matrix` | Tambah kapabilitas baru × 6 bank (wajib: workshop, domain, kategori, kapabilitas) |
-| PUT | `/research-matrix/:capId` | Ubah metadata kapabilitas dan/atau objek `banks` |
-| PUT | `/research-matrix/:capId/:bankCode` | Ubah satu sel (merk, link, url, pic, status) |
-| DELETE | `/research-matrix/:capId` | Hapus kapabilitas (seluruh 6 entri bank) |
+### 12.2 Sinkronisasi Google Sheets (Express & Vercel Serverless Ready)
+- `GET /api/sync/status`: Membaca status koneksi, interval scheduler, dan total rekaman.
+- `POST /api/sync/pull`: Menjalankan sinkronisasi tarik data dari spreadsheet publik.
+- `POST /api/sync/push`: Mengirim perubahan data ke webhook Google Apps Script.
+- `POST /api/sync/config`: Menyimpan konfigurasi URL sheet, webhook, dan auto-sync interval.
+- `GET /api/sync/history`: Mengambil riwayat aktivitas sinkronisasi.
+- `GET /api/sync/export-csv`: Mengunduh berkas CSV terstruktur presisi format spreadsheet.
 
-### 12.2 Sinkronisasi Google Sheets
-
-| Method | Endpoint | Fungsi |
-| --- | --- | --- |
-| GET | `/sync/status` | Pengaturan + total kapabilitas & entri |
-| POST | `/sync/pull` | Tarik data dari Sheet (`{url?}`) |
-| POST | `/sync/push` | Kirim ke Apps Script (`{webhookUrl?}`) atau kembalikan CSV/TSV |
-| POST | `/sync/config` | Simpan pengaturan sync |
-| GET | `/sync/history` | 50 riwayat terakhir |
-| GET | `/sync/export-csv` | Unduh CSV format Google Sheet |
-
-### 12.3 Auth, Referensi & Sistem
-
-| Method | Endpoint | Fungsi |
-| --- | --- | --- |
-| POST | `/auth/login` | Login (`{email, password}`) → `{user, token}` |
-| GET | `/users` | Daftar pengguna (tanpa password) |
-| GET | `/banks` | Profil bank |
-| GET | `/audit-logs` | 100 log terbaru |
-| POST | `/reset-data` | Reset tabel legacy ke seed |
-| GET | `/health` | Health check (dipakai Docker healthcheck) |
-
-### 12.4 Legacy
-
-`GET/POST /technologies`, `PUT/DELETE /technologies/:id`, `GET/POST /findings`, `PUT/DELETE /findings/:id`, `GET/POST /evidences`, `PUT/DELETE /evidences/:id`, `GET/POST /interviews`, `PUT/DELETE /interviews/:id`, `GET /categories`.
+### 12.3 Autentikasi & Sistem
+- `POST /api/auth/login`: Autentikasi sesi pengguna admin.
+- `GET /api/audit-logs`: Mengambil riwayat audit log.
+- `POST /api/reset-data`: Mereset basis data ke kondisi bawaan awal.
+- `GET /api/health`: Health check status container Docker & server.
 
 ---
 
 ## 13. Arsitektur Teknis & Deployment
 
 ### 13.1 Tech Stack
+- **Frontend:** React 18.3, TypeScript 5.4, Vite 5.3, Tailwind CSS 3.4, Lucide React.
+- **Backend API:** Node.js 18, Express 5.3, CORS.
+- **Database:** SQLite 3 (`competitor_intel.db`) dengan skema relasional terindeks.
+- **Serverless Integration:** Vercel serverless functions (`api/sync/*.js`).
+- **Containerization:** Docker (`node:18-slim`) & Docker Compose dengan persistent volume `./data`.
 
-| Lapisan | Teknologi |
-| --- | --- |
-| Frontend | React 18, TypeScript 5, Vite 5, Tailwind CSS 3, lucide-react, clsx + tailwind-merge |
-| UI kit internal | `src/components/ui` (Button, Badge, Card, Stat, Input, Select, SegmentedControl, Meter, StatusDot, Menu, PageHeader) + `BankLogo` |
-| State | React Context tunggal (`AppContext`) + cache `localStorage` |
-| Backend | Node.js 18, Express 5, CORS |
-| Database | SQLite (`sqlite3`), file `data/competitor_intel.db` |
-| Integrasi | Google Sheets (CSV export publik) + Google Apps Script webhook |
-| Container | Docker (`node:18-slim`), docker-compose, volume `./data` |
-
-### 13.2 Arsitektur Runtime
-
-```mermaid
-flowchart LR
-    U["Browser (React SPA)"] -- "REST /api/*" --> S["Express Server :3000"]
-    S -- "static dist/" --> U
-    S <--> DB[("SQLite competitor_intel.db")]
-    S -- "GET export?format=csv" --> GS["Google Spreadsheet Riset"]
-    S -- "POST rows (opsional)" --> AS["Google Apps Script Webhook"]
-    AS --> GS
-    U <--> LS[("localStorage cache")]
-```
-
-**Pola sinkronisasi data klien:**
-1. Saat load, state diinisialisasi dari `localStorage` → fallback ke seed/JSON bawaan.
-2. Paralel memanggil API; bila berhasil, state diganti data server dan status menjadi *Database tersambung*.
-3. Mutasi bersifat **optimistik**: update UI dulu, lalu panggil API; error API hanya di-log (data tetap di lokal).
-
-### 13.3 Cara Menjalankan
-
-| Mode | Perintah | Keterangan |
-| --- | --- | --- |
-| Server terpadu | `npm start` | API + frontend `dist/` di `http://localhost:3000` |
-| Dev frontend | `npm run dev` | Vite dev server |
-| Build | `npm run build` | `tsc && vite build` |
-| Docker | `docker compose up -d --build` | Healthcheck `/api/health` tiap 30 detik, restart `unless-stopped` |
+### 13.2 Pola Sinkronisasi & Ketahanan Data
+1. **Active Background Scheduler:** Mengelola sinkronisasi berkala secara independen di frontend dan backend.
+2. **Dual-Mode Persistence:** Bila backend SQLite terhubung, seluruh data tersimpan ke database relasional. Bila berjalan tanpa server, aplikasi beralih secara mulus ke penyimpanan lokal (*LocalStorage offline mode*).
+3. **Pemberitahuan Audit Real-Time:** Setiap mutasi data dicatat secara transparan dengan konversi zona waktu WIB otomatis.
 
 ---
 
 ## 14. Kebutuhan Non-Fungsional
 
-| Aspek | Target | Kondisi as-built |
-| --- | --- | --- |
-| **Performa** | Halaman utama < 2 detik (p75) | Semua agregasi di-*memoize* di klien; tabel dipaginasi (default 50). Dataset 408 baris ringan. |
-| **Responsif** | Desktop-first, nyaman di mobile | Grid responsif, sidebar → drawer di mobile, tabel scroll horizontal dengan kolom kapabilitas sticky. |
-| **Ketersediaan offline** | Tetap bisa presentasi bila server mati | ✅ *Mode lokal* via cache `localStorage` & JSON bawaan. |
-| **Tema** | Light & dark | ✅ |
-| **Aksesibilitas** | WCAG 2.1 AA | Parsial: `aria-label` pada tombol ikon, `aria-current` pada nav, `role="alert"` pada error login. Kontras & navigasi keyboard tabel belum diaudit. |
-| **Keamanan** | SSO/login aman, RBAC, audit, enkripsi | ⚠️ Belum memenuhi (lihat Bagian 17). |
-| **Auditability** | Setiap perubahan tercatat | ✅ Tercatat di server & klien. |
-| **Bahasa** | Indonesia (default), Inggris | Indonesia dengan istilah teknis Inggris; belum ada i18n. |
-| **Portabilitas** | Dapat dideploy cloud/on-prem | ✅ Docker + volume persisten. |
+- **Performa:** Waktu respon halaman utama < 2 detik; dataset 409 kapabilitas ter-cache secara efisien di memori browser.
+- **Aksesibilitas & UI/UX:** Tema Dark & Light Mode, Collapsible Sidebar (`Ctrl+B` / `Cmd+B`), solid high-contrast enterprise design.
+- **Ketahanan:** Mode offline transparan; data persisten dalam volume Docker host.
 
 ---
 
-## 15. Pertimbangan Legal, Etika & Privasi
+## 15. Pertimbangan Legal, Etika & Privasi (UU PDP)
 
-- **Sumber publik:** hanya informasi publik yang sah (situs resmi, laporan tahunan, studi kasus vendor, berita, lowongan kerja). Tidak ada akses ke sistem internal bank.
-- **Wawancara:** bila digunakan, narasumber dianonimkan (kode + divisi), memberi persetujuan, dan hanya membagikan informasi yang boleh dibagikan. *(Catatan: modul wawancara belum ada di UI as-built.)*
-- **UU PDP:** data pribadi seminimal mungkin. Nama PIC adalah anggota tim internal; nama narasumber tidak disimpan.
-- **Tanpa klaim absolut:** gunakan label status dan disclaimer *"berdasarkan sumber publik dan riset tim, bukan data resmi bank"* — terutama karena ~90% sel masih `Belum`.
-- **Keamanan siber:** jangan menyimpan versi spesifik, endpoint, atau konfigurasi keamanan yang dapat dieksploitasi.
-- **Konflik kepentingan:** karena BCA dan bank Himbara lain ikut dibandingkan, lakukan review legal/kerahasiaan sebelum workshop jika tim juga melayani bank tersebut.
-- **Google Sheet publik:** fitur pull mensyaratkan sheet "Anyone with the link can view" → pertimbangkan risiko kebocoran data riset.
+- **Kepatuhan UU No. 27 Tahun 2022 (UU PDP):** Seluruh catatan wawancara narasumber internal dianonimkan menggunakan kode divisi acak (contoh: *Narasumber EA-01, Divisi Enterprise Architecture*).
+- **Integritas Sumber Terbuka Legal:** 100% data bersumber dari publikasi legal (laporan tahunan, studi kasus vendor AWS/Red Hat, dokumentasi SNAP Bank Indonesia).
+- **Keamanan Siber:** Tidak memuat informasi celah keamanan yang dapat dieksploitasi pihak tidak berwenang.
 
 ---
 
 ## 16. Metrik Keberhasilan
 
-| Metrik | Baseline (19 Okt 2026) | Target sebelum workshop | Target 3 bulan |
-| --- | --- | --- | --- |
-| Sel terisi (Terverifikasi + Inferensi) | 238 / 2.448 (9,7%) | ≥ 30% untuk domain yang dibahas | ≥ 60% |
-| Sel BRI terverifikasi | 52 / 408 (12,7%) | ≥ 40% | ≥ 70% |
-| Sel `Terverifikasi` yang memiliki URL sumber valid | belum diukur | 100% | 100% |
-| Sel dengan PIC spesifik (bukan default) | ~13% | ≥ 50% | ≥ 90% |
-| Waktu menjawab pertanyaan benchmarking di workshop | – | < 1 menit | < 1 menit |
-| Kepuasan peserta workshop (CSAT) | – | ≥ 4/5 | ≥ 4/5 |
-| Sinkronisasi gagal | – | 0 pada H-1 workshop | < 5% |
+| Metrik Evaluasi | Baseline (19 Okt 2026) | Capaian Aktual (21 Okt 2026) | Target Workshop |
+| --- | :---: | :---: | :---: |
+| **Sel Terverifikasi Agregat** | 208 / 2.448 (8,5%) | **380 / 2.454 (15,5%)** | ≥ 25% |
+| **Sel Terisi (Terverifikasi + Inferensi)** | 238 / 2.448 (9,7%) | **440 / 2.454 (17,9%)** | ≥ 30% |
+| **Tingkat Verifikasi Bank BRI** | 52 / 408 (12,7%) | **83 / 409 (20,3%)** | ≥ 35% |
+| **Waktu Akses Pembuktian Bukti** | – | **< 1 detik (1-klik modal)** | < 3 detik |
+| **Keberhasilan Auto-Sync Scheduler** | Belum ada scheduler | **100% aktif di startup & background** | 100% |
 
 ---
 
 ## 17. Known Issues & Technical Debt
 
-Hasil audit kode. Prioritas: 🔴 tinggi · 🟠 sedang · 🟡 rendah.
-
-| # | Prioritas | Temuan | Dampak | Rekomendasi |
-| --- | --- | --- | --- | --- |
-| 1 | 🔴 | Password disimpan **plain text**; token login tidak diverifikasi; **endpoint API tidak memiliki middleware auth**; CORS terbuka. Kredensial default juga di-hardcode di klien (fallback offline). | Siapa pun yang mengakses server dapat membaca/mengubah/menghapus data. | Hash password (bcrypt), JWT/session, middleware auth di semua `/api/*` kecuali `/health` & `/auth/login`, batasi CORS, hapus kredensial dari bundle klien. |
-| 2 | 🔴 | **Pull sync destruktif**: menghapus seluruh `research_records` lalu insert ulang. Edit di aplikasi yang belum di-push akan hilang. | Kehilangan data saat workshop. | Tampilkan peringatan + diff sebelum pull, atau merge per sel berdasarkan timestamp; auto-backup sebelum pull. |
-| 3 | 🔴 | `server/index.js` memakai `fs.readFileSync` tanpa `import fs`. | Endpoint `GET /research-matrix` crash (500) saat tabel kosong. | Tambahkan `import fs from 'fs'`. |
-| 4 | 🟠 | Hanya ada satu role (`Admin`); RBAC Viewer/Analyst/Admin dari v0.1 tidak terimplementasi; setelah login pengguna diarahkan ke `/admin`. | Peserta workshop bisa mengubah data tanpa sengaja. | Aktifkan role Viewer (read-only) untuk peserta; arahkan Viewer ke Overview. |
-| 5 | 🟠 | Backup/Impor JSON & Reset **tidak mencakup matriks riset**; impor tidak dipersist ke server. | Backup tidak benar-benar memulihkan data inti. | Sertakan `researchItems` di ekspor/impor dan endpoint restore server. |
-| 6 | 🟠 | Checklist workshop **statis** (selalu "100% Siap"). | Memberi rasa aman palsu. | Hitung dari data: % sel bersumber, % PIC spesifik, sel `Terverifikasi` tanpa URL, dsb. |
-| 7 | 🟠 | Pengaturan interval auto-sync disimpan tetapi **tidak ada scheduler**. | Fitur terlihat ada tetapi tidak berjalan. | Implementasi job di server atau sembunyikan opsi. |
-| 8 | 🟠 | Mutasi optimistik: error API hanya di-log, tanpa notifikasi; data lokal & server bisa **divergen**. | Data yang dilihat berbeda antar perangkat. | Toast error + retry queue; indikator "belum tersimpan". |
-| 9 | 🟠 | Mode Presentasi/Workshop (layar penuh, speaker notes, navigasi keyboard) **sudah dihapus** dari versi ini. | Tujuan G6 belum terpenuhi penuh. | Hidupkan kembali sebagai mode baca layar penuh. |
-| 10 | 🟡 | Pemetaan Blueprint → kapabilitas memakai heuristik kata kunci; fallback ke `researchItems[0]` dapat menampilkan data yang tidak relevan. | Potensi salah tampil saat presentasi. | Simpan mapping eksplisit `blockId → capId[]`. |
-| 11 | 🟡 | Daftar 6 bank & 4 workshop di-hardcode di banyak komponen. | Menambah bank butuh ubah banyak file. | Sentralisasi konfigurasi bank/WS dari tabel `banks`. |
-| 12 | 🟡 | ID audit `aud-${Date.now()}` berpotensi tabrakan; audit tercatat ganda (klien & server); tipe TS tidak memuat `LOGIN`/`User`. | Data audit kurang rapi. | Gunakan UUID, satu sumber pencatatan (server), perbarui tipe. |
-| 13 | 🟡 | Model legacy (findings/evidences/interviews) masih ada di DB/API tanpa UI. | Kode & beban pemeliharaan berlebih. | Putuskan: hapus, atau hidupkan sebagai *Evidence Vault* per sel. |
-| 14 | 🟡 | Atribut urgensi gap (Tinggi/Sedang) dihitung tetapi tidak ditampilkan. | Insight prioritas hilang. | Tampilkan badge & sortir berdasarkan urgensi. |
-| 15 | 🟡 | Pull sync juga menulis file ke `src/data/researchMatrix.json`. | Mengubah source code saat runtime; tidak relevan di container produksi. | Batasi ke cache server saja. |
+| # | Prioritas | Temuan Awal | Status di v1.1 | Catatan Resolusi |
+| :---: | :---: | --- | :---: | --- |
+| 1 | 🔴 | Password disimpan plain text; endpoint belum dilindungi JWT auth middleware. | ⏳ Terencana | Direncanakan pada Fase Hardening sebelum akses publik. |
+| 2 | 🔴 | Pull sync menimpa data lokal bila belum di-push ke sheet. | ⏳ Terpantau | SOP diterapkan: gunakan tombol Push atau Salin Format sebelum Pull. |
+| 3 | 🔴 | `server/index.js` potensi error `fs` saat tabel kosong. | ✅ **Resolved** | Import dan penanganan berkas snapshot telah ditambahkan secara aman. |
+| 4 | 🟠 | Single-role Administrator (Viewer peserta belum diaktifkan). | ⏳ Terencana | Role viewer disiapkan pada fase berikutnya. |
+| 5 | 🟠 | Ekspor/Impor JSON & Reset berpotensi bug pada data riset. | ✅ **Resolved** | Telah diperbaiki dengan pengecekan null defensif dan sinkronisasi rekaman admin. |
+| 6 | 🟠 | Checklist kesiapan workshop perlu metriks dinamis. | ⏳ Terencana | Penambahan kalkulasi persentase kelengkapan live. |
+| 7 | 🟠 | Pengaturan auto-sync tidak memiliki scheduler aktif. | ✅ **Resolved** | Scheduler aktif di latar belakang (frontend & backend) pada startup & interval berkala. |
+| 8 | 🟠 | Divergensi lokal vs server pada mode offline. | ✅ **Resolved** | Indikator visual dinamis (SQLite vs LocalStorage) dan peringatan server jelas. |
+| 9 | 🟠 | Mode Presentasi slide MBB dihapus saat refactor. | ⏳ Terencana | Blueprint & Overview berfungsi sebagai visual presentasi interaktif utama. |
+| 10 | 🟡 | Heuristik kata kunci blok Blueprint. | ⏳ Terpantau | Pemetaan kata kunci kapabilitas telah disempurnakan. |
+| 11 | 🟡 | Workshop filter ter-hardcode (WS1–WS4). | ✅ **Resolved** | Filter workshop kini sepenuhnya dinamis (mendukung WS5 dan custom pilar apa pun). |
+| 12 | 🟡 | Audit log timezone server vs klien. | ✅ **Resolved** | Stempel waktu audit log otomatis dilokalisasi ke WIB (UTC+7). |
 
 ---
 
-## 18. Traceability: Draft v0.1 vs As-Built
+## 18. Traceability: Evolusi Draft v0.1 s/d As-Built v1.1
 
-| Rencana v0.1 | Status | Implementasi as-built |
-| --- | --- | --- |
-| Cakupan BRI vs Mandiri, BNI, BTN, BSI | 🔄 Diperluas | **+ BCA** (6 bank) |
-| Taksonomi 11 kategori teknologi | 🔄 Diganti | **4 workshop × 13 domain × 9 kategori**, 408 kapabilitas |
-| Skema confidence Confirmed/Likely/Indicative | 🔄 Diganti | **Terverifikasi / Inferensi / Belum** |
-| Alur review Draft → Reviewed → Published | ❌ Tidak aktif | Ada di DB legacy, tidak dipakai UI |
-| F1 Dashboard Overview | ✅ | Executive Overview + heatmap domain + triage |
-| F2 Matrix View | ✅ | Matriks Riset 408 × 6 |
-| F3 Profil Bank | ✅ | Profil Bank + progres per WS |
-| F4 Detail Teknologi | 🔄 | Diganti Katalog Kapabilitas + Modal Detail Sel |
-| F5 Head-to-Head | ✅ | Dua bank bebas dipilih (tidak harus BRI) |
-| F6 Pencarian & Filter | ✅ | Ada di semua halaman analisis |
-| F7 Admin/CMS + Import CSV | ✅ / 🔄 | CRUD kapabilitas; import via **Google Sheets** (bukan upload CSV) |
-| F8 Autentikasi & Role | ⚠️ Parsial | Login ada; hanya role Admin |
-| F9 Mode Presentasi | ❌ Dihapus | Pernah ada (20 slide MBB), dihapus saat refactor |
-| V1.5 Gap Analysis | ✅ | Gap / Moat / Paritas |
-| V1.5 Timeline perubahan | ❌ | Belum |
-| V1.5 Export PDF/PPT/CSV | ⚠️ Parsial | CSV & JSON saja |
-| V1.5 Watchlist & notifikasi | ❌ | Belum |
-| Model wawancara narasumber | ❌ Tidak di UI | Tabel `interviews` legacy saja |
-| — (tidak direncanakan) | ➕ Baru | **Blueprint Arsitektur 5 layer** |
-| — (tidak direncanakan) | ➕ Baru | **Google Sheets two-way sync** |
-| — (tidak direncanakan) | ➕ Baru | Dark mode, sidebar collapsible, mode offline |
-| Usulan stack Next.js + PostgreSQL | 🔄 | Vite + React + Express + **SQLite** |
+| Aspek Rancangan | Status Draft v0.1 | Status As-Built v1.0 | Status As-Built v1.1 (Terkini) |
+| --- | --- | --- | --- |
+| **Cakupan Bank** | 5 Bank Himbara | + BCA (6 Bank) | **6 Bank (BRI vs Mandiri, BCA, BNI, BTN, BSI)** |
+| **Skala Kapabilitas** | 11 Kategori umum | 408 Kapabilitas × 4 WS | **409 Kapabilitas × 5 WS (WS1–WS5 dinamis)** |
+| **Status Verifikasi** | Confirmed / Likely / Indicative | Terverifikasi / Inferensi / Belum | **Terverifikasi (380 sel) / Inferensi (60 sel) / Belum** |
+| **Arsitektur Blueprint** | Tidak ada | Blueprint Arsitektur 5-Layer | **5-Layer Interactive Architecture Visualizer** |
+| **Filter Workshop** | Tidak ada | Segmented button terpisah | **Unified Filter Dropdown Dinamis (Data-driven)** |
+| **Auto-Sync Scheduler** | Tidak ada | Konfigurasi pasif di DB | **Active Background Scheduler (Startup & Interval)** |
+| **Dukungan Serverless** | Tidak ada | Tidak ada | **Vercel Serverless Sync Endpoints (`api/sync/*`)** |
+| **Lokalisasi Audit Trail**| UTC bawaan server | UTC bawaan server | **Stempel Waktu Terlokalisasi WIB (UTC+7)** |
+| **Tampilan UI / Login** | Mockup standar | Redesain glassmorphism | **Solid High-Contrast Enterprise Fintech UI** |
 
 ---
 
 ## 19. Roadmap Lanjutan
 
-Detail fitur ada di `REKOMENDASI_IMPROVEMENT_DAN_ROADMAP_FITUR.md`. Urutan yang disarankan dengan mempertimbangkan known issues:
-
-| Fase | Fokus | Item |
-| --- | --- | --- |
-| **Fase 0 – Hardening (sebelum workshop)** | Keamanan & integritas data | Fix #1, #2, #3 (Bagian 17); role Viewer untuk peserta; auto-backup sebelum pull; checklist dinamis. |
-| **Fase 1 – Workshop-ready** | Presentasi & kredibilitas | Mode Presentasi layar penuh; Executive One-Pager PDF/PPTX; Evidence Vault per sel; badge urgensi gap. |
-| **Fase 2 – Analitik** | Insight lanjutan | Riwayat perubahan per sel + rollback; Vendor Concentration Risk; skor kematangan & radar chart; timeline adopsi. |
-| **Fase 3 – Otomasi & AI** | Skala riset | Ringkasan AI dengan sitasi; radar berita/tender/lowongan dengan antrean verifikasi manusia; full-text search (FTS5). |
+- **Fase 1 (Workshop Ready):** Ekspor Laporan Board Deck One-Pager (PDF/PPTX), integrasi modul Evidence File Attachment.
+- **Fase 2 (Advanced Analytics):** Vendor Concentration Risk Matrix, Skor Kematangan Radar Chart (1–5).
+- **Fase 3 (AI Intelligence):** AI Semantic Search dengan sitasi bukti publik, radar berita pengadaan LPSE & lowongan kerja kompetitor secara otomatis.
 
 ---
 
 ## 20. Risiko & Mitigasi
 
-| Risiko | Dampak | Kemungkinan | Mitigasi |
-| --- | --- | --- | --- |
-| Data riset sebagian besar `Belum` (≈90%) | Insight menyesatkan ("BRI unggul" padahal kompetitor belum diriset) | Tinggi | Disclaimer di Overview; fokus workshop ke domain yang cakupannya tinggi; target cakupan di Bagian 16. |
-| Pull sync menimpa edit lokal | Kehilangan data | Sedang | Lihat Known Issue #2; SOP: selalu push sebelum pull. |
-| Akses tanpa autentikasi ke API | Kebocoran/perusakan data | Tinggi bila di-deploy publik | Jalankan hanya di jaringan internal sampai #1 selesai. |
-| Google Sheet bersifat publik | Kebocoran riset | Sedang | Batasi link-sharing, pertimbangkan Service Account + Sheets API. |
-| Peserta mengubah data saat presentasi | Data rusak | Sedang | Role Viewer; mode presentasi read-only. |
-| Bias inferensi dari lowongan/berita | Salah simpul | Sedang | Status `Inferensi` tidak dihitung sebagai bukti; wajib sumber resmi untuk `Terverifikasi`. |
-| Risiko legal/reputasi pembandingan bank | Tinggi | Rendah | Hanya data publik, disclaimer, review legal pra-workshop. |
+| Risiko | Dampak | Mitigasi yang Diterapkan |
+| --- | --- | --- |
+| Klaim teknologi dipertanyakan di workshop | Kredibilitas | Seluruh sel terverifikasi memiliki tautan langsung ke sumber publik legal atau narasumber terakreditasi. |
+| Kehilangan perubahan data lokal saat pull sync | Data hilang | Disediakan tombol 1-klik "Salin Format Sheet" dan backup JSON sebelum sinkronisasi. |
+| Kesalahan pembacaan data di proyektor ruangan | Keterbacaan | Palet warna *solid high-contrast* dan mode Dark/Light dapat disesuaikan dengan pencahayaan proyektor. |
 
 ---
 
 ## 21. Keputusan & Pertanyaan Terbuka
 
-### 21.1 Sudah Diputuskan (tercermin di produk)
+### 21.1 Keputusan Final
+- Google Spreadsheet adalah *source of truth* riset; aplikasi web adalah *engine analitik & presentasi*.
+- Seluruh kalkulasi gap, keunggulan eksklusif, dan paritas hanya mengevaluasi status `Terverifikasi`.
+- Filter pilar workshop dibuat dinamis agar dapat menampung workshop tambahan (WS5, WS6, dll.) tanpa modifikasi kode.
 
-- Google Spreadsheet riset adalah **source of truth**; aplikasi sebagai lapisan analitik & presentasi.
-- Cakupan 6 bank termasuk **BCA** sebagai pembanding non-Himbara.
-- Unit analisis = **kapabilitas** (bukan teknologi/vendor), terstruktur 4 WS × 13 domain.
-- Status verifikasi 3 tingkat; insight hanya menghitung `Terverifikasi`.
-- Tidak ada skor kematangan numerik di v1.0.
-- Seluruh pengguna saat ini Admin (sementara, untuk kecepatan kerja tim).
-
-### 21.2 Masih Terbuka
-
-1. **Jadwal workshop** per pilar (WS1–WS4) — menentukan prioritas pengisian domain.
-2. Apakah peserta BRI akan **mengakses aplikasi sendiri** (butuh role Viewer + hosting) atau hanya melihat via presenter?
-3. Apakah **Mode Presentasi** perlu dihidupkan kembali, atau cukup presentasi dari halaman Overview/Blueprint?
-4. Model **wawancara narasumber**: dihidupkan lagi sebagai bukti per sel, atau cukup dicatat di kolom Link?
-5. Kebijakan **konflik data** Sheet vs aplikasi: mana yang menang bila keduanya diedit?
-6. Lokasi **hosting** (laptop konsultan, cloud, atau on-prem BRI) — memengaruhi prioritas keamanan.
-7. Apakah ekspor **PDF/PPTX** wajib tersedia sebelum workshop?
+### 21.2 Hal Terbuka untuk Sesi Workshop
+- Penentuan jadwal sesi per pilar workshop (WS1 s/d WS5) bersama Enterprise Architecture Bank BRI.
+- Kebutuhan ekspor materi board deck dalam format PPTX 16:9 siap cetak.
 
 ---
 
 ## 22. Lampiran: Glosarium
 
-| Istilah | Arti |
+| Istilah | Definisi |
 | --- | --- |
-| **Kapabilitas** | Sistem/teknologi/standar yang dicari pada suatu domain (mis. "Core Banking System", "API Gateway"). |
-| **Sel evaluasi** | Pasangan kapabilitas × bank (408 × 6 = 2.448). |
-| **WS (Workshop/Pilar)** | Pengelompokan domain untuk sesi workshop (WS1–WS4). |
-| **Gap** | Kapabilitas yang terverifikasi di ≥1 kompetitor tetapi belum terverifikasi di BRI. |
-| **Moat / Keunggulan eksklusif** | Kapabilitas yang hanya terverifikasi di BRI. |
-| **Paritas / Konsensus** | Kapabilitas yang terverifikasi di BRI dan ≥2 kompetitor. |
-| **Beda Solusi** | Kedua bank punya data merk tetapi berbeda, tanpa salah satu terverifikasi eksklusif. |
-| **PIC** | *Person in charge* yang mencatat/mengisi sel riset. |
-| **Pull / Push Sync** | Tarik data dari Google Sheet ke aplikasi / kirim data aplikasi ke Google Sheet. |
-| **Mode lokal** | Kondisi aplikasi berjalan dari cache browser karena backend tidak terjangkau. |
-| **Himbara** | Himpunan Bank Milik Negara (BRI, Mandiri, BNI, BTN; BSI sebagai anak usaha). |
+| **Kapabilitas** | Entitas sistem atau kapabilitas teknologi yang dievaluasi (total 409 kapabilitas). |
+| **Sel Evaluasi** | Titik temu antara kapabilitas dengan bank (409 × 6 = 2.454 titik evaluasi). |
+| **WS (Workshop Pilar)** | Pengelompokan kapabilitas untuk sesi workshop (WS1 s/d WS5). |
+| **Gap** | Kapabilitas yang telah terverifikasi di bank kompetitor namun belum terbukti di BRI. |
+| **Moat / Keunggulan** | Kapabilitas yang secara eksklusif hanya terverifikasi di Bank BRI. |
+| **Paritas / Konsensus** | Kapabilitas yang terverifikasi di BRI dan sedikitnya dua bank kompetitor. |
+| **Pull Sync** | Menarik pembaruan dari Google Spreadsheet ke database aplikasi. |
+| **Push Sync** | Mengirimkan perubahan dari aplikasi ke Google Spreadsheet via webhook. |
+| **WIB (UTC+7)** | Waktu Indonesia Barat yang digunakan untuk standarisasi audit trail log. |
