@@ -55,7 +55,7 @@ export const ResearchDetailModal: React.FC = () => {
     b => b.slug?.toLowerCase() === activeBankSlug.toLowerCase() || b.singkatan?.toLowerCase() === activeBankSlug.toLowerCase()
   );
 
-  const canEdit = true; // Admin role has full editing rights
+  const canEdit = false; // Mode Read-Only: Perubahan data dilakukan terpusat via Google Sheets
 
   const handleStartEdit = () => {
     setEditMerk(currentBankDetail.merk);
@@ -234,17 +234,10 @@ export const ResearchDetailModal: React.FC = () => {
                     <span>{copied ? 'Berhasil Disalin!' : 'Salin Kutipan Riset'}</span>
                   </Button>
 
-                  {canEdit && (
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={handleStartEdit}
-                      className="gap-2 font-semibold"
-                    >
-                      <Save className="w-4 h-4" />
-                      <span>Edit Data Kapabilitas</span>
-                    </Button>
-                  )}
+                  <div className="flex items-center gap-1.5 text-[11px] text-muted font-medium bg-surface-raised px-2.5 py-1.5 rounded-xl border border-line">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Tersinkronisasi dari Google Sheets (Read-Only)</span>
+                  </div>
                 </div>
               </div>
             ) : (

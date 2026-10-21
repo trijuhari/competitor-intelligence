@@ -1,15 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
-  Search, Plus, Download, Edit3, Trash2, CheckCircle2, 
+  Search, Download, CheckCircle2, 
   AlertTriangle, HelpCircle, ExternalLink, RotateCcw, 
   ChevronLeft, ChevronRight, Layers, Building2, Eye, Database,
   FileSpreadsheet, X, Sparkles, Filter
 } from 'lucide-react';
 import { ResearchItem, VerificationStatus } from '../../types';
 import { formatDashLineBreaks } from '../../utils/helpers';
-import { AdminResearchEditModal } from './AdminResearchEditModal';
-import { AdminResearchAddModal } from './AdminResearchAddModal';
 import { StatusBadge } from '../ui/Badge';
 import { extractUniqueWorkshops, getWorkshopLabel, getWorkshopMeta } from '../../utils/workshop';
 
@@ -349,14 +347,13 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
                     </div>
                   </th>
                 ))}
-                <th className="py-3.5 px-3 w-20 text-center shrink-0">Aksi</th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-line">
               {paginatedItems.length === 0 ? (
                 <tr>
-                  <td colSpan={5 + BANK_SLUGS.length} className="py-16 text-center text-ink-muted">
+                  <td colSpan={4 + BANK_SLUGS.length} className="py-16 text-center text-ink-muted">
                     Tidak ada kapabilitas yang cocok dengan filter atau kata kunci "{searchQuery}".
                   </td>
                 </tr>
@@ -428,7 +425,7 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
                                   ? 'bg-amber-50/70 dark:bg-amber-950/40 border-amber-300/60 dark:border-amber-800/70 text-amber-950 dark:text-amber-100'
                                   : 'bg-rose-50/40 dark:bg-rose-950/30 border-rose-200/70 dark:border-rose-900/60 text-rose-950 dark:text-rose-200'
                               }`}
-                              title={`Klik untuk edit rincian bukti ${b.label}`}
+                              title={`Klik untuk melihat rincian bukti ${b.label}`}
                             >
                               <div className="font-semibold break-words whitespace-pre-line leading-snug">
                                 {formatDashLineBreaks(bDetail.merk)}
@@ -456,33 +453,6 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
                           </td>
                         );
                       })}
-
-                      {/* Actions: Edit & Delete */}
-                      <td className="py-3 px-3 text-center align-top w-20 shrink-0">
-                        <div className="flex items-center justify-center space-x-1">
-                          <button
-                            type="button"
-                            onClick={() => setEditingItem(item)}
-                            className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 transition cursor-pointer"
-                            title="Edit seluruh baris & 6 bank"
-                          >
-                            <Edit3 className="w-3.5 h-3.5" />
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={async () => {
-                              if (confirm(`Hapus kapabilitas #${item.no}: "${item.kapabilitas}"?`)) {
-                                await deleteResearchCapability(item.id);
-                              }
-                            }}
-                            className="p-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 transition cursor-pointer"
-                            title="Hapus kapabilitas ini"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </td>
                     </tr>
                   );
                 })
@@ -491,26 +461,6 @@ export const AdminResearchMatrixTab: React.FC<AdminResearchMatrixTabProps> = ({
           </table>
         </div>
       </div>
-
-      {/* Edit Modal */}
-      {editingItem && (
-        <AdminResearchEditModal
-          item={editingItem}
-          isOpen={!!editingItem}
-          onClose={() => setEditingItem(null)}
-          onSave={updateResearchCapability}
-          onDelete={deleteResearchCapability}
-        />
-      )}
-
-      {/* Add Modal */}
-      {isAddModalOpen && (
-        <AdminResearchAddModal
-          isOpen={isAddModalOpen}
-          onClose={() => setIsAddModalOpen(false)}
-          onAdd={addResearchCapability}
-        />
-      )}
     </div>
   );
 };

@@ -126,24 +126,14 @@ export const AdminCMSView: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex items-center flex-wrap gap-2.5 shrink-0">
             {activeAdminSubtab === 'findings' && (
-              <>
-                <button
-                  onClick={() => setIsAddModalOpen(true)}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white font-bold text-xs flex items-center space-x-2 shadow-glow-blue active:scale-[0.98] transition-all cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Input Temuan Baru</span>
-                </button>
-
-                <button
-                  onClick={exportResearchMatrixCSV}
-                  className="px-3.5 py-2.5 rounded-xl border border-line bg-surface hover:bg-surface-raised text-ink text-xs font-bold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-[0.98] cursor-pointer"
-                  title="Download CSV matriks riset"
-                >
-                  <Download className="w-4 h-4 text-ink-muted" />
-                  <span>Ekspor CSV</span>
-                </button>
-              </>
+              <button
+                onClick={exportResearchMatrixCSV}
+                className="px-3.5 py-2.5 rounded-xl border border-line bg-surface hover:bg-surface-raised text-ink text-xs font-bold flex items-center space-x-1.5 shadow-2xs transition-all active:scale-[0.98] cursor-pointer"
+                title="Download CSV matriks riset"
+              >
+                <Download className="w-4 h-4 text-ink-muted" />
+                <span>Ekspor CSV</span>
+              </button>
             )}
 
             <button
